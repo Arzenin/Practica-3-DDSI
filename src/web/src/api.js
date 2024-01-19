@@ -120,7 +120,7 @@ app.get('/ver', async (req, res) => { // GET Usuarios
         'CREATE TABLE IF NOT EXISTS RECETAS_INGREDIENTES(IdReceta INT,IdIngrediente INT,PRIMARY KEY(IdReceta,IdIngrediente),FOREIGN KEY(IdReceta) REFERENCES RECETAS(IdReceta),FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente));',
         'CREATE TABLE IF NOT EXISTS INGREDIENTES_ALERGENOS(IdIngrediente INT,IdAlergeno INT,PRIMARY KEY(IdAlergeno,IdIngrediente),FOREIGN KEY(IdAlergeno) REFERENCES ALERGENOS(IdAlergeno),FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente));',
         
-        `CREATE TRIGGER ActualizarStock 
+        `CREATE TRIGGER IF NOT EXISTS ActualizarStock 
         BEFORE INSERT ON PEDIDO_RECETAS 
         FOR EACH ROW 
         BEGIN 
