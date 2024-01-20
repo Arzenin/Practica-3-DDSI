@@ -45,7 +45,7 @@ const Clientes = () => {
     console.log(id);
     axios.delete(`http://localhost:5050/borrarcliente/${id}`)
     .then((response) => {
-      this.forceUpdate();
+        setFilas(prevFilas => prevFilas.filter(item => item.IdCliente !== idCliente));
       })
       .catch((error) => console.error('Error al eliminar:', error));
   };
