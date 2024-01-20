@@ -1,46 +1,138 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
-import { useNavigate } from 'react-router-native';
+import { DataTable, FAB, IconButton} from 'react-native-paper';
+import { View, Text, Pressable, StyleSheet, Image, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-native';
+import dayjs from 'dayjs';
+
+const useHost = () => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:5050/receta';
+  } else {
+    return 'http://localhost:5050/receta';
+  }
+};
+
+const Cabecera = () => {
+  return (
+    <DataTable.Header>
+      <DataTable.Title>ID Receta</DataTable.Title>
+      <DataTable.Title>Precio</DataTable.Title>
+    </DataTable.Header>
+  );
+};
 
 const Receta = () => {
-    const [stockData, setStockData] = useState([]);
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-        // Llamada a la API al cargar el componente
-        const fetchData = async() => {
-            try{
-                const response = await axios.get('http://172.28.152.110:5050/ver');
-                const resultado = response.data[0];
-                await setStockData(resultado);
-            } catch(error) {
-            console.error('Error al realizar la solicitud:', error);
-            }
-        };
-        fetchData();
-    }, []);
+  const [stockData, setStockData] = useState([]);
+  const navigate = useNavigate();
+  const [filas, setFilas] = useState([]);
+  const [pagina, setPagina] = useState(1);
+  const host = useHost();
+  const [itemsPorPagina] = useState(10); // Ajustar preferencia
 
-    const handleButtonClick = (enlace) => {
-      navigate(enlace);
-    };
   
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
-          <Text style={styles.title}>McAndCheese - Práctica 3</Text>
-        </View>
-        <Text style={styles.title}>Recetas</Text>
-  
-        <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/menu')}>
-          <Text style={styles.pressableText}>Volver</Text>
-        </Pressable>
-      </View>
-    );
+  const handleAdd = () => { // Función añadir
+    navigate('/crearcliente');
+  };
+
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borrarcliente/${id}`)
+    .then((response) => {
+      this.forceUpdate();
+      })
+      .catch((error) => console.error('Error al eliminar:', error));
+  };
+
+	const handleEdit = (ide) => {
+		navigate('/editarcliente', { state: { id: ide }})
+	};
+
+  const handlePageChange = (page) => {  
+    setPagina(page);
   };
   
-  const styles = StyleSheet.create({
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(host);
+        const resultado = response.data[0];
+        // Aplicar la paginación
+        const inicio = (pagina - 1) * itemsPorPagina;
+        const fin = inicio + itemsPorPagina;
+        const filasPaginadas = resultado.slice(inicio, fin);
+        setFilas(filasPaginadas);
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    };
+
+    fetchData();
+  }, [host, pagina]); // dependencia para que useEffect se ejecute cuando cambie
+
+  useEffect(() => {
+    // Llamada a la API al cargar el componente
+      const fetchData = async() => {
+        try{
+          const response = await axios.get('http://172.28.152.110:5050/ver');
+          const resultado = response.data[0];
+          await setStockData(resultado);
+        } catch(error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleButtonClick = (enlace) => {
+    navigate(enlace);
+  };
+
+  return (
+    <View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+        <Text style={styles.title}>McAndCheese - Práctica 3</Text>
+      </View>
+    </View>
+      <Text style={styles.title}>Subsistema de Receta</Text>
+      <View style={styles.table}>
+      {/* Encabezado de la tabla */}
+      <Cabecera />
+      {/* Datos de la tabla */}
+      <DataTable>
+        {filas.map((item) => (
+          <DataTable.Row key={item.IdReceta}>
+            <DataTable.Cell>{item.IdReceta}</DataTable.Cell>
+            <DataTable.Cell>{item.Precio}</DataTable.Cell>
+            {/* Botones de las filas */}
+            {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
+            {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdCliente)} />*/}
+          </DataTable.Row>
+        ))}
+        <DataTable.Pagination
+        page={pagina} /* Página actual */
+        numberOfPages={Math.ceil(filas.length / itemsPorPagina)} /* Paginas = Filas/itemsXPagina */
+        onPageChange={handlePageChange}
+        label={`${pagina} de ${Math.ceil(filas.length / itemsPorPagina)}`} // Etiqueta
+      />
+      </DataTable>
+      <FAB
+        icon="plus"
+        style={styles.fabStyle}
+        color='white'
+        onPress={() => handleAdd()}
+      />
+    </View>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/menu')}>
+        <Text style={styles.pressableText}>Volver</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
@@ -55,6 +147,7 @@ const Receta = () => {
       fontSize: 20,
       fontWeight: 'bold',
       marginLeft: 20,
+      alignSelf: 'center'
     },
     image: {
       width: 200, // Ajusta el ancho según tus necesidades
@@ -86,7 +179,16 @@ const Receta = () => {
       marginTop: 100,
       fontSize: 14,
       fontWeight: 'bold'
-    }
+    },
+    table: {
+      margin: 10,
+      },
+      fabStyle: {
+        width: 55,
+       backgroundColor: '#049CDC',
+       alignSelf: 'right',
+       justifyContent: 'center',
+     }
   });
-  
-  export default Receta;
+
+export default Receta;

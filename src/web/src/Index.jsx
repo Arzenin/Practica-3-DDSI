@@ -11,7 +11,10 @@ import CrearCliente from './Clientes/CrearCliente';
 import EditarCliente from './Clientes/EditarCliente';
 import Ingrediente from './Menú/Ingrediente/Ingrediente';
 import Receta from './Menú/Receta/Receta';
-
+import VerPedidos from './Pedidos/VerPedidos';
+import VerPedidosActivos from './Pedidos/VerPedidosActivos';
+import VerPedidosInactivos from './Pedidos/VerPedidosInactivos';
+import Alergeno from './Menú/Alergeno/Alergeno';
 
 const Index = () => {
   return (
@@ -29,6 +32,10 @@ const Index = () => {
           <Route path="/editarcliente" exact element={<EditarCliente />}/>
           <Route path="/ingrediente" exact element={<Ingrediente />}/>
           <Route path="/receta" exact element={<Receta />}/>
+          <Route path="/verpedidos" exact element={<VerPedidos />}/>
+          <Route path="/verpedidosactivos" exact element={<VerPedidosActivos />}/>
+          <Route path="/verpedidosinactivos" exact element={<VerPedidosInactivos />}/>
+          <Route path="/alergeno" exact element={<Alergeno />}/>
         </Routes>
       </View>
     </NativeRouter>

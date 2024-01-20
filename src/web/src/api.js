@@ -79,6 +79,32 @@ app.get('/clientes', async (req, res) => { // GET Clientes
   }
 });
 
+app.get('/trabajadores', async (req, res) => { // GET Trabajadores
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM TRABAJADOR';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener listado de ingredientes:', error);
+    res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
+app.get('/alergeno', async (req, res) => { // GET Alergeno
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM ALERGENOS';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener listado de ingredientes:', error);
+    res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
 app.get('/ingrediente', async (req, res) => { // GET Ingredientes
   try {
     const connection = await abrirConexion();
@@ -89,6 +115,71 @@ app.get('/ingrediente', async (req, res) => { // GET Ingredientes
   } catch (error) {
     console.error('Error al obtener listado de ingredientes:', error);
     res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
+app.get('/verpedidos', async (req, res) => { // GET Ingredientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM PEDIDO';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener listado de ingredientes:', error);
+    res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
+app.get('/verpedidosactivos', async (req, res) => { // GET Ingredientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM PEDIDO WHERE Estado= \'Activo\';';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener listado de ingredientes:', error);
+    res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
+app.get('/verpedidosinactivos', async (req, res) => { // GET Ingredientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM PEDIDO WHERE Estado= \'Inactivo\';';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener listado de ingredientes:', error);
+    res.status(500).json({ error: 'Error al obtener ingredientes' });
+  }
+});
+
+app.get('/receta', async (req, res) => { // GET receta
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM RECETAS';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener estudiantes:', error);
+    res.status(500).json({ error: 'Error al obtener estudiantes' });
+  }
+});
+
+app.get('/reservas', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM RESERVAS_PEDIDO';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener estudiantes:', error);
+    res.status(500).json({ error: 'Error al obtener estudiantes' });
   }
 });
 

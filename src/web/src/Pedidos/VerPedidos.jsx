@@ -7,23 +7,24 @@ import dayjs from 'dayjs';
 
 const useHost = () => {
     if (Platform.OS === 'android') {
-      return 'http://10.0.2.2:5050/ingrediente';
+      return 'http://10.0.2.2:5050/verpedidos';
     } else {
-      return 'http://localhost:5050/ingrediente';
+      return 'http://localhost:5050/verpedidos';
     }
   };
   
   const Cabecera = () => {
     return (
       <DataTable.Header>
-        <DataTable.Title>ID Ingrediente</DataTable.Title>
-        <DataTable.Title>Nombre</DataTable.Title>
-        <DataTable.Title>Numero Stock</DataTable.Title>
+        <DataTable.Title>ID Pedido</DataTable.Title>
+        <DataTable.Title>Valoracion</DataTable.Title>
+        <DataTable.Title>Tipo de Pago</DataTable.Title>
+        <DataTable.Title>Estado del Pedido</DataTable.Title>
       </DataTable.Header>
     );
   };
 
-const Ingrediente = () => {
+const VerPedidos = () => {
     const [stockData, setStockData] = useState([]);
     const navigate = useNavigate();
     const [filas, setFilas] = useState([]);
@@ -47,6 +48,7 @@ const Ingrediente = () => {
     const handlePageChange = (page) => {  
         setPagina(page);
     };
+    
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -87,24 +89,25 @@ const Ingrediente = () => {
         <View>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+            <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
             <Text style={styles.title}>McAndCheese - Práctica 3</Text>
           </View>
         </View>
-          <Text style={styles.title}>Subsistema de Ingredientes</Text>
+          <Text style={styles.title}>Listado de Pedidos</Text>
           <View style={styles.table}>
           {/* Encabezado de la tabla */}
           <Cabecera />
           {/* Datos de la tabla */}
           <DataTable>
             {filas.map((item) => (
-              <DataTable.Row key={item.IdIngrediente}>
-                <DataTable.Cell>{item.IdIngrediente}</DataTable.Cell>                
-                <DataTable.Cell>{item.Nombre}</DataTable.Cell>
-                <DataTable.Cell>{item.NumStock}</DataTable.Cell>
+              <DataTable.Row key={item.IdPedido}>
+                <DataTable.Cell>{item.IdPedido}</DataTable.Cell>                
+                <DataTable.Cell>{item.Valoracion}</DataTable.Cell>
+                <DataTable.Cell>{item.Tpago}</DataTable.Cell>
+                <DataTable.Cell>{item.Estado}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                <IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />
+                {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />*/}
               </DataTable.Row>
             ))}
             <DataTable.Pagination
@@ -121,7 +124,7 @@ const Ingrediente = () => {
             onPress={() => handleAdd()}
           />
         </View>
-          <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/menu')}>
+          <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/pedidos')}>
             <Text style={styles.pressableText}>Volver</Text>
           </Pressable>
         </View>
@@ -187,4 +190,4 @@ const Ingrediente = () => {
      }
   });
   
-  export default Ingrediente;
+  export default VerPedidos;

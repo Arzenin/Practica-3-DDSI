@@ -32,7 +32,15 @@ const Pedidos = () => {
         <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
       <Text style={styles.title}>Subsistema de Pedidos</Text>
-
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/verpedidos')}>
+        <Text style={styles.pressableText}>Ver todos los pedidos</Text>
+      </Pressable>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/verpedidosactivos')}>
+        <Text style={styles.pressableText}>Ver pedidos activos</Text>
+      </Pressable>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/verpedidosinactivos')}>
+        <Text style={styles.pressableText}>Ver pedidos inactivos</Text>
+      </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
         <Text style={styles.pressableText}>Volver</Text>
       </Pressable>
@@ -41,52 +49,52 @@ const Pedidos = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      padding: 20,
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginLeft: 20,
-    },
-    image: {
-      width: 200, // Ajusta el ancho según tus necesidades
-      height: 200, // Ajusta la altura según tus necesidades
-      borderRadius: 0,
-      marginBottom: 20,
-    },
-    pressableButton: {
-      width: 200,
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignSelf: 'center',
-      backgroundColor: '#049CDC',  // Un verde fresco, puedes cambiarlo según tus preferencias
-      borderRadius: 10,
-      elevation: 3, // Sombra para un efecto de elevación
-      marginBottom: 15,
-      marginTop: 15,
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-    }, pressableText: {
-      color: 'white',
-      fontSize: 18,
-      fontWeight: 'bold', // Texto en negrita
-      textAlign: 'center',
-    },
-    text:{
-      marginBottom: 100,
-      marginTop: 100,
-      fontSize: 14,
-      fontWeight: 'bold'
-    }
-  });
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  image: {
+    width: 200, // Ajusta el ancho según tus necesidades
+    height: 200, // Ajusta la altura según tus necesidades
+    borderRadius: 0,
+    marginBottom: 20,
+  },
+  pressableButton: {
+    width: 200,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#049CDC',  // Un verde fresco, puedes cambiarlo según tus preferencias
+    borderRadius: 10,
+    elevation: 3, // Sombra para un efecto de elevación
+    marginBottom: 15,
+    marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  }, pressableText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold', // Texto en negrita
+    textAlign: 'center',
+  },
+  text:{
+    marginBottom: 100,
+    marginTop: 100,
+    fontSize: 14,
+    fontWeight: 'bold'
+  }
+});
 
 export default Pedidos;

@@ -32,6 +32,9 @@ const Menú = () => {
         <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
       <Text style={styles.title}>Subsistema de Menú</Text>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/alergeno')}>
+        <Text style={styles.pressableText}>Alergenos</Text>
+      </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/ingrediente')}>
         <Text style={styles.pressableText}>Ingrediente</Text>
       </Pressable>

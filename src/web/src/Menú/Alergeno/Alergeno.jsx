@@ -7,23 +7,23 @@ import dayjs from 'dayjs';
 
 const useHost = () => {
     if (Platform.OS === 'android') {
-      return 'http://10.0.2.2:5050/ingrediente';
+      return 'http://10.0.2.2:5050/alergeno';
     } else {
-      return 'http://localhost:5050/ingrediente';
+      return 'http://localhost:5050/alergeno';
     }
   };
   
   const Cabecera = () => {
     return (
       <DataTable.Header>
-        <DataTable.Title>ID Ingrediente</DataTable.Title>
+        <DataTable.Title>ID Alergeno</DataTable.Title>
         <DataTable.Title>Nombre</DataTable.Title>
-        <DataTable.Title>Numero Stock</DataTable.Title>
+        <DataTable.Title>Descripcion</DataTable.Title>
       </DataTable.Header>
     );
   };
 
-const Ingrediente = () => {
+const Alergeno = () => {
     const [stockData, setStockData] = useState([]);
     const navigate = useNavigate();
     const [filas, setFilas] = useState([]);
@@ -35,14 +35,26 @@ const Ingrediente = () => {
         navigate('/crearcliente');
     };
 
-    const handleDelete = (id) => { // Función borrar
-        console.log(id);
-        axios.delete(`http://localhost:5050/borraringrediente/${id}`)
-        .then((response) => {
-          this.forceUpdate();
-        })
-        .catch((error) => console.error('Error al eliminar:', error));
-    };
+    const handleDelete = async (idIngrediente) => {
+        console.log(idIngrediente);
+        try {
+          // Realizar la solicitud DELETE
+          await axios.delete(`http://localhost:5050/borraringrediente/${idIngrediente}`);
+      
+          // Volver a cargar los datos después de la eliminación
+          const response = await axios.get(host);
+          const resultado = response.data[0];
+      
+          // Aplicar la paginación
+          const inicio = (pagina - 1) * itemsPorPagina;
+          const fin = inicio + itemsPorPagina;
+          const filasPaginadas = resultado.slice(inicio, fin);
+          
+          setFilas(filasPaginadas);
+        } catch (error) {
+          console.error('Error al eliminar:', error);
+        }
+      };
 
     const handlePageChange = (page) => {  
         setPagina(page);
@@ -91,20 +103,20 @@ const Ingrediente = () => {
             <Text style={styles.title}>McAndCheese - Práctica 3</Text>
           </View>
         </View>
-          <Text style={styles.title}>Subsistema de Ingredientes</Text>
+          <Text style={styles.title}>Subsistema de Alergenos</Text>
           <View style={styles.table}>
           {/* Encabezado de la tabla */}
           <Cabecera />
           {/* Datos de la tabla */}
           <DataTable>
             {filas.map((item) => (
-              <DataTable.Row key={item.IdIngrediente}>
-                <DataTable.Cell>{item.IdIngrediente}</DataTable.Cell>                
+              <DataTable.Row key={item.IdAlergeno}>
+                <DataTable.Cell>{item.IdAlergeno}</DataTable.Cell>                
                 <DataTable.Cell>{item.Nombre}</DataTable.Cell>
-                <DataTable.Cell>{item.NumStock}</DataTable.Cell>
+                <DataTable.Cell>{item.Descripcion}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                <IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />
+                {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />*/}
               </DataTable.Row>
             ))}
             <DataTable.Pagination
@@ -187,4 +199,4 @@ const Ingrediente = () => {
      }
   });
   
-  export default Ingrediente;
+  export default Alergeno;
