@@ -28,7 +28,7 @@ const CrearIngrediente = ()=>{
     const handleCreateIngrediente = () => {
 
         try{
-            axios.post(`${useHost()}/crearingrediente`,{email,nombre,date,username,contraseña,domicilio,datosPago})
+            axios.post(`${useHost()}/crearingrediente`,{id,nombre,numStock})
             navigate('/ingrediente');
         }
         catch(error){

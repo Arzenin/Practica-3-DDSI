@@ -47,7 +47,7 @@ app.post('/crearcliente', async (req, res) => {
 });
 
 app.post('/crearingrediente', async (req, res) => {
-  console.error('AQUI ESTOY');
+
   try {
     const connection = await abrirConexion();
     const {id,nombre,numStock} = req.body;
@@ -55,7 +55,7 @@ app.post('/crearingrediente', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, nombre, numStock]);
-    
+
     connection.commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
