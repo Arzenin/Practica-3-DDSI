@@ -9,6 +9,8 @@ import Trabajadores from './Trabajadores/Trabajadores';
 import Mensaje from './Mensaje';
 import CrearCliente from './Clientes/CrearCliente';
 import EditarCliente from './Clientes/EditarCliente';
+import Ingrediente from './Menú/Ingrediente/Ingrediente';
+import Receta from './Menú/Receta/Receta';
 
 
 const Index = () => {
@@ -17,14 +19,16 @@ const Index = () => {
       <View style={{ flex: 1 }}>
         <Routes>
           <Route path="/" exact element={<App />} />
-          <Route path='/menu' exact element={<Menú/>}/>
-          <Route path='/clientes' exact element={<Clientes/>}/>
-          <Route path='/pedidos' exact element={<Pedidos/>}/>
-          <Route path='/reservas' exact element={<Reservas/>}/>
-          <Route path='/trabajadores' exact element={<Trabajadores/>}/>
-          <Route path="/mensaje" exact element={<Mensaje/>}/>
-          <Route path="/crearcliente" exact element={<CrearCliente/>}/>
-          <Route path="/editarcliente" exact element={<EditarCliente/>}/>
+          <Route path='/menu' exact element={<Menú />}/>
+          <Route path='/clientes' exact element={<Clientes />}/>
+          <Route path='/pedidos' exact element={<Pedidos />}/>
+          <Route path='/reservas' exact element={<Reservas />}/>
+          <Route path='/trabajadores' exact element={<Trabajadores />}/>
+          <Route path="/mensaje" exact element={<Mensaje />}/>
+          <Route path="/crearcliente" exact element={<CrearCliente />}/>
+          <Route path="/editarcliente" exact element={<EditarCliente />}/>
+          <Route path="/ingrediente" exact element={<Ingrediente />}/>
+          <Route path="/receta" exact element={<Receta />}/>
         </Routes>
       </View>
     </NativeRouter>

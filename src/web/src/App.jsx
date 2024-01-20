@@ -13,6 +13,18 @@ const App = () => {
         navigate(enlace);
     };
 
+    const reiniciarBD = () => {
+      axios.post('http://172.28.111.168:5050/reiniciar')
+      .then((response) => {
+        // Maneja la respuesta exitosa
+        navigate('/mensaje', { state: { mensaje: '¡Base de datos reiniciada con éxito!' } });
+    })
+    .catch((error) => {
+        // Maneja los errores
+        navigate('/mensaje', { state: { mensaje: 'Error al reiniciar la base de datos: ', error } });
+    });
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -35,6 +47,9 @@ const App = () => {
       </Pressable>
       <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/trabajadores')}>
           <Text style={styles.pressableText}>Subsistema de Trabajadores</Text>
+      </Pressable>
+      <Pressable style={styles.pressableButton} onPress={() => reiniciarBD()}>
+          <Text style={styles.pressableText}>Reiniciar Base de datos</Text>
       </Pressable>
     </View>
   );
