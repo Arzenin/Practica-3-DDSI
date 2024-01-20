@@ -1,9 +1,8 @@
 {
   "expo": {
-    "name": "DDSI-practica3",
-    "slug": "DDSI-practica3",
+    "name": "DDSI-Seminario2",
+    "slug": "DDSI-Seminario2",
     "version": "1.0.0",
-    "lanType": "lan",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

@@ -1,40 +1,40 @@
-// App.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
-import {useNavigate} from 'react-router-native'
+import { useNavigate } from 'react-router-native';
 import axios from 'axios';
 
-const App = () => {
-
+const Menú = () => {
+  const [stockData, setStockData] = useState([]);
   const navigate = useNavigate();
 
-    const handleButtonClick = (enlace) => {
-        navigate(enlace);
+  useEffect(() => {
+    // Llamada a la API al cargar el componente
+      const fetchData = async() => {
+        try{
+          const response = await axios.get('http://172.28.152.110:5050/ver');
+          const resultado = response.data[0];
+          await setStockData(resultado);
+        } catch(error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
     };
+    fetchData();
+  }, []);
+
+  const handleButtonClick = (enlace) => {
+    navigate(enlace);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.image} source={require('../LogoMcAndCheese.png')} />
-        <Text style={styles.title}>McAndCheese - Práctica 3
-        
-        </Text>
+        <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
+        <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
-      <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/menu')}>
-          <Text style={styles.pressableText}>Subsistema de Menú</Text>
-      </Pressable>  
-      <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/clientes')}>
-          <Text style={styles.pressableText}>Subsistema de Clientes</Text>
-      </Pressable>  
-      <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/pedidos')}>
-          <Text style={styles.pressableText}>Subsistema de Pedidos</Text>
-      </Pressable>  
-      <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/reservas')}>
-          <Text style={styles.pressableText}>Subsistema de Reservas</Text>
-      </Pressable>
-      <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/trabajadores')}>
-          <Text style={styles.pressableText}>Subsistema de Trabajadores</Text>
+      <Text style={styles.title}>Subsistema de Menú</Text>
+
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
+        <Text style={styles.pressableText}>Volver</Text>
       </Pressable>
     </View>
   );
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default Menú;

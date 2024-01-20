@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS INGREDIENTES_ALERGENOS(
     FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente)
 );
 
-CREATE TRIGGER IF NOT EXISTS ActualizarStock 
+CREATE TRIGGER ActualizarStock 
 BEFORE INSERT ON PEDIDO_RECETAS 
 FOR EACH ROW 
 BEGIN 
@@ -146,7 +146,7 @@ BEGIN
     WHERE ir.IdReceta = NEW.IdReceta; 
 END;
 
-CREATE TRIGGER IF NOT EXISTS RestarPuntos
+CREATE TRIGGER RestarPuntos
 BEFORE INSERT ON CLIENTES_PEDIDO
 FOR EACH ROW
 BEGIN
@@ -177,7 +177,7 @@ BEGIN
     END IF;
 END;
 
-CREATE TRIGGER IF NOT EXISTS RellenarStock
+CREATE TRIGGER RellenarStock
 AFTER INSERT ON PEDIDO_RECETAS
 FOR EACH ROW
 BEGIN
@@ -196,7 +196,7 @@ BEGIN
     END IF;
 END;
 
-CREATE TRIGGER IF NOT EXISTS ContieneAlergeno
+CREATE TRIGGER ContieneAlergeno
 BEFORE INSERT ON CLIENTES_PEDIDO
 FOR EACH ROW
 BEGIN
@@ -215,3 +215,7 @@ BEGIN
         SET MESSAGE_TEXT = 'El cliente tiene alérgenos en las recetas del pedido';
     END IF;
 END;
+
+INSERT INTO `CLIENTES` (`IdCliente`, `Valoracion`, `Nombre`, `UserName`, `Contrasenia`, `Domicilio`, `Puntos`, `FechaNacimiento`, `DatosDePago`) VALUES
+('gonzalo@miemail.com', NULL, 'Gonzalo Sanz Guerrero', 'gonzasanz_', '1234abc', 'Calle A', 0, '2012-12-12 00:00:00', '123A'),
+('jose', NULL, 'José Manuel Aranda Gutierrez', 'josemanuelaranda_', '12346ma', 'Calle B', 0, '2012-12-12 00:00:00', '123B');
