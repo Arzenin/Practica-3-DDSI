@@ -33,13 +33,13 @@ const Menú = () => {
       </View>
       <Text style={styles.title}>Subsistema de Menú</Text>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/alergeno')}>
-        <Text style={styles.pressableText}>Alergenos</Text>
+        <Text style={styles.pressableText}>Sistema de Alergenos</Text>
       </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/ingrediente')}>
-        <Text style={styles.pressableText}>Ingrediente</Text>
+        <Text style={styles.pressableText}>Sistema de Ingrediente</Text>
       </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/receta')}>
-        <Text style={styles.pressableText}>Receta</Text>
+        <Text style={styles.pressableText}>Sistema de Receta</Text>
       </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
         <Text style={styles.pressableText}>Volver</Text>

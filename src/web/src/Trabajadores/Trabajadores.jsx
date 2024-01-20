@@ -35,26 +35,26 @@ const Trabajadores = () => {
         navigate('/crearcliente');
     };
 
-    const handleDelete = async (idIngrediente) => {
-        console.log(idIngrediente);
-        try {
-          // Realizar la solicitud DELETE
-          await axios.delete(`http://localhost:5050/borraringrediente/${idIngrediente}`);
-      
-          // Volver a cargar los datos después de la eliminación
-          const response = await axios.get(host);
-          const resultado = response.data[0];
-      
-          // Aplicar la paginación
-          const inicio = (pagina - 1) * itemsPorPagina;
-          const fin = inicio + itemsPorPagina;
-          const filasPaginadas = resultado.slice(inicio, fin);
-          
-          setFilas(filasPaginadas);
-        } catch (error) {
-          console.error('Error al eliminar:', error);
-        }
+    const handleDelete = async (id) => { // Función borrar
+      try{
+        // Realizar la solicitud DELETE
+        await axios.delete(`http://localhost:5050/borrartrabajador/${id}`);
+    
+        // Volver a cargar los datos después de la eliminación
+        const response = await axios.get(host);
+        const resultado = response.data[0];
+    
+        // Aplicar la paginación
+        const inicio = (pagina - 1) * itemsPorPagina;
+        const fin = inicio + itemsPorPagina;
+        const filasPaginadas = resultado.slice(inicio, fin);
+        
+        setFilas(filasPaginadas);
+      }
+      catch (error) {
+        console.error('Error al eliminar:', error);
       };
+    };
 
     const handlePageChange = (page) => {  
         setPagina(page);
@@ -116,7 +116,7 @@ const Trabajadores = () => {
                 <DataTable.Cell>{item.Bono}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} /> */}
+                {<IconButton icon="delete" onPress={() => handleDelete(item.IdTrabajador)} /> }
               </DataTable.Row>
             ))}
             <DataTable.Pagination

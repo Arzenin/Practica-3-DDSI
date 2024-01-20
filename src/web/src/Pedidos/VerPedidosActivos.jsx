@@ -16,9 +16,10 @@ const useHost = () => {
   const Cabecera = () => {
     return (
       <DataTable.Header>
-        <DataTable.Title>ID Ingrediente</DataTable.Title>
-        <DataTable.Title>Nombre</DataTable.Title>
-        <DataTable.Title>Numero Stock</DataTable.Title>
+        <DataTable.Title>ID Pedido</DataTable.Title>
+        <DataTable.Title>Valoracion</DataTable.Title>
+        <DataTable.Title>Tipo de Pago</DataTable.Title>
+        <DataTable.Title>Estado del Pedido</DataTable.Title>
       </DataTable.Header>
     );
   };
@@ -35,13 +36,25 @@ const VerPedidos = () => {
         navigate('/crearcliente');
     };
 
-    const handleDelete = (id) => { // Función borrar
-        console.log(id);
-        axios.delete(`http://localhost:5050/borraringrediente/${id}`)
-        .then((response) => {
-          this.forceUpdate();
-        })
-        .catch((error) => console.error('Error al eliminar:', error));
+    const handleDelete = async (id) => { // Función borrar
+        try{
+          // Realizar la solicitud DELETE
+          await axios.delete(`http://localhost:5050/borrarpedido/${id}`);
+      
+          // Volver a cargar los datos después de la eliminación
+          const response = await axios.get(host);
+          const resultado = response.data[0];
+      
+          // Aplicar la paginación
+          const inicio = (pagina - 1) * itemsPorPagina;
+          const fin = inicio + itemsPorPagina;
+          const filasPaginadas = resultado.slice(inicio, fin);
+          
+          setFilas(filasPaginadas);
+        }
+        catch (error) {
+          console.error('Error al eliminar:', error);
+        };
     };
 
     const handlePageChange = (page) => {  
@@ -102,11 +115,11 @@ const VerPedidos = () => {
               <DataTable.Row key={item.IdPedido}>
                 <DataTable.Cell>{item.IdPedido}</DataTable.Cell>                
                 <DataTable.Cell>{item.Valoracion}</DataTable.Cell>
-                <DataTable.Cell>{item.Tpago}</DataTable.Cell>
+                <DataTable.Cell>{item.TPago}</DataTable.Cell>
                 <DataTable.Cell>{item.Estado}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />*/}
+                <IconButton icon="delete" onPress={() => handleDelete(item.IdPedido)} />
               </DataTable.Row>
             ))}
             <DataTable.Pagination

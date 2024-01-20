@@ -46,6 +46,28 @@ app.post('/crearcliente', async (req, res) => {
   }
 });
 
+app.post('/crearingrediente', async (req, res) => {
+  console.error('AQUI ESTOY');
+  try {
+    const connection = await abrirConexion();
+    const {id,nombre,numStock} = req.body;
+    const querySelect = 'INSERT INTO INGREDIENTES (IdIngrediente,Nombre,NumStock) VALUES (?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, nombre, numStock]);
+    
+    connection.commit();
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Ingrediente creado correctamente' });
+  } catch (error) {
+    console.error('Error al crear Ingrediente:', error);
+    res.status(500).json({ error: 'Error al crear Ingrediente' });
+  }
+});
+
 app.put('/editarcliente', async (req, res) => {
   try {
     const connection = await abrirConexion();
@@ -134,7 +156,7 @@ app.get('/verpedidos', async (req, res) => { // GET Ingredientes
 app.get('/verpedidosactivos', async (req, res) => { // GET Ingredientes
   try {
     const connection = await abrirConexion();
-    const query = 'SELECT * FROM PEDIDO WHERE Estado= \'Activo\';';
+    const query = 'SELECT * FROM PEDIDO WHERE Estado = \'Activo\';';
     const [resultado] = await connection.promise().query(query);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
@@ -238,6 +260,39 @@ app.delete('/borrarcliente/:id', async (req, res) => {
   res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
 });
 
+app.delete('/borrartrabajador/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    console.log("Trabajador:", id);
+
+    const checkQuery1 = 'SELECT * FROM  TRABAJADOR_PEDIDO WHERE IdTrabajador = ?';
+    const [result1] = await connection.promise().query(checkQuery1, id);
+
+    if (result1.length > 0) {
+      const deleteQuery1 = 'DELETE FROM TRABAJADOR_PEDIDO WHERE Idtrabajador = ?';
+      await connection.promise().query(deleteQuery1, id);
+    }
+
+    const checkQuery2 = 'SELECT * FROM  TRABAJADOR WHERE IdTrabajador = ?';
+    const [result2] = await connection.promise().query(checkQuery2, id);
+
+    if (result2.length > 0) {
+      const deleteQuery2 = 'DELETE FROM TRABAJADOR WHERE IdTrabajador = ?';
+      await connection.promise().query(deleteQuery2, id);
+    }    
+
+    connection.commit();
+    connection.end();
+
+  } catch (error){
+    console.error('Error al borrar Trabajador:', error);
+    res.status(500).json({ error: 'Error al borrar Trabajador' });
+  }
+  console.log('Trabajador eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Trabajador eliminado con éxito' });
+});
+
 app.delete('/borraringrediente/:id', async (req, res) => {
   try{
     const connection = await abrirConexion();
@@ -279,6 +334,170 @@ app.delete('/borraringrediente/:id', async (req, res) => {
   res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
 });
 
+app.delete('/borrarpedido/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    console.log("Pedido:", id);
+
+    const checkQuery1 = 'SELECT * FROM  PEDIDO_RECETAS WHERE IdPedido = ?';
+    const [result1] = await connection.promise().query(checkQuery1, id);
+
+    if (result1.length > 0) {
+      const deleteQuery1 = 'DELETE FROM PEDIDO_RECETAS WHERE IdPedido = ?';
+      await connection.promise().query(deleteQuery1, id);
+    }
+
+    const checkQuery2 = 'SELECT * FROM  RESERVAS_PEDIDO WHERE IdPedido = ?';
+    const [result2] = await connection.promise().query(checkQuery2, id);
+
+    if (result2.length > 0) {
+      const deleteQuery2 = 'DELETE FROM RESERVAS_PEDIDO WHERE IdPedido = ?';
+      await connection.promise().query(deleteQuery2, id);
+    }    
+
+    const checkQuery3 = 'SELECT * FROM  CLIENTES_PEDIDO WHERE IdPedido = ?';
+    const [result3] = await connection.promise().query(checkQuery3, id);
+
+    if (result3.length > 0) {
+      const deleteQuery3 = 'DELETE FROM CLIENTES_PEDIDO WHERE IdPedido = ?';
+      await connection.promise().query(deleteQuery3, id);
+    }  
+
+    const checkQuery4 = 'SELECT * FROM  TRABAJADOR_PEDIDO WHERE IdPedido = ?';
+    const [result4] = await connection.promise().query(checkQuery4, id);
+
+    if (result4.length > 0) {
+      const deleteQuery4 = 'DELETE FROM TRABAJADOR_PEDIDO WHERE IdPedido = ?';
+      await connection.promise().query(deleteQuery4, id);
+    }  
+
+    const checkQuery5 = 'SELECT * FROM  PEDIDO WHERE IdPedido = ?';
+    const [result5] = await connection.promise().query(checkQuery5, id);
+
+    if (result5.length > 0) {
+      const deleteQuery5 = 'DELETE FROM PEDIDO WHERE IdPedido = ?';
+      await connection.promise().query(deleteQuery5, id);
+    }  
+
+    connection.commit();
+    connection.end();
+
+  } catch (error){
+    console.error('Error al borrar Pedido:', error);
+    res.status(500).json({ error: 'Error al borrar Pedido' });
+  }
+  console.log('Pedido eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Pedido eliminado con éxito' });
+});
+
+app.delete('/borrarreserva/:id', async (req,res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+
+    console.log("Reserva:", id);
+
+    const checkQuery1 = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
+    const [result1] = await connection.promise().query(checkQuery1,id);
+
+    if (result1.length > 0) {
+      const deleteQuery1 = 'DELETE FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
+      await connection.promise().query(deleteQuery1, id);
+    }
+
+    connection.commit();
+    connection.end();
+
+  } catch (error){
+    console.error('Error al borrar reserva:', error);
+    res.status(500).json({ error: 'Error al borrar reserva' });
+  }
+  console.log('Reserva eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Reserva eliminado con éxito' });
+});
+
+app.delete('/borraralergeno/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    console.log("Alergeno:", id);
+
+    const checkQuery1 = 'SELECT * FROM  CLIENTES_ALERGENOS WHERE IdAlergeno = ?';
+    const [result1] = await connection.promise().query(checkQuery1, id);
+
+    if (result1.length > 0) {
+      const deleteQuery1 = 'DELETE FROM CLIENTES_ALERGENOS WHERE IdAlergeno = ?';
+      await connection.promise().query(deleteQuery1, id);
+    }
+
+    const checkQuery2 = 'SELECT * FROM  INGREDIENTES_ALERGENOS WHERE IdAlergeno = ?';
+    const [result2] = await connection.promise().query(checkQuery2, id);
+
+    if (result2.length > 0) {
+      const deleteQuery2 = 'DELETE FROM INGREDIENTES_ALERGENOS WHERE IdAlergeno = ?';
+      await connection.promise().query(deleteQuery2, id);
+    }    
+
+    const checkQuery3 = 'SELECT * FROM  ALERGENOS WHERE IdAlergeno = ?';
+    const [result3] = await connection.promise().query(checkQuery3, id);
+
+    if (result3.length > 0) {
+      const deleteQuery3 = 'DELETE FROM ALERGENOS WHERE IdAlergeno = ?';
+      await connection.promise().query(deleteQuery3, id);
+    }  
+
+    connection.commit();
+    connection.end();
+
+  } catch (error){
+    console.error('Error al borrar Ingrediente:', error);
+    res.status(500).json({ error: 'Error al borrar Ingrediente' });
+  }
+  console.log('Ingrediente eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
+});
+
+app.delete('/borrarreceta/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    console.log("Receta:", id);
+
+    const checkQuery1 = 'SELECT * FROM  PEDIDO_RECETAS WHERE IdReceta = ?';
+    const [result1] = await connection.promise().query(checkQuery1, id);
+
+    if (result1.length > 0) {
+      const deleteQuery1 = 'DELETE FROM PEDIDO_RECETAS WHERE IdReceta = ?';
+      await connection.promise().query(deleteQuery1, id);
+    }
+
+    const checkQuery2 = 'SELECT * FROM  RECETAS_INGREDIENTES WHERE IdReceta = ?';
+    const [result2] = await connection.promise().query(checkQuery2, id);
+
+    if (result2.length > 0) {
+      const deleteQuery2 = 'DELETE FROM RECETAS_INGREDIENTES WHERE IdReceta = ?';
+      await connection.promise().query(deleteQuery2, id);
+    }    
+
+    const checkQuery3 = 'SELECT * FROM  RECETAS WHERE IdReceta = ?';
+    const [result3] = await connection.promise().query(checkQuery3, id);
+
+    if (result3.length > 0) {
+      const deleteQuery3 = 'DELETE FROM RECETAS WHERE IdReceta = ?';
+      await connection.promise().query(deleteQuery3, id);
+    }  
+
+    connection.commit();
+    connection.end();
+
+  } catch (error){
+    console.error('Error al borrar Ingrediente:', error);
+    res.status(500).json({ error: 'Error al borrar Ingrediente' });
+  }
+  console.log('Ingrediente eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
+});
 
 app.post('/reiniciar', async (req, res) => {
   try {

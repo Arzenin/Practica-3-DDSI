@@ -39,7 +39,7 @@ const Alergeno = () => {
         console.log(idIngrediente);
         try {
           // Realizar la solicitud DELETE
-          await axios.delete(`http://localhost:5050/borraringrediente/${idIngrediente}`);
+          await axios.delete(`http://localhost:5050/borraralergeno/${idIngrediente}`);
       
           // Volver a cargar los datos después de la eliminación
           const response = await axios.get(host);
@@ -116,7 +116,7 @@ const Alergeno = () => {
                 <DataTable.Cell>{item.Descripcion}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />*/}
+                <IconButton icon="delete" onPress={() => handleDelete(item.IdAlergeno)} />
               </DataTable.Row>
             ))}
             <DataTable.Pagination

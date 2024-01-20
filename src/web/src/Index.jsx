@@ -15,6 +15,7 @@ import VerPedidos from './Pedidos/VerPedidos';
 import VerPedidosActivos from './Pedidos/VerPedidosActivos';
 import VerPedidosInactivos from './Pedidos/VerPedidosInactivos';
 import Alergeno from './Menú/Alergeno/Alergeno';
+import CrearIngrediente from './Menú/Ingrediente/CrearIngrediente';
 
 const Index = () => {
   return (
@@ -36,6 +37,7 @@ const Index = () => {
           <Route path="/verpedidosactivos" exact element={<VerPedidosActivos />}/>
           <Route path="/verpedidosinactivos" exact element={<VerPedidosInactivos />}/>
           <Route path="/alergeno" exact element={<Alergeno />}/>
+          <Route path="/crearingrediente" exact element={<CrearIngrediente />}/>
         </Routes>
       </View>
     </NativeRouter>

@@ -41,13 +41,24 @@ const Clientes = () => {
     navigate('/crearcliente');
   };
 
-  const handleDelete = (id) => { // Función borrar
-    console.log(id);
-    axios.delete(`http://localhost:5050/borrarcliente/${id}`)
-    .then((response) => {
-        setFilas(prevFilas => prevFilas.filter(item => item.IdCliente !== idCliente));
-      })
-      .catch((error) => console.error('Error al eliminar:', error));
+  const handleDelete = async (id) => { // Función borrar
+    try{
+      console.log(id);
+      axios.delete(`http://localhost:5050/borrarcliente/${id}`)
+      // Volver a cargar los datos después de la eliminación
+      const response = await axios.get(host);
+      const resultado = response.data[0];
+  
+      // Aplicar la paginación
+      const inicio = (pagina - 1) * itemsPorPagina;
+      const fin = inicio + itemsPorPagina;
+      const filasPaginadas = resultado.slice(inicio, fin);
+      
+      setFilas(filasPaginadas);
+    }
+    catch (error) {
+      console.error('Error al eliminar:', error);
+    };
   };
 
 	const handleEdit = (ide) => {

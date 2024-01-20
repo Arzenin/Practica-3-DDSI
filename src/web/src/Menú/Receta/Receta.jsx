@@ -35,14 +35,26 @@ const Receta = () => {
     navigate('/crearcliente');
   };
 
-  const handleDelete = (id) => { // Función borrar
-    console.log(id);
-    axios.delete(`http://localhost:5050/borrarcliente/${id}`)
-    .then((response) => {
-      this.forceUpdate();
-      })
-      .catch((error) => console.error('Error al eliminar:', error));
-  };
+  const handleDelete = async (id) => { // Función borrar
+    try{
+      // Realizar la solicitud DELETE
+      await axios.delete(`http://localhost:5050/borrarreceta/${id}`);
+  
+      // Volver a cargar los datos después de la eliminación
+      const response = await axios.get(host);
+      const resultado = response.data[0];
+  
+      // Aplicar la paginación
+      const inicio = (pagina - 1) * itemsPorPagina;
+      const fin = inicio + itemsPorPagina;
+      const filasPaginadas = resultado.slice(inicio, fin);
+      
+      setFilas(filasPaginadas);
+    }
+    catch (error) {
+      console.error('Error al eliminar:', error);
+    };
+};
 
 	const handleEdit = (ide) => {
 		navigate('/editarcliente', { state: { id: ide }})
@@ -108,7 +120,7 @@ const Receta = () => {
             <DataTable.Cell>{item.Precio}</DataTable.Cell>
             {/* Botones de las filas */}
             {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-            {/*<IconButton icon="delete" onPress={() => handleDelete(item.IdCliente)} />*/}
+            <IconButton icon="delete" onPress={() => handleDelete(item.IdReceta)} />
           </DataTable.Row>
         ))}
         <DataTable.Pagination

@@ -356,6 +356,7 @@ public class TestTriggerJava {
             //Error por asignar un numero de personas negativo o 0
             //sentencia.executeUpdate("INSERT INTO RESERVAS_PEDIDO (`IdReserva`,`IdPedido`,`NumPersonas`,`HoraIni`) VALUES (1,1,-5,'15:00/21/12/2002')");
             sentencia.executeUpdate("INSERT INTO RESERVAS_PEDIDO (`IdReserva`,`IdPedido`,`NumPersonas`,`HoraIni`) VALUES (1,1,5,'15:00/21/12/2002')");
+            sentencia.executeUpdate("INSERT INTO RESERVAS_PEDIDO (`IdReserva`,`IdPedido`,`NumPersonas`,`HoraIni`) VALUES (1,2,5,'16:00/21/12/2002')");
             sentencia.executeUpdate("INSERT INTO RESERVAS (`IdReserva`) VALUES (2)");
             //Comprobar que un pedido no puede tener mas de una reserva
             //sentencia.executeUpdate("INSERT INTO RESERVAS_PEDIDO (`IdReserva`,`IdPedido`,`NumPersonas`,`HoraIni`) VALUES (2,1,5,'15:00/21/12/2002')");
