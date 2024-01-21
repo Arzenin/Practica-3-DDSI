@@ -695,45 +695,414 @@ también determinaría que alergenos contiene cada receta. Sus atributos son los
 2. `IdAlergeno`: Es el identificador de un alergeno determinado de el ingrediente identificado por `IdIngrediente`
 
 
-//SUBIR IMAGEN
+ ### 5.1.2 Triggers
+En esta sección comentaremos los triggers del sistema, como hemos mencionado previamente hemos configurado algunos de ellos para realizar funciones más allá de
+la comprobación de actualizaciones correctas dentro de la base de datos. Hemos decidido que la base de datos por si misma se encague del cáculo y realización de 
+determinados requisitos funcionales, para que así nuestro sistema únicamente deba de devolver el resultado.
+
+Antes de comenzar con la explicación se debe de aclarar una cosa, en determinadas secciones hay dos triggers en un único fragmento de código, si nos fijamos bien 
+la única diferencia del código será que cambiará en el momento en el que se ejecuta el trigger y al final del nombre aquellos que se disparen en la creación
+tendrán un `Init` al final del nombre.
 
 
+#### ActualizarStock
 ```sql
-
-```
-
-```sql
-
-```
-
-```sql
-
-```
-
-```sql
-
-```
-
-
-```sql
-
-```
-
-
-```sql
-
-```
-
-
-```sql
-
+CREATE TRIGGER ActualizarStock AFTER INSERT ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    DECLARE veces INT;
+    SELECT numero INTO veces FROM PEDIDO_RECETAS WHERE IdReceta = NEW.IdReceta AND IdPedido = NEW.IdPedido;
+    
+    UPDATE INGREDIENTES
+    JOIN RECETAS_INGREDIENTES ON INGREDIENTES.IdIngrediente = RECETAS_INGREDIENTES.IdIngrediente
+    SET INGREDIENTES.NumStock = CASE
+        WHEN (INGREDIENTES.NumStock - veces * RECETAS_INGREDIENTES.numero) < 0 THEN -1
+        WHEN (INGREDIENTES.NumStock - veces * RECETAS_INGREDIENTES.numero) < 10 THEN 200 + INGREDIENTES.NumStock - veces * RECETAS_INGREDIENTES.numero
+        ELSE (INGREDIENTES.NumStock - veces * RECETAS_INGREDIENTES.numero)
+    END
+    WHERE RECETAS_INGREDIENTES.IdReceta = NEW.IdReceta;
+END;
 ```
 
 
-```sql
+Este trigger es el encargado de comprobar que cuando realize un pedido, en caso de que el pedido sea tan grande que requiera más ingredientes de los que 
+disponemos, ponga `numStock= -1`, esto se debe a que como más adelante veremos disponemos de un trigger que hará que se devuelva un error.
 
+
+Además de esto el requisito funcional de que se aumente el stock cada vez que queden pocas existencias se hará de forma automática con este trigger, ya que en
+caso de que un pedido haga que el número de existencias baje a menos de 10, automáticamente se aumentará en 200 unidades el stock.
+
+
+Por último, este trigger también se encargará de restar el stock correpondiente tras añadir una receta a un pedido, como podemos comprobar también se tendrá en
+cuenta el número de esa misma receta que se hayan pedido y cuantos ingredientes requiere esa receta.
+
+
+#### RestarPuntos
+```sql
+CREATE TRIGGER RestarPuntos AFTER INSERT ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    DECLARE resta INT;
+    DECLARE multiplicador INT;
+    DECLARE Tipo VARCHAR(40);
+    
+    SELECT Precio INTO resta FROM RECETAS WHERE RECETAS.IdReceta = NEW.IdReceta;
+    SELECT numero INTO multiplicador FROM PEDIDO_RECETAS WHERE PEDIDO_RECETAS.IdPedido = NEW.IdPedido AND PEDIDO_RECETAS.IdReceta = NEW.IdReceta;
+    
+    SET resta = resta * multiplicador;
+    
+    SELECT TPago INTO Tipo FROM PEDIDO WHERE PEDIDO.IdPedido = NEW.IdPedido;
+    
+    IF Tipo = 'Puntos' THEN
+        UPDATE CLIENTES
+        JOIN CLIENTES_PEDIDO ON CLIENTES_PEDIDO.IdPedido = NEW.IdPedido AND CLIENTES.IdCliente = CLIENTES_PEDIDO.IdCliente
+        SET CLIENTES.Puntos = CASE
+            WHEN (CLIENTES.Puntos - resta) < 0 THEN -1
+            ELSE (CLIENTES.Puntos - resta)
+        END
+        WHERE CLIENTES_PEDIDO.IdPedido = NEW.IdPedido;
+    END IF;
+END;
 ```
 
+
+Este trigger automatizará la gestión de los puntos de los clientes, es decir que cada vez que un cliente seleccione como metodo de pago del pedido `Puntos` se 
+irá restando a los puntos el precio de la receta, y al igual que en stock en caso de que el precio sea mayor al número de puntos, se actualizará el valor de 
+`Puntos = -1` haciendo así que otro trigger implementado más adelante salte dando un error.
+
+
+Por último se debe destacar que para calcular la resta de precios tambien se ha tenido en cuenta el número de una misma receta que se ha pedido en un mismo
+pedido.
+
+
+#### ContieneAlergeno
+```sql
+CREATE TRIGGER ContieneAlergeno BEFORE INSERT ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    DECLARE Peligro BOOLEAN;
+    SELECT 1 INTO Peligro FROM ALERGENOS
+    JOIN INGREDIENTES_ALERGENOS ON ALERGENOS.IdAlergeno = INGREDIENTES_ALERGENOS.IdAlergeno
+    JOIN INGREDIENTES ON INGREDIENTES_ALERGENOS.IdIngrediente = INGREDIENTES.IdIngrediente
+    JOIN RECETAS_INGREDIENTES ON INGREDIENTES.IdIngrediente = RECETAS_INGREDIENTES.IdIngrediente
+    WHERE RECETAS_INGREDIENTES.IdReceta = NEW.IdReceta
+    AND EXISTS (
+        SELECT 1
+        FROM CLIENTES_ALERGENOS
+        WHERE CLIENTES_ALERGENOS.IdCliente = (SELECT IdCliente FROM PEDIDO WHERE IdPedido = NEW.IdPedido)
+        AND CLIENTES_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno
+    );
+    
+    IF Peligro THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'EL CLIENTE TIENE ALERGIAS EN LA RECETA DEL PEDIDO';
+    END IF;
+END;
+```
+
+
+Este es uno de los trigger más importantes, ya que será el encargado de evitar que un cliente pida una receta la cual contenga un alérgeno que esté en su listado 
+de alérgenos, para ello usará las relaciones entre tablas desde `CLIENTES_ALERGENOS` hasta `INGREDIENTE_ALERGENOS`, haciendo así posible la automatización del
+requisito funcional de detección de alergenos
+
+
+#### SumarPuntos
+```sql
+CREATE TRIGGER SumarPuntos AFTER INSERT ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    DECLARE suma INT;
+    DECLARE multiplicador INT;
+    DECLARE Tipo VARCHAR(40);
+    
+    SELECT Precio INTO suma FROM RECETAS WHERE RECETAS.IdReceta = NEW.IdReceta;
+    SELECT numero INTO multiplicador FROM PEDIDO_RECETAS WHERE PEDIDO_RECETAS.IdPedido = NEW.IdPedido AND PEDIDO_RECETAS.IdReceta = NEW.IdReceta;
+    
+    SET suma = suma * multiplicador;
+    
+    SELECT TPago INTO Tipo FROM PEDIDO WHERE PEDIDO.IdPedido = NEW.IdPedido;
+    
+    IF Tipo != 'Puntos' THEN
+        UPDATE CLIENTES
+        JOIN CLIENTES_PEDIDO ON CLIENTES_PEDIDO.IdPedido = NEW.IdPedido AND CLIENTES.IdCliente = CLIENTES_PEDIDO.IdCliente
+        SET CLIENTES.Puntos = CLIENTES.Puntos + suma
+        WHERE CLIENTES_PEDIDO.IdPedido = NEW.IdPedido;
+    END IF;
+END;
+```
+
+
+Este trigger será el encargado de que cada vez que cada vez que un cliente pague con otro metodo que no sean puntos se le añada el precio que ha pagado en el
+pedido a sus puntos. Al igual que en varios triggers anteriores se tendrán en cuenta el número de recetas que se hayan pedido en el pedido.
+
+
+#### ReservasInferior
+```sql
+CREATE TRIGGER ReservasInferior BEFORE UPDATE ON RESERVAS_PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.NumPersonas >= OLD.NumPersonas THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO SE PUEDEN AUMENTAR LAS RESERVAS A UN NUMERO MAYOR DE PERSONAS';
+    END IF;
+END;
+```
+
+
+La funcionalidad de este trigger es la de evitar que cada vez que se edite la reserva, si el número nuevo de comensales es superior al anterior no lo permita, 
+esto. Nuestro objetivo con esto sería que en un entorno real, en las horas puntas, pudiese llegar a superar el aforo máximo permitido en el restaurante.
+
+
+#### CalcularBono
+```sql
+CREATE TRIGGER CalcularBono AFTER UPDATE ON PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.Estado = 'Inactivo' THEN
+        UPDATE TRABAJADOR
+        JOIN TRABAJADOR_PEDIDO ON TRABAJADOR_PEDIDO.IdTrabajador = TRABAJADOR.IdTrabajador
+        JOIN PEDIDO ON TRABAJADOR_PEDIDO.IdPedido = PEDIDO.IdPedido
+        SET TRABAJADOR.Bono = TRABAJADOR.Bono + PEDIDO.Valoracion
+        WHERE PEDIDO.IdPedido = NEW.IdPedido;
+    END IF;
+END;
+```
+
+
+La función que realizará este trigger será la de actualizar el bono del trabajador por medio de la valoración del pedido. Esta actualización se llevará a cabo 
+cada vez que un pedido pase de estado activo a inactivo
+
+
+#### ComprobarPuntosNoNegativo
+```sql
+CREATE TRIGGER ComprobarPuntosNoNegativoInit BEFORE INSERT ON CLIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.Puntos < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER PUNTOS NEGATIVOS';
+    END IF;
+END;
+
+CREATE TRIGGER ComprobarPuntosNoNegativo BEFORE UPDATE ON CLIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.Puntos < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO HAY SUFICIENTES PUNTOS PARA PAGAR EL PEDIDO';
+    END IF;
+END;
+```
+
+
+Este trigger es el encargado de comprobar que en ningún momento los puntos de un cliente puedan llegar a ser negativos, en caso de ser así, dará un error.
+
+
+#### ComprobarStockNoNegativo
+```sql
+CREATE TRIGGER ComprobarStockNoNegativoInit BEFORE INSERT ON INGREDIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.NumStock < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER STOCK NEGATIVO';
+    END IF;
+END;
+
+CREATE TRIGGER ComprobarStockNoNegativo BEFORE UPDATE ON INGREDIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.NumStock < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO DEBE DE HABER STOCK NEGATIVO';
+    END IF;
+END;
+```
+
+Este trigger es el encargado de comprobar que en ningún momento el stock de un ingrediente pueda llegar a ser negativos, en caso de ser así, dará un error.
+
+
+#### BonoMenor500
+```sql
+CREATE TRIGGER BonoMenor500 BEFORE UPDATE ON TRABAJADOR
+FOR EACH ROW
+BEGIN
+    SET NEW.Bono = CASE
+        WHEN NEW.Bono > 500 THEN 500
+        WHEN NEW.Bono < 0 THEN 0
+        ELSE NEW.Bono
+    END;
+END;
+
+CREATE TRIGGER BonoMenor500Init BEFORE INSERT ON TRABAJADOR
+FOR EACH ROW
+BEGIN
+    SET NEW.Bono = CASE
+        WHEN NEW.Bono > 500 THEN 500
+        WHEN NEW.Bono < 0 THEN 0
+        ELSE NEW.Bono
+    END;
+END;
+```
+
+Este trigger será el encargado de evitar que un trabajador pueda tener un bono total mayor a 500 euros e inferior a 0, ya que en caso de ser así actualizará el
+bono a un valor dado por defecto, en caso de ser mayor a 500 el valor será 500 y en caso de ser 0 el valor será 0
+
+
+#### ValoracionMenor10
+```sql
+
+CREATE TRIGGER ValoracionMenor10Init BEFORE INSERT ON PEDIDO
+FOR EACH ROW
+BEGIN
+    SET NEW.Valoracion = CASE
+        WHEN NEW.Valoracion > 10 THEN 10
+        WHEN NEW.Valoracion < 0 THEN 0
+        ELSE NEW.Valoracion
+    END;
+END;
+
+CREATE TRIGGER ValoracionMenor10 BEFORE UPDATE ON PEDIDO
+FOR EACH ROW
+BEGIN
+    SET NEW.Valoracion = CASE
+        WHEN NEW.Valoracion > 10 THEN 10
+        WHEN NEW.Valoracion < 0 THEN 0
+        ELSE NEW.Valoracion
+    END;
+END;
+```
+
+Este trigger será el encargado de evitar que una valoración sea superior a 10 e inferior a 0, ya que en caso de ser así actualizará la valoración a un valor dado
+por defecto, en caso de ser mayor a 10 el valor será 10 y en caso de ser 0 el valor será 0
+
+
+#### PrecioPositivoInit
+```sql
+CREATE TRIGGER PrecioPositivoInit BEFORE INSERT ON RECETAS
+FOR EACH ROW
+BEGIN
+    IF NEW.Precio < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN PRECIO NEGATIVO';
+    END IF;
+END;
+
+CREATE TRIGGER PrecioPositivo BEFORE UPDATE ON RECETAS
+FOR EACH ROW
+BEGIN
+    IF NEW.Precio < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN PRECIO NEGATIVO';
+    END IF;
+END;
+```
+
+La funcionalidad de este trigger es la de comprobar que ninguna receta pueda generarse con un valor inferior o igual a 0, ya que en caso de o bien modificarse o 
+bien generarse siendo 0 o menor que el mismo nos devolverá un error
+
+
+#### EstadoEnRango
+```sql
+CREATE TRIGGER EstadoEnRangoInit BEFORE INSERT ON PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.Estado != 'Activo' AND  NEW.Estado != 'Inactivo' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'FUERA DEL RANGO VALIDO';
+    END IF;
+END;
+
+CREATE TRIGGER EstadoEnRango BEFORE UPDATE ON PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.Estado != 'Activo' AND  NEW.Estado != 'Inactivo' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'FUERA DEL RANGO VALIDO';
+    END IF;
+END;
+```
+
+La misión de este trigger es la de asegurarse que sean cuales sean las condiciones de la modificación del parámetro estado, solo pueda estar en el rango `Activo`
+o bien `Inactivo`
+
+
+#### TipoDePagoEnRango
+```sql
+CREATE TRIGGER TipoDePagoEnRangoInit BEFORE INSERT ON PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.TPago != ('Tarjeta' AND 'Efectivo' AND 'Puntos') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'TIPO DE PAGO INVALIDO';
+    END IF;
+END;
+
+CREATE TRIGGER TipoDePagoEnRango BEFORE UPDATE ON PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.TPago != ('Tarjeta' AND 'Efectivo' AND 'Puntos') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'TIPO DE PAGO INVALIDO';
+    END IF;
+END;
+```
+
+La misión de este trigger es la de asegurarse que sean cuales sean las condiciones de la modificación del parámetro tipo de pago, solo pueda estar en el rango
+`Tarjeta` , `Efectivo` y `Puntos` 
+
+#### NumRecetasPositivo
+```sql
+CREATE TRIGGER NumRecetasPositivoInit BEFORE INSERT ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    IF NEW.numero < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE PLATOS NEGATIVOS O 0 EN EL PEDIDO';
+    END IF;
+END;
+
+CREATE TRIGGER NumRecetasPositivo BEFORE UPDATE ON PEDIDO_RECETAS
+FOR EACH ROW
+BEGIN
+    IF NEW.numero < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE PLATOS NEGATIVOS O 0 EN EL PEDIDO';
+    END IF;
+END;
+```
+
+Este trigger nos asegurará que en un pedido no se pueda pedir una receta un número negativo o 0 de veces sea cual sea el contexto.
+
+
+#### NumIngredientes
+```sql
+CREATE TRIGGER NumIngredientesPositivoInit BEFORE INSERT ON RECETAS_INGREDIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.numero < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE INGREDIENTES NEGATIVO O 0 EN LA RECETA';
+    END IF;
+END;
+
+CREATE TRIGGER NumIngredientesPositivo BEFORE UPDATE ON RECETAS_INGREDIENTES
+FOR EACH ROW
+BEGIN
+    IF NEW.numero < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE INGREDIENTES NEGATIVO O 0 EN LA RECETA';
+    END IF;
+END;
+```
+
+Al igual que el anterior caso, este trigger nos que un valor no pueda ser inferior a uno, en este caso el número de ingredientes dentro de una receta. 
+
+#### NumPersonasPositivo
+```sql
+CREATE TRIGGER NumPersonasPositivoInit BEFORE INSERT ON RESERVAS_PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.NumPersonas < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE DE PERSONAS NEGATIVO O 0 EN LA MESA';
+    END IF;
+END;
+
+CREATE TRIGGER NumNumPersonasPositivo BEFORE UPDATE ON RESERVAS_PEDIDO
+FOR EACH ROW
+BEGIN
+    IF NEW.NumPersonas < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO PUEDE HABER UN NUMERO DE DE PERSONAS NEGATIVO O 0 EN LA MESA';
+    END IF;
+END;
+```
+
+Para finalizar, el último trigger será el encargado de que una reserva no pueda tener un número menor a uno en el número de clientes sea cual sea el contexto, ya
+que si no, no podría llegar a existir la reserva.
 
 ```sql
 
