@@ -1,3 +1,6 @@
+![WhatsApp Image 2024-01-21 at 23 46 40](https://github.com/Arzenin/Sistema-Mc-And-Cheese/assets/79646195/8cf39317-8eb0-40cb-9b22-9ae791b26078)
+
+
 # Autor:
 - Jose Manuel Aranda Gutiérrez
   - Correo electrónico: jomagtr@gmail.com
