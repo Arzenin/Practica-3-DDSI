@@ -69,11 +69,11 @@ app.post('/crearalergeno', async (req, res) => {
 app.post('/crearreceta', async (req, res) => {
   try {
     const connection = await abrirConexion();
-    const {id, precio} = req.body;
-    const querySelect = 'INSERT INTO RECETAS (IdReceta, Precio) VALUES (?,?)';
+    const {id, precio , nombre} = req.body;
+    const querySelect = 'INSERT INTO RECETAS (IdReceta, Precio, Nombre) VALUES (?,?,?)';
 
     // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, precio]);
+    const result = await connection.promise().query(querySelect, [id, precio, nombre]);
     
     connection.end(); // Liberar recursos BD
     connection.destroy();
@@ -171,11 +171,11 @@ app.put('/editaralergeno', async (req, res) => {
 app.put('/editarreceta', async (req, res) => {
   try {
     const connection = await abrirConexion();
-    const { idReceta,precio} = req.body;
-    const querySelect = 'UPDATE RECETAS SET Precio=? WHERE IdReceta=?';
+    const { idReceta,precio,nombre} = req.body;
+    const querySelect = 'UPDATE RECETAS SET Precio=?,Nombre=? WHERE IdReceta=?';
 
     // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [precio,idReceta]);
+    const result = await connection.promise().query(querySelect, [precio,nombre,idReceta]);
     
     connection.end(); // Liberar recursos BD
     connection.destroy();
@@ -708,11 +708,11 @@ app.post('/reiniciar', async (req, res) => {
       "SET foreign_key_checks = 1;",
       "CREATE TABLE IF NOT EXISTS TRABAJADOR (IdTrabajador VARCHAR(20), Turno INT, Bono INT CHECK(Bono <= 500), PRIMARY KEY(IdTrabajador));",
       "CREATE TABLE IF NOT EXISTS PEDIDO (IdPedido INT, Valoracion INT CHECK(Valoracion <= 10), TPago VARCHAR(10) CHECK (TPago IN ('Tarjeta','Efectivo','Puntos')), Estado VARCHAR(10) CHECK (Estado IN ('Activo','Inactivo')), PRIMARY KEY(IdPedido));",
-      "CREATE TABLE IF NOT EXISTS RESERVAS (IdReserva INT, PRIMARY KEY(IdReserva));",
+      "CREATE TABLE IF NOT EXISTS RESERVAS (NumMesa INT UNIQUE,IdReserva INT, PRIMARY KEY(IdReserva));",
       "CREATE TABLE IF NOT EXISTS CLIENTES (IdCliente VARCHAR(40), Nombre VARCHAR(40), UserName VARCHAR(40), Contrasenia VARCHAR(40), Domicilio VARCHAR(40), Puntos INT, FechaNacimiento VARCHAR(40), DatosDePago VARCHAR(30), PRIMARY KEY(IdCliente));",
       "CREATE TABLE IF NOT EXISTS ALERGENOS (IdAlergeno INT, Nombre VARCHAR(40), Descripcion VARCHAR(40), PRIMARY KEY(IdAlergeno));",
       "CREATE TABLE IF NOT EXISTS INGREDIENTES (IdIngrediente INT, Nombre VARCHAR(40), NumStock INT CHECK (NumStock >= 0), PRIMARY KEY(IdIngrediente));",
-      "CREATE TABLE IF NOT EXISTS RECETAS (IdReceta INT, Precio INT CHECK (Precio >= 1), PRIMARY KEY(IdReceta));",
+      "CREATE TABLE IF NOT EXISTS RECETAS (IdReceta INT, Nombre VARCHAR(40),Precio INT CHECK (Precio >= 1), PRIMARY KEY(IdReceta));",
       "CREATE TABLE IF NOT EXISTS RESERVAS_PEDIDO (IdReserva INT, IdPedido INT UNIQUE, NumPersonas INT, HoraIni VARCHAR(40), PRIMARY KEY(IdReserva,Horaini), FOREIGN KEY(IdReserva) REFERENCES RESERVAS(IdReserva), FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido));",
       "CREATE TABLE IF NOT EXISTS TRABAJADOR_PEDIDO (IdTrabajador VARCHAR(20), IdPedido INT, PRIMARY KEY(IdTrabajador,IdPedido), FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido), FOREIGN KEY(IdTrabajador) REFERENCES TRABAJADOR(IdTrabajador));",
       "CREATE TABLE IF NOT EXISTS CLIENTES_PEDIDO (IdCliente VARCHAR(40), IdPedido INT, PRIMARY KEY(IdPedido,IdCliente), FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido), FOREIGN KEY(IdCliente) REFERENCES CLIENTES(IdCliente));",

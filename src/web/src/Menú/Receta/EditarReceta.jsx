@@ -22,6 +22,7 @@ const EditarReceta = ()=>{
     };
 
     const [idReceta, setIdReceta] = useState('');
+    const [nombre, setNombre] = useState('')
     const [precio, setPrecio] = useState('');
     const { state } = useLocation();
     const id = state ? state.id : '';
@@ -33,6 +34,7 @@ const EditarReceta = ()=>{
                 if (resultado && resultado.length > 0 && Array.isArray(resultado)) {
                     resultado.forEach((receta) => {
                         setIdReceta(receta.IdReceta);
+                        setNombre(receta.Nombre);
                         setPrecio(receta.Precio);
                     });
                 }
@@ -50,7 +52,7 @@ const EditarReceta = ()=>{
     const handleEditarReceta = () => {
 
         // Realiza una solicitud POST al servidor backend para crear un alumno
-        axios.put(`${useHost()}/editarreceta`, {idReceta,precio})
+        axios.put(`${useHost()}/editarreceta`, {idReceta,precio,nombre})
         .then((response) => {
             // Maneja la respuesta exitosa
             navigate('/receta');
@@ -76,6 +78,11 @@ const EditarReceta = ()=>{
             
             <Text style={styles.text}>IdReceta:</Text>
             <Text style={styles.text}>{idReceta}</Text>
+            <Text style={styles.text}>Nombre:</Text>
+            <TextInput style={styles.textInput}
+                value={nombre}
+                onChangeText={text => setNombre(text)}
+            />
             <Text style={styles.text}>Precio:</Text>
             <TextInput style={styles.textInput}
                 value={precio}

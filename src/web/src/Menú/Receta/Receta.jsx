@@ -17,6 +17,7 @@ const Cabecera = () => {
   return (
     <DataTable.Header>
       <DataTable.Title>ID Receta</DataTable.Title>
+      <DataTable.Title>Nombre</DataTable.Title>
       <DataTable.Title>Precio</DataTable.Title>
     </DataTable.Header>
   );
@@ -117,6 +118,7 @@ const Receta = () => {
         {filas.map((item) => (
           <DataTable.Row key={item.IdReceta}>
             <DataTable.Cell>{item.IdReceta}</DataTable.Cell>
+            <DataTable.Cell>{item.Nombre}</DataTable.Cell>
             <DataTable.Cell>{item.Precio}</DataTable.Cell>
             {/* Botones de las filas */}
             <IconButton icon="pencil" onPress={() => handleEdit(item.IdReceta)} />

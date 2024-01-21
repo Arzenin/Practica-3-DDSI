@@ -23,11 +23,12 @@ const CrearReceta = ()=>{
 
     const [id, setId] = useState('');
     const [precio, setPrecio] = useState('');
+    const [nombre, setNombre] = useState('');
 
     const handleCreateReceta = () => {
 
         try{
-            axios.post(`${useHost()}/crearreceta`, {id, precio})
+            axios.post(`${useHost()}/crearreceta`, {id, precio, nombre})
             navigate('/receta');
         }
         catch(error){
@@ -53,6 +54,12 @@ const CrearReceta = ()=>{
                 label="Id de la receta"
                 value={id}
                 onChangeText={text => setId(text)}
+            />
+            <Text style={styles.text}>Nombre:</Text>
+            <TextInput style={styles.textInput}
+                label="Nombre"
+                value={nombre}
+                onChangeText={text => setNombre(text)}
             />
             <Text style={styles.text}>Precio:</Text>
             <TextInput style={styles.textInput}
