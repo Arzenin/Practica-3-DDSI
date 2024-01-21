@@ -35,6 +35,10 @@ const Alergeno = () => {
         navigate('/crearalergeno');
     };
 
+    const handleEdit = (ide) => {
+      navigate('/editaralergeno', { state: { id: ide }})
+    };
+
     const handleDelete = async (idIngrediente) => {
         console.log(idIngrediente);
         try {
@@ -115,7 +119,7 @@ const Alergeno = () => {
                 <DataTable.Cell>{item.Nombre}</DataTable.Cell>
                 <DataTable.Cell>{item.Descripcion}</DataTable.Cell>
                 {/* Botones de las filas */}
-                {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
+                <IconButton icon="pencil" onPress={() => handleEdit(item.IdAlergeno)} />
                 <IconButton icon="delete" onPress={() => handleDelete(item.IdAlergeno)} />
               </DataTable.Row>
             ))}

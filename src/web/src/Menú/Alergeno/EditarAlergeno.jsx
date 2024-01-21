@@ -14,29 +14,29 @@ const useHost = () => {
     }
 };
 
-const EditarIngrediente = ()=>{
+const EditarAlergeno = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-    const [idIngrediente, setIdIngrediente] = useState('');
+    const [idAlergeno, setIdAlergeno] = useState('');
     const [nombre, setNombre] = useState('');
-    const [numStock, setNumStock] = useState('');
+    const [descripcion, setDescripcion] = useState('');
     const { state } = useLocation();
     const id = state ? state.id : '';
 
 
-    const getDatosIngrediente = () => {
-        axios.get(`${useHost()}/ingrediente/${id}`)
+    const getDatosAlergeno = () => {
+        axios.get(`${useHost()}/alergeno/${id}`)
             .then((response) => {
                 const resultado = response.data[0];
                 if (resultado && resultado.length > 0 && Array.isArray(resultado)) {
-                    resultado.forEach((ingrediente) => {
-                        setIdIngrediente(ingrediente.IdIngrediente);
-                        setNombre(ingrediente.Nombre);
-                        setNumStock(ingrediente.NumStock);
+                    resultado.forEach((alergeno) => {
+                        setIdAlergeno(alergeno.IdAlergeno);
+                        setNombre(alergeno.Nombre);
+                        setDescripcion(alergeno.Descripcion);
                     });
                 }
             })
@@ -47,21 +47,21 @@ const EditarIngrediente = ()=>{
     };
 
     useEffect(() => {
-        getDatosIngrediente();
+        getDatosAlergeno();
     }, [])
 
-    const handleEditarIngrediente = () => {
+    const handleEditarAlergeno = () => {
 
         // Realiza una solicitud POST al servidor backend para crear un alumno
-        axios.put(`${useHost()}/editaringrediente`, {idIngrediente,nombre,numStock})
+        axios.put(`${useHost()}/editaralergeno`, {idAlergeno,nombre,descripcion})
         .then((response) => {
             // Maneja la respuesta exitosa
-            navigate('/ingrediente');
+            navigate('/alergeno');
         })
         .catch((error) => {
             // Maneja los errores
-            console.error("Error al editar Ingrediente: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error al editar Ingrediente',error } });
+            console.error("Error al editar Alergeno: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error al editar Alergeno',error } });
         });
         
     };
@@ -74,31 +74,31 @@ const EditarIngrediente = ()=>{
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Sistema de Ingredientes</Text>
-            <Text style={styles.titleText}>Editar Ingrediente</Text>
+            <Text style={styles.titleText}>Sistema de Alergenos</Text>
+            <Text style={styles.titleText}>Editar Alergenos</Text>
             
-            <Text style={styles.text}>IdIngrediente:</Text>
-            <Text style={styles.text}>{idIngrediente}</Text>
+            <Text style={styles.text}>IdAlergeno:</Text>
+            <Text style={styles.text}>{idAlergeno}</Text>
             <Text style={styles.text}>Nombre:</Text>
             <TextInput style={styles.textInput}
                 value={nombre}
                 onChangeText={text => setNombre(text)}
             />
 
-            <Text style={styles.text}>Numero de Stock:</Text>
+            <Text style={styles.text}>Descripcion:</Text>
             <TextInput style={styles.textInput}
-                value={numStock}
-                onChangeText={text => setNumStock(text)}
+                value={descripcion}
+                onChangeText={text => setDescripcion(text)}
             />
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleEditarIngrediente}>
-                    <Text style={styles.pressableText}>Editar Ingrediente</Text>
+                <Pressable style={styles.pressableButton} onPress={handleEditarAlergeno}>
+                    <Text style={styles.pressableText}>Editar Descripcion</Text>
                 </Pressable> 
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/ingrediente')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/alergeno')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -199,4 +199,4 @@ const styles=StyleSheet.create({
 
 
 
-export default EditarIngrediente
+export default EditarAlergeno

@@ -148,6 +148,26 @@ app.put('/editaringrediente', async (req, res) => {
   }
 });
 
+app.put('/editaralergeno', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { idAlergeno,nombre,descripcion} = req.body;
+    const querySelect = 'UPDATE ALERGENOS SET Nombre=?,Descripcion=? WHERE IdAlergeno=?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [nombre,descripcion,idAlergeno]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Ingrediente editado correctamente' });
+  } catch (error) {
+    console.error('Error al editar Ingrediente:', error);
+    res.status(500).json({ error: 'Error al editar Ingrediente' });
+  }
+});
+
 app.post('/crearreserva', async (req, res) => {
   try {
     const connection = await abrirConexion();
@@ -324,6 +344,20 @@ app.get('/ingrediente/:id', async (req, res) => { // GET Estudiantes
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM INGREDIENTES WHERE IdIngrediente = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener Ingrediente:', error);
+    res.status(500).json({ error: 'Error al obtener Ingrediente' });
+  }
+});
+
+app.get('/alergeno/:id', async (req, res) => { // GET Estudiantes
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM ALERGENOS WHERE IdAlergeno = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
