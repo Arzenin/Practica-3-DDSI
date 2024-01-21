@@ -754,11 +754,11 @@ caso es porque esta imagen se trata de un esquema inicial que se realizo previam
 
 
 ### 5.1.2 Triggers
-En esta sección comentaremos los triggers del sistema, como hemos mencionado previamente hemos configurado algunos de ellos para realizar funciones más allá de
-la comprobación de actualizaciones correctas dentro de la base de datos. Hemos decidido que la base de datos por si misma se encague del cáculo y realización de 
+En esta sección se comentarán los triggers del sistema, como se ha mencionado previamente se han configurado algunos de ellos para realizar funciones más allá de
+la comprobación de actualizaciones correctas dentro de la base de datos. Se ha decidido que la base de datos por sí misma se encague del cálculo y realización de 
 determinados requisitos funcionales, para que así nuestro sistema únicamente deba de devolver el resultado.
 
-Antes de comenzar con la explicación se debe de aclarar una cosa, en determinadas secciones hay dos triggers en un único fragmento de código, si nos fijamos bien 
+Antes de comenzar con la explicación se debe de aclarar una cosa, en determinadas secciones hay dos triggers en un único fragmento de código, si nos fijamos bien, 
 la única diferencia del código será que cambiará en el momento en el que se ejecuta el trigger y al final del nombre aquellos que se disparen en la creación
 tendrán un `Init` al final del nombre.
 
@@ -784,14 +784,14 @@ END;
 
 
 Este trigger es el encargado de comprobar que cuando realize un pedido, en caso de que el pedido sea tan grande que requiera más ingredientes de los que 
-disponemos, ponga `numStock= -1`, esto se debe a que como más adelante veremos disponemos de un trigger que hará que se devuelva un error.
+disponemos, ponga `numStock= -1`, esto se debe a que como más adelante veremos, se dispone de un trigger que hará que se devuelva un error.
 
 
 Además de esto el requisito funcional de que se aumente el stock cada vez que queden pocas existencias se hará de forma automática con este trigger, ya que en
 caso de que un pedido haga que el número de existencias baje a menos de 10, automáticamente se aumentará en 200 unidades el stock.
 
 
-Por último, este trigger también se encargará de restar el stock correpondiente tras añadir una receta a un pedido, como podemos comprobar también se tendrá en
+Por último, este trigger también se encargará de restar el stock correpondiente tras añadir una receta a un pedido, como se puede comprobar también se tendrá en
 cuenta el número de esa misma receta que se hayan pedido y cuantos ingredientes requiere esa receta.
 
 
@@ -824,12 +824,12 @@ END;
 ```
 
 
-Este trigger automatizará la gestión de los puntos de los clientes, es decir que cada vez que un cliente seleccione como metodo de pago del pedido `Puntos` se 
+Este trigger automatizará la gestión de los puntos de los clientes, es decir que cada vez que un cliente seleccione como método de pago del pedido `Puntos` se 
 irá restando a los puntos el precio de la receta, y al igual que en stock en caso de que el precio sea mayor al número de puntos, se actualizará el valor de 
 `Puntos = -1` haciendo así que otro trigger implementado más adelante salte dando un error.
 
 
-Por último se debe destacar que para calcular la resta de precios tambien se ha tenido en cuenta el número de una misma receta que se ha pedido en un mismo
+Por último se debe destacar que para calcular la resta de precios también se ha tenido en cuenta el número de una misma receta que se ha pedido en un mismo
 pedido.
 
 
@@ -905,8 +905,7 @@ END;
 ```
 
 
-La funcionalidad de este trigger es la de evitar que cada vez que se edite la reserva, si el número nuevo de comensales es superior al anterior no lo permita, 
-esto. Nuestro objetivo con esto sería que en un entorno real, en las horas puntas, pudiese llegar a superar el aforo máximo permitido en el restaurante.
+La funcionalidad de este trigger es la de evitar que cada vez que se edite la reserva, si el número nuevo de comensales es superior al anterior no lo permita. El objetivo de esto sería que en un entorno real, en las horas puntas, pudiese llegar a superar el aforo máximo permitido en el restaurante.
 
 
 #### CalcularBono
@@ -971,7 +970,7 @@ BEGIN
 END;
 ```
 
-Este trigger es el encargado de comprobar que en ningún momento el stock de un ingrediente pueda llegar a ser negativos, en caso de ser así, dará un error.
+Este trigger es el encargado de comprobar que en ningún momento el stock de un ingrediente pueda llegar a ser negativo, en caso de ser así, dará un error.
 
 
 #### BonoMenor500
@@ -1116,7 +1115,7 @@ BEGIN
 END;
 ```
 
-Este trigger nos asegurará que en un pedido no se pueda pedir una receta un número negativo o 0 de veces sea cual sea el contexto.
+Este trigger nos asegurará que en un pedido no se pueda pedir en una receta un número negativo o 0 de veces sea cual sea el contexto.
 
 
 #### NumIngredientes
@@ -1138,7 +1137,7 @@ BEGIN
 END;
 ```
 
-Al igual que el anterior caso, este trigger nos que un valor no pueda ser inferior a uno, en este caso el número de ingredientes dentro de una receta. 
+Al igual que el anterior caso, este trigger controla que un valor no pueda ser inferior a uno, en este caso el número de ingredientes dentro de una receta. 
 
 #### NumPersonasPositivo
 ```sql
@@ -1639,7 +1638,7 @@ Además de esto los nombres no tienen por que coincidir, ya que estos triggers p
 
 - Resetear_BD() :
   Este método se encarga de resetear la base de datos e introduce una serie de valores por defecto. Lo primero que se hace es el borrado de todas
-  las tablas de la base de datos, acontinuación se encarga de crear las tablas y diversos triggers. Y por último se introduce unos valores para realizar pruebas y
+  las tablas de la base de datos, a continuación se encarga de crear las tablas y diversos triggers. Y por último se introduce unos valores para realizar pruebas y
   se maneja excepciones para los errores.
 
 
@@ -1728,7 +1727,7 @@ Además de esto los nombres no tienen por que coincidir, ya que estos triggers p
   Se encarga de comprobar el funcionamiento de los trigger ActualizarStock y ComprobarStockNoNegativo. Al principio se insertan datos de prueba en las
   tablas CLIENTES, INGREDIENTES, RECETAS, RECETAS_INGREDIENTES, PEDIDO, CLIENTES_PEDIDO y PEDIDO_RECETAS para simular una situación realista. Luego, intenta realizar
   algunas operaciones incorrectas, como la inserción de números negativos o cero en los triggers asociados a las recetas y pedidos, así como actualizaciones con
-  valores incorrectos en los precios de las recetas y métodos de pago, stas operaciones fallidas están comentadas. Finalmente, se consulta la base de datos
+  valores incorrectos en los precios de las recetas y métodos de pago, estas operaciones fallidas están comentadas. Finalmente, se consulta la base de datos
   para recuperar el valor actual de NumStock de dos ingredientes y se imprime en la consola. Cualquier excepción durante la ejecución se captura y se imprime un mensaje de error.
 
 
@@ -1856,7 +1855,7 @@ public void TestActualizarStockANDComprobarStockNoNegativo(){
 
 
 - TestRellenarStock():
-  El método evalúa el funcionamiento del trigger ActualizarStock al representar la inserción de un pedido, la cual utiliza un ingredient con un stock inicial.
+  El método evalúa el funcionamiento del trigger ActualizarStock al representar la inserción de un pedido, la cual utiliza un ingrediente con un stock inicial.
   La receta requiere ciertas unidades del ingrediente. Después de la operación, se espera que el stock del ingrediente se actualice mediante el trigger, incrementándose en
   200 unidades debido a que el stock resultante es inferior a 10. Cualquier excepción durante la ejecución se captura y se imprime un mensaje de error.
 
@@ -1940,7 +1939,7 @@ public void TestRellenarStock(){
 
 - TestReservasInferior():
   Evalúa el comportamiento del sistema al gestionar reservas asociadas a pedidos. El código incluye casos donde se intenta asignar un número de personas negativo o igual a 0,
-  lo cual debería generar un error. Además, se verifica que un pedido no pueda tener más de una reserva asociada. También, se comprueba un posible de error al intentar
+  lo cual debería generar un error. Además, se verifica que un pedido no pueda tener más de una reserva asociada. También, se comprueba un posible error al intentar
   actualizar el número de personas a un valor mayor al anterior, esto se debe a que no podemos asegurar que el local tenga suficiente espacio.
 
 
@@ -1998,7 +1997,7 @@ public void TestReservasInferior(){
 
 - CalcularBonus():
   La función simula la actualización del bono de un trabajador basándose en el desempeño de los pedidos. Se inserta un trabajador con un bono inicial de 0 y se le asigna un
-  pedido.Luego, se consulta y muestra el bono antes del cálculo. Se actualiza la valoración y el estado de un pedido asociado al trabajador, y posteriormente se muestra el
+  pedido. Luego, se consulta y muestra el bono antes del cálculo. Se actualiza la valoración y el estado de un pedido asociado al trabajador, y posteriormente se muestra el
   bono después del cálculo. Cualquier excepción se gestiona, imprimiendo un mensaje de error.
 
 
