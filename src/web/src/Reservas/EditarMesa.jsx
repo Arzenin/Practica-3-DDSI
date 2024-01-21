@@ -14,28 +14,29 @@ const useHost = () => {
     }
 };
 
-const EditarReceta = ()=>{
+const EditarMesa = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-    const [idReceta, setIdReceta] = useState('');
-    const [nombre, setNombre] = useState('')
-    const [precio, setPrecio] = useState('');
+    const [idReserva, setIdReserva] = useState('');
+    const [numMesa, setNumMesa] = useState('');
+   
     const { state } = useLocation();
     const id = state ? state.id : '';
+    
 
-    const getDatosReceta = () => {
-        axios.get(`${useHost()}/receta/${id}`)
+
+    const getDatosMesa = () => {
+        axios.get(`${useHost()}/mesas/${id}`)
             .then((response) => {
                 const resultado = response.data[0];
                 if (resultado && resultado.length > 0 && Array.isArray(resultado)) {
-                    resultado.forEach((receta) => {
-                        setIdReceta(receta.IdReceta);
-                        setNombre(receta.Nombre);
-                        setPrecio(receta.Precio);
+                    resultado.forEach((mesa) => {
+                        setIdReserva(mesa.IdReserva);
+                        setNumMesa(mesa.NumMesa);
                     });
                 }
             })
@@ -46,22 +47,21 @@ const EditarReceta = ()=>{
     };
 
     useEffect(() => {
-        getDatosReceta();
+        getDatosMesa();
     }, [])
 
-    const handleEditarReceta = () => {
-
-        // Realiza una solicitud POST al servidor backend para crear un alumno
-        axios.put(`${useHost()}/editarreceta`, {idReceta,precio,nombre})
-        .then((response) => {
-            // Maneja la respuesta exitosa
-            navigate('/receta');
-        })
-        .catch((error) => {
-            // Maneja los errores
-            console.error("Error al editar Receta: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error al editar Receta',error } });
-        });
+    const handleEditarMesa = () => {
+       // Realiza una solicitud POST al servidor backend para crear un alumno
+       axios.put(`${useHost()}/editarmesa`, {idReserva, numMesa})
+       .then((response) => {
+           // Maneja la respuesta exitosa
+           navigate('/mesas');
+       })
+       .catch((error) => {
+           // Maneja los errores
+           console.error("Error al editar mesas: ",error);
+           navigate('/mensaje', { state: { mensaje: 'Error al editar mesas',error } });
+       });
         
     };
 
@@ -69,33 +69,30 @@ const EditarReceta = ()=>{
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Sistema de Recetas</Text>
-            <Text style={styles.titleText}>Editar Recetas</Text>
+            <Text style={styles.titleText}>Subsistema de Mesas</Text>
+            <Text style={styles.titleText}>Editar número de mesa</Text>
             
-            <Text style={styles.text}>IdReceta:</Text>
-            <Text style={styles.text}>{idReceta}</Text>
-            <Text style={styles.text}>Nombre:</Text>
+            <Text style={styles.text}>ID Reserva:</Text>
+            <Text style={styles.text}>{idReserva}</Text>
+            
+            <Text style={styles.text}>Nuevo número de mesa:</Text>
             <TextInput style={styles.textInput}
-                value={nombre}
-                onChangeText={text => setNombre(text)}
+                value={numMesa}
+                onChangeText={text => setNumMesa(text)}
             />
-            <Text style={styles.text}>Precio:</Text>
-            <TextInput style={styles.textInput}
-                value={precio}
-                onChangeText={text => setPrecio(text)}
-            />
+
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleEditarReceta}>
-                    <Text style={styles.pressableText}>Editar Receta </Text>
+                <Pressable style={styles.pressableButton} onPress={handleEditarMesa}>
+                    <Text style={styles.pressableText}>Editar número de mesa</Text>
                 </Pressable> 
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/receta')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/mesas')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -193,7 +190,4 @@ const styles=StyleSheet.create({
       }
 })
 
-
-
-
-export default EditarReceta
+export default EditarMesa

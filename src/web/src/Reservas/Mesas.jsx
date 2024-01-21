@@ -7,9 +7,9 @@ import dayjs from 'dayjs';
 
 const useHost = () => {
   if (Platform.OS === 'android') {
-    return 'http://10.0.2.2:5050/reservas';
+    return 'http://10.0.2.2:5050/mesas';
   } else {
-    return 'http://localhost:5050/reservas';
+    return 'http://localhost:5050/mesas';
   }
 };
 
@@ -17,27 +17,27 @@ const Cabecera = () => {
   return (
     <DataTable.Header>
       <DataTable.Title>ID Reserva</DataTable.Title>
-      <DataTable.Title>ID Pedido</DataTable.Title>
-      <DataTable.Title>Número de personas</DataTable.Title>
-      <DataTable.Title>Hora de Inicio</DataTable.Title>
+      <DataTable.Title>Número de la mesa</DataTable.Title>
     </DataTable.Header>
   );
 };
 
-const Reservas = () => {
+const Mesas = () => {
   const [stockData, setStockData] = useState([]);
   const navigate = useNavigate();
   const [filas, setFilas] = useState([]);
+  const [filas2, setFilas2] = useState([]);
   const [pagina, setPagina] = useState(1);
   const host = useHost();
   const [itemsPorPagina] = useState(10); // Ajustar preferencia
 
   const handleAdd = () => { // Función añadir
-    navigate('/crearreserva');
+    navigate('/crearmesa');
   };
 
-  const handleDelete = (id,hora) => { // Función borrar
-    axios.delete(`http://localhost:5050/borrarreserva?id=${id}&hora=${hora}`)
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borrarmesa/${id}`)
     .then((response) => {
       this.forceUpdate();
       })
@@ -45,11 +45,7 @@ const Reservas = () => {
   };
 
 	const handleEdit = (ide) => {
-		navigate('/editarreserva', { state: { id: ide }})
-	};
-
-  const handleInfoPedido = (ide) => {
-		navigate('/infopedido', { state: { id: ide }})
+		navigate('/editarmesa', { state: { id: ide }})
 	};
 
   const handlePageChange = (page) => {  
@@ -71,8 +67,37 @@ const Reservas = () => {
       }
     };
 
+    const fetchData2 = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/mesasdisponibles");
+        const resultado = response.data[0];
+        // Aplicar la paginación
+        const inicio = (pagina - 1) * itemsPorPagina;
+        const fin = inicio + itemsPorPagina;
+        const filasPaginadas = resultado.slice(inicio, fin);
+        setFilas2(filasPaginadas);
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    };
+
     fetchData();
+    fetchData2();
   }, [host, pagina]); // dependencia para que useEffect se ejecute cuando cambie
+
+  useEffect(() => {
+    // Llamada a la API al cargar el componente
+      const fetchData = async() => {
+        try{
+          const response = await axios.get('http://localhost:5050/mesas');
+          const resultado = response.data[0];
+          await setStockData(resultado);
+        } catch(error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleButtonClick = (enlace) => {
     navigate(enlace);
@@ -86,7 +111,8 @@ const Reservas = () => {
         <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
     </View>
-      <Text style={styles.title}>Subsistema de Reservas</Text>
+      <Text style={styles.title}>Subsistema de Mesas</Text>
+      <Text style={styles.title}>Mesas Totales</Text>
       <View style={styles.table}>
       {/* Encabezado de la tabla */}
       <Cabecera />
@@ -95,13 +121,10 @@ const Reservas = () => {
         {filas.map((item) => (
           <DataTable.Row key={item.IdReserva}>
             <DataTable.Cell>{item.IdReserva}</DataTable.Cell>
-            <DataTable.Cell>{item.IdPedido}</DataTable.Cell>
-            <DataTable.Cell>{item.NumPersonas}</DataTable.Cell>
-            <DataTable.Cell>{item.HoraIni}</DataTable.Cell>
+            <DataTable.Cell>{item.NumMesa}</DataTable.Cell>
             {/* Botones de las filas */}
-            <IconButton icon="content-paste" onPress={() => handleInfoPedido(item.IdPedido)} />
-            <IconButton icon="pencil" onPress={() => handleEdit(item.IdReserva)} />
-            <IconButton icon="delete" onPress={() => handleDelete(item.IdReserva, item.HoraIni)} />
+            <IconButton icon="pencil" onPress={() => handleEdit(item.IdReserva,item.NumMesa)} />
+            <IconButton icon="delete" onPress={() => handleDelete(item.IdReserva)} />
           </DataTable.Row>
         ))}
         <DataTable.Pagination
@@ -111,6 +134,24 @@ const Reservas = () => {
         label={`${pagina} de ${Math.ceil(filas.length / itemsPorPagina)}`} // Etiqueta
       />
       </DataTable>
+      </View>
+      <Text style={styles.title}>Mesas Disponibles</Text>
+      <View style={styles.table}>
+      {/* Encabezado de la tabla */}
+      <Cabecera />
+      {/* Datos de la tabla */}
+        {filas2.map((item) => (
+          <DataTable.Row key={item.IdReserva}>
+            <DataTable.Cell>{item.IdReserva}</DataTable.Cell>
+            <DataTable.Cell>{item.NumMesa}</DataTable.Cell>
+          </DataTable.Row>
+        ))}
+        <DataTable.Pagination
+        page={pagina} /* Página actual */
+        numberOfPages={Math.ceil(filas.length / itemsPorPagina)} /* Paginas = Filas/itemsXPagina */
+        onPageChange={handlePageChange}
+        label={`${pagina} de ${Math.ceil(filas.length / itemsPorPagina)}`} // Etiqueta
+      />
       <FAB
         icon="plus"
         style={styles.fabStyle}
@@ -118,10 +159,7 @@ const Reservas = () => {
         onPress={() => handleAdd()}
       />
     </View>
-    <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/mesas')}>
-        <Text style={styles.pressableText}>Mesas</Text>
-      </Pressable>
-      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/reservas')}>
         <Text style={styles.pressableText}>Volver</Text>
       </Pressable>
     </View>
@@ -186,4 +224,4 @@ const styles = StyleSheet.create({
        justifyContent: 'center',
      }
   });
-export default Reservas;
+export default Mesas;

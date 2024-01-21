@@ -7,25 +7,25 @@ import dayjs from 'dayjs';
 
 const useHost = () => {
   if (Platform.OS === 'android') {
-    return 'http://10.0.2.2:5050/reservas';
+    return 'http://10.0.2.2:5050';
   } else {
-    return 'http://localhost:5050/reservas';
+    return 'http://localhost:5050';
   }
 };
 
 const Cabecera = () => {
   return (
     <DataTable.Header>
-      <DataTable.Title>ID Reserva</DataTable.Title>
-      <DataTable.Title>ID Pedido</DataTable.Title>
-      <DataTable.Title>Número de personas</DataTable.Title>
-      <DataTable.Title>Hora de Inicio</DataTable.Title>
+      <DataTable.Title>ID</DataTable.Title>
+      <DataTable.Title>Nombre</DataTable.Title>
+      <DataTable.Title>Stock</DataTable.Title>
+      <DataTable.Title>Alérgenos</DataTable.Title>
+      <DataTable.Title>Eliminar</DataTable.Title>
     </DataTable.Header>
   );
 };
 
-const Reservas = () => {
-  const [stockData, setStockData] = useState([]);
+const Ingredientes = () => {
   const navigate = useNavigate();
   const [filas, setFilas] = useState([]);
   const [pagina, setPagina] = useState(1);
@@ -33,38 +33,57 @@ const Reservas = () => {
   const [itemsPorPagina] = useState(10); // Ajustar preferencia
 
   const handleAdd = () => { // Función añadir
-    navigate('/crearreserva');
+    navigate('/crearingrediente');
   };
 
-  const handleDelete = (id,hora) => { // Función borrar
-    axios.delete(`http://localhost:5050/borrarreserva?id=${id}&hora=${hora}`)
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borraringrediente/${id}`)
     .then((response) => {
       this.forceUpdate();
       })
       .catch((error) => console.error('Error al eliminar:', error));
   };
 
-	const handleEdit = (ide) => {
-		navigate('/editarreserva', { state: { id: ide }})
-	};
-
-  const handleInfoPedido = (ide) => {
-		navigate('/infopedido', { state: { id: ide }})
-	};
-
   const handlePageChange = (page) => {  
     setPagina(page);
   };
+
+  const getAlergenosIngrediente = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:5050/alergenos/ingrediente/${id}`)
+      const alergenos = response.data;
+  
+      if (alergenos && alergenos.length > 0) {
+        return alergenos.map((alergeno) => alergeno.Nombre).join(', ');
+      } else {
+        return 'NINGUNO';
+      }
+    } catch (error) {
+      console.error('Error al obtener alergenos del ingrediente:', error);
+      throw error;
+    }
+  };
+  
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(host);
+        const response = await axios.get(`${useHost()}/ingredientes`);
         const resultado = response.data[0];
+        const ingredientesConAlergenos = await Promise.all(
+            resultado.map(async (ingrediente)=>{
+                const alergenos = await getAlergenosIngrediente(ingrediente.IdIngrediente);
+                return{
+                    ...ingrediente,
+                    alergenos,
+                };
+            })
+        );
         // Aplicar la paginación
         const inicio = (pagina - 1) * itemsPorPagina;
         const fin = inicio + itemsPorPagina;
-        const filasPaginadas = resultado.slice(inicio, fin);
+        const filasPaginadas = ingredientesConAlergenos.slice(inicio, fin);
         setFilas(filasPaginadas);
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
@@ -86,22 +105,21 @@ const Reservas = () => {
         <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
     </View>
-      <Text style={styles.title}>Subsistema de Reservas</Text>
+      <Text style={styles.title}>Subsistema de Menú</Text>
+      <Text style={styles.title}>Listado de ingredientes: </Text>
       <View style={styles.table}>
       {/* Encabezado de la tabla */}
       <Cabecera />
       {/* Datos de la tabla */}
       <DataTable>
         {filas.map((item) => (
-          <DataTable.Row key={item.IdReserva}>
-            <DataTable.Cell>{item.IdReserva}</DataTable.Cell>
-            <DataTable.Cell>{item.IdPedido}</DataTable.Cell>
-            <DataTable.Cell>{item.NumPersonas}</DataTable.Cell>
-            <DataTable.Cell>{item.HoraIni}</DataTable.Cell>
+          <DataTable.Row key={item.IdIngrediente}>
+            <DataTable.Cell>{item.IdIngrediente}</DataTable.Cell>
+            <DataTable.Cell>{item.Nombre}</DataTable.Cell>
+            <DataTable.Cell>{item.NumStock}</DataTable.Cell>
+            <DataTable.Cell>{item.alergenos}</DataTable.Cell>
             {/* Botones de las filas */}
-            <IconButton icon="content-paste" onPress={() => handleInfoPedido(item.IdPedido)} />
-            <IconButton icon="pencil" onPress={() => handleEdit(item.IdReserva)} />
-            <IconButton icon="delete" onPress={() => handleDelete(item.IdReserva, item.HoraIni)} />
+            <IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />
           </DataTable.Row>
         ))}
         <DataTable.Pagination
@@ -118,10 +136,7 @@ const Reservas = () => {
         onPress={() => handleAdd()}
       />
     </View>
-    <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/mesas')}>
-        <Text style={styles.pressableText}>Mesas</Text>
-      </Pressable>
-      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/menu')}>
         <Text style={styles.pressableText}>Volver</Text>
       </Pressable>
     </View>
@@ -186,4 +201,4 @@ const styles = StyleSheet.create({
        justifyContent: 'center',
      }
   });
-export default Reservas;
+export default Ingredientes;

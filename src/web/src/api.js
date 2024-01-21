@@ -46,68 +46,6 @@ app.post('/crearcliente', async (req, res) => {
   }
 });
 
-app.post('/crearalergeno', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { id, nombre, descripcion } = req.body;
-    const querySelect = 'INSERT INTO ALERGENOS (IdAlergeno, Nombre, Descripcion) VALUES (?, ?, ?)';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, nombre, descripcion]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Alergeno creado correctamente' });
-  } catch (error) {
-    console.error('Error al crear el alergeno:', error);
-    res.status(500).json({ error: 'Error al crear alergeno' });
-  }
-});
-
-app.post('/crearreceta', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const {id, precio , nombre} = req.body;
-    const querySelect = 'INSERT INTO RECETAS (IdReceta, Precio, Nombre) VALUES (?,?,?)';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, precio, nombre]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Receta creada correctamente' });
-  } catch (error) {
-    console.error('Error al crear Receta:', error);
-    res.status(500).json({ error: 'Error al crear Receta' });
-  }
-});
-
-app.post('/crearingrediente', async (req, res) => {
-
-  try {
-    const connection = await abrirConexion();
-    const {id,nombre,numStock} = req.body;
-    const querySelect = 'INSERT INTO INGREDIENTES (IdIngrediente,Nombre,NumStock) VALUES (?, ?, ?)';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, nombre, numStock]);
-
-    connection.commit();
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Ingrediente creado correctamente' });
-  } catch (error) {
-    console.error('Error al crear Ingrediente:', error);
-    res.status(500).json({ error: 'Error al crear Ingrediente' });
-  }
-});
-
 app.put('/editarcliente', async (req, res) => {
   try {
     const connection = await abrirConexion();
@@ -128,106 +66,6 @@ app.put('/editarcliente', async (req, res) => {
   }
 });
 
-app.put('/editaringrediente', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { idIngrediente, nombre, numStock } = req.body;
-    const querySelect = 'UPDATE INGREDIENTES SET Nombre=?,NumStock=? WHERE IdIngrediente=?';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [nombre,numStock,idIngrediente]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Ingrediente editado correctamente' });
-  } catch (error) {
-    console.error('Error al editar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al editar Ingrediente' });
-  }
-});
-
-app.put('/editaralergeno', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { idAlergeno,nombre,descripcion} = req.body;
-    const querySelect = 'UPDATE ALERGENOS SET Nombre=?,Descripcion=? WHERE IdAlergeno=?';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [nombre,descripcion,idAlergeno]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Alergeno editado correctamente' });
-  } catch (error) {
-    console.error('Error al Alergeno Ingrediente:', error);
-    res.status(500).json({ error: 'Error al editar Alergeno' });
-  }
-});
-
-app.put('/editarreceta', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { idReceta,precio,nombre} = req.body;
-    const querySelect = 'UPDATE RECETAS SET Precio=?,Nombre=? WHERE IdReceta=?';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [precio,nombre,idReceta]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Receta editado correctamente' });
-  } catch (error) {
-    console.error('Error al editar Receta:', error);
-    res.status(500).json({ error: 'Error al editar Receta' });
-  }
-});
-
-app.post('/crearreserva', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { id, idP, npersonas, hora} = req.body;
-    const querySelect = 'INSERT INTO RESERVAS_PEDIDO (IdReserva, IdPedido, NumPersonas, HoraIni) VALUES (?, ?, ?, ?)';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, idP, npersonas, hora]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Reserva creada correctamente' });
-  } catch (error) {
-    console.error('Error al crear cliente:', error);
-    res.status(500).json({ error: 'Error al crear una reserva' });
-  }
-});
-
-app.post('/creartrabajadores', async (req, res) => {
-  try {
-    const connection = await abrirConexion();
-    const { id, turno, bono } = req.body;
-    const querySelect = 'INSERT INTO TRABAJADOR (IdTrabajador, Turno, Bono) VALUES (?, ?, ?)';
-
-    // Cambiar el nombre de la variable result
-    const result = await connection.promise().query(querySelect, [id, turno, bono]);
-    
-    connection.end(); // Liberar recursos BD
-    connection.destroy();
-
-    // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Trabajador creado correctamente' });
-  } catch (error) {
-    console.error('Error al crear trabajador:', error);
-    res.status(500).json({ error: 'Error al crear trabajador' });
-  }
-});
-
 app.get('/clientes', async (req, res) => { // GET Clientes
   try {
     const connection = await abrirConexion();
@@ -241,20 +79,62 @@ app.get('/clientes', async (req, res) => { // GET Clientes
   }
 });
 
-app.get('/trabajadores', async (req, res) => { // GET Trabajadores
+app.get('/clientes/:id', async (req, res) => { // GET Estudiantes
   try {
     const connection = await abrirConexion();
-    const query = 'SELECT * FROM TRABAJADOR';
-    const [resultado] = await connection.promise().query(query);
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM CLIENTES WHERE idCliente = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
     connection.end(); // Libera recursos BD
-    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
-    console.error('Error al obtener listado de ingredientes:', error);
-    res.status(500).json({ error: 'Error al obtener ingredientes' });
+    console.error('Error al obtener cliente:', error);
+    res.status(500).json({ error: 'Error al obtener cliente' });
   }
 });
 
-app.get('/alergeno', async (req, res) => { // GET Alergeno
+app.delete('/borrarcliente/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    console.log("Cliente:", id);
+
+    const query1 = 'DELETE FROM CLIENTE_ALERGENOS WHERE idCliente = ?';
+    await connection.promise().query(query1, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente-alérgeno: ' + err);
+      res.status(500).json({ error: 'Error al borrar cliente-alergeno' });
+      return;
+    }
+    res.status(201).json({ message: 'Cliente borrado con éxito' });
+    });
+
+    const query2 = 'DELETE FROM CLIENTE_PEDIDO WHERE idCliente = ?';
+    await connection.promise().query(query2, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente-pedido: ' + err);
+      return;
+    }
+    });
+
+    const query3 = 'DELETE FROM CLIENTES WHERE idCliente = ?';
+    await connection.promise().query(query3, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente: ' + err);
+      return;
+    }
+
+    });
+    connection.end();
+  } catch (error){
+    console.error('Error al borrar cliente:', error);
+    res.status(500).json({ error: 'Error al borrar cliente' });
+  }
+  console.log('Cliente eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Cliente eliminado con éxito' });
+});
+
+app.get('/alergenos', async (req, res) => { // GET Clientes
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM ALERGENOS';
@@ -262,12 +142,180 @@ app.get('/alergeno', async (req, res) => { // GET Alergeno
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
-    console.error('Error al obtener listado de ingredientes:', error);
-    res.status(500).json({ error: 'Error al obtener ingredientes' });
+    console.error('Error al obtener alergenoss:', error);
+    res.status(500).json({ error: 'Error al obtener alergenoss' });
+  }
+});
+  
+app.post('/crearalergeno', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, nombre, descripcion } = req.body;
+    const querySelect = 'INSERT INTO ALERGENOS (IdAlergeno, Nombre, Descripcion) VALUES (?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, nombre, descripcion]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Alergeno creado correctamente' });
+  } catch (error) {
+    console.error('Error al crear alergeno:', error);
+    res.status(500).json({ error: 'Error al crear alergeno' });
   }
 });
 
-app.get('/ingrediente', async (req, res) => { // GET Ingredientes
+app.delete('/borraralergeno/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = parseInt(req.params.id, 10);
+
+    const query1 = 'DELETE FROM CLIENTE_ALERGENOS WHERE idAlergeno = ?';
+    await connection.promise().query(query1, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente-alérgeno: ' + err);
+      res.status(500).json({ error: 'Error al borrar cliente-alergeno' });
+      return;
+    }
+    res.status(201).json({ message: 'Alergeno borrado con éxito' });
+    });
+
+    const query2 = 'DELETE FROM INGREDIENTES_ALERGENOS WHERE idAlergeno = ?';
+    await connection.promise().query(query2, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar ingrediente-alergeno: ' + err);
+      return;
+    }
+    });
+
+    const query3 = 'DELETE FROM ALERGENOS WHERE idAlergeno = ?';
+    await connection.promise().query(query3, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar alergeno: ' + err);
+      return;
+    }
+
+    });
+    connection.end();
+  } catch (error){
+    console.error('Error al borrar alergeno:', error);
+    res.status(500).json({ error: 'Error al borrar alergeno' });
+  }
+  console.log('Alergeno eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Alergeno eliminado con éxito' });
+});
+
+app.get('/alergenos/clienteId/:IdCliente', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const IdCliente = req.params.IdCliente;
+    const queryTareas = 'SELECT * FROM CLIENTE_ALERGENOS JOIN ALERGENOS ON CLIENTE_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno WHERE CLIENTE_ALERGENOS.IdCliente = ?';
+    const [resultado] = await connection.promise().query(queryTareas, [IdCliente]);
+    connection.end();
+
+    // Devuelve un array vacío si no hay resultados
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error al obtener alergenos del cliente:', error);
+    res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
+  }
+});
+
+
+
+
+app.post('/clientes/quitaralergenos', async (req, res) => {
+  try {
+    const {IdCliente, alergenos } = req.body;
+    const connection = await abrirConexion();
+
+    try {
+      // Iterar sobre los estudiantes seleccionados
+      for (const alergenoId of alergenos) {
+        // Eliminar la fila correspondiente a la asignación
+        const queryDelete = 'DELETE FROM CLIENTE_ALERGENOS WHERE IdCliente = ? AND IdAlergeno = ?';
+        await connection.promise().query(queryDelete, [IdCliente, alergenoId], (err, result) => {
+          if (err) {
+            console.error('Error al establecer conexión con la base de datos:' + err);
+            res.status(500).json({ error: 'Error al establecer conexión con la base de datos.' });
+          }
+        });
+      }
+
+    } catch (error) {
+      console.error('Error al quitar tareas a estudiante:', error);
+      res.status(500).json({ error: 'Error al quitar tareas a estudiante.' });
+    } finally {
+      connection.end();
+    }
+
+  } catch (error) {
+    console.error('Error al quitar tareas a estudiante:', error);
+    res.status(500).json({ error: 'Error al quitar tareas a estudiante.' });
+  }
+  console.log('Tarea(s) quitadas al Estudiante con éxito');
+  res.status(200).json({ message: 'Tarea(s) quitadas al Estudiante con éxito.' });
+});
+
+app.post('/clientes/aniadealergenos', async (req, res) => {
+  try {
+    const { IdCliente, alergenos } = req.body;
+    const connection = await abrirConexion();
+    console.log(alergenos);
+
+    try {
+      if (Array.isArray(alergenos)) {
+        for (const alergenoId of alergenos) {
+        // Eliminar la fila correspondiente a la asignación
+        const queryDelete = 'DELETE FROM CLIENTE_ALERGENOS WHERE IdCliente = ? AND IdAlergeno = ?';
+        await connection.promise().query(queryDelete, [IdCliente, alergenoId], (err, result) => {
+          if (err) {
+            console.error('Error al establecer conexión con la base de datos:' + err);
+            res.status(500).json({ error: 'Error al establecer conexión con la base de datos.' });
+          }
+        });
+      }
+        
+        // Use Promise.all to wait for all queries to complete
+        await Promise.all(
+          alergenos.map(async (alergenoId) => {
+            const queryInsert =
+              'INSERT INTO CLIENTE_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
+            await connection.promise().query(queryInsert, [IdCliente, alergenoId]);
+          })
+        );
+
+
+
+        // All queries are successful, send a response
+        console.log('Tareas añadidas al estudiante con éxito');
+        res.status(201).json({ message: 'Tareas añadidas al estudiante con éxito.' });
+      } else {
+        // Si tareas no es un array, realizar una única inserción
+        const queryInsert =
+          'INSERT INTO CLIENTE_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
+        await connection.promise().query(queryInsert, [IdCliente, alergenos]);
+
+        // Query is successful, send a response
+        console.log('Tarea añadida al estudiante con éxito');
+        res.status(201).json({ message: 'Tarea añadida al estudiante con éxito.' });
+      }
+    } catch (error) {
+      console.error('Error al añadir tareas al alumno:', error);
+      res.status(500).json({ error: 'Error al añadir tareas al alumno.' });
+    } finally {
+      // Always close the connection in a finally block
+      connection.end();
+    }
+  } catch (error) {
+    console.error('Error al añadir las tareas:', error);
+    res.status(500).json({ error: 'Error al añadir las tareas.' });
+  }
+});
+
+app.get('/ingredientes', async (req, res) => { // GET Clientes
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM INGREDIENTES';
@@ -275,8 +323,320 @@ app.get('/ingrediente', async (req, res) => { // GET Ingredientes
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
-    console.error('Error al obtener listado de ingredientes:', error);
-    res.status(500).json({ error: 'Error al obtener ingredientes' });
+    console.error('Error al obtener alergenoss:', error);
+    res.status(500).json({ error: 'Error al obtener alergenoss' });
+  }
+});
+
+app.delete('/borraringrediente/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = parseInt(req.params.id, 10);
+
+    const query1 = 'DELETE FROM INGREDIENTES_ALERGENOS WHERE IdIngrediente = ?';
+    await connection.promise().query(query1, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente-alérgeno: ' + err);
+      res.status(500).json({ error: 'Error al borrar cliente-alergeno' });
+      return;
+    }
+    res.status(201).json({ message: 'Alergeno borrado con éxito' });
+    });
+
+    const query2 = 'DELETE FROM RECETAS_INGREDIENTES WHERE IdIngrediente = ?';
+    await connection.promise().query(query2, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar ingrediente-alergeno: ' + err);
+      return;
+    }
+    });
+
+    const query3 = 'DELETE FROM INGREDIENTES WHERE IdIngrediente = ?';
+    await connection.promise().query(query3, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar alergeno: ' + err);
+      return;
+    }
+
+    });
+    connection.end();
+  } catch (error){
+    console.error('Error al borrar alergeno:', error);
+    res.status(500).json({ error: 'Error al borrar alergeno' });
+  }
+  console.log('Alergeno eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Alergeno eliminado con éxito' });
+});
+
+app.post('/crearingrediente', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, nombre, alergenos } = req.body;
+    const querySelect = 'INSERT INTO INGREDIENTES (IdIngrediente, Nombre, NumStock) VALUES (?, ?, 100)';
+    
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, nombre]);
+
+    if (Array.isArray(alergenos)) {
+      // Use Promise.all to wait for all queries to complete
+      await Promise.all(
+        alergenos.map(async (alergenoId) => {
+          const queryInsert = 'INSERT INTO INGREDIENTES_ALERGENOS (IdIngrediente, IdAlergeno) VALUES (?,?)';
+          await connection.promise().query(queryInsert, [id, alergenoId]);
+        })
+      );
+
+      // All queries are successful, send a response
+      console.log('Tareas añadidas al estudiante con éxito');
+      res.status(200).json({ mensaje: 'Ingrediente creado correctamente' });
+    } else {
+      // Si tareas no es un array, realizar una única inserción
+      const queryInsert = 'INSERT INTO CLIENTE_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
+      await connection.promise().query(queryInsert, [IdCliente, alergenos]);
+
+      // Query is successful, send a response
+      console.log('Tarea añadida al estudiante con éxito');
+      res.status(201).json({ message: 'Tarea añadida al estudiante con éxito.' });
+    }
+
+    // Mover el cierre de la conexión aquí, después de todas las operaciones
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+  } catch (error) {
+    console.error('Error al crear Ingrediente:', error);
+    res.status(500).json({ error: 'Error al crear Ingrediente' });
+  }
+});
+
+app.get('/alergenos/ingrediente/:id', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const queryTareas = 'SELECT * FROM INGREDIENTES_ALERGENOS JOIN ALERGENOS ON INGREDIENTES_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno WHERE INGREDIENTES_ALERGENOS.IdIngrediente = ?';
+    const [resultado] = await connection.promise().query(queryTareas, [id]);
+    connection.end();
+
+    // Devuelve un array vacío si no hay resultados
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error al obtener alergenos del ingrediente:', error);
+    res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
+  }
+});
+
+app.get('/trabajadores', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM TRABAJADOR';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener trabajadores:', error);
+    res.status(500).json({ error: 'Error al obtener trabajadores' });
+  }
+});
+
+app.post('/trabajadores/creartrabajador', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const {id, nombre, turno, libre} = req.body;
+    const querySelect = 'INSERT INTO TRABAJADOR (IdTrabajador, Turno, Nombre, Libre, Bono) VALUES (?, ?, ?, ?, 0)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, turno, nombre, libre]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Trabajador creado correctamente' });
+  } catch (error) {
+    console.error('Error al crear Trabajador:', error);
+    res.status(500).json({ error: 'Error al crear Trabajador' });
+  }
+});
+
+app.get('/trabajadores/trabajador/:id', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const query = 'SELECT * FROM TRABAJADOR WHERE IdTrabajador = ?';
+    const [resultado] = await connection.promise().query(query, [id]);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener trabajador:', error);
+    res.status(500).json({ error: 'Error al obtener trabajador' });
+  }
+});
+
+app.put('/trabajadores/editartrabajador', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, nombre, turno, libre} = req.body;
+    const querySelect = 'UPDATE TRABAJADOR SET Nombre=?, Turno=?, Libre=? WHERE IdTrabajador=?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [nombre, turno, libre, id]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Trabajador editado correctamente' });
+  } catch (error) {
+    console.error('Error al editar Trabajador:', error);
+    res.status(500).json({ error: 'Error al editar Trabajador' });
+  }
+});
+
+app.delete('/borrartrabajador/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = parseInt(req.params.id, 10);
+
+    const query1 = 'DELETE FROM TRABAJADOR_PEDIDO WHERE IdTrabajador = ?';
+    await connection.promise().query(query1, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar trabajador-pedido: ' + err);
+      res.status(500).json({ error: 'Error al borrar trabajador-pedido' });
+      return;
+    }
+    res.status(201).json({ message: 'Trabajador borrado con éxito' });
+    });
+
+    const query3 = 'DELETE FROM TRABAJADOR WHERE IdTrabajador = ?';
+    await connection.promise().query(query3, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar trabajador: ' + err);
+      return;
+    }
+
+    });
+    connection.end();
+  } catch (error){
+    console.error('Error al borrar trabajador:', error);
+    res.status(500).json({ error: 'Error al borrar trabajador' });
+  }
+  console.log('Trabajador eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Trabajador eliminado con éxito' });
+});
+
+app.get('/reservas/:id', async (req, res) => { // GET Estudiantes
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener cliente:', error);
+    res.status(500).json({ error: 'Error al obtener cliente' });
+  }
+});
+
+app.get('/recetas', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM RECETAS';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
+  } catch (error) {
+    console.error('Error al obtener estudiantes:', error);
+    res.status(500).json({ error: 'Error al obtener estudiantes' });
+  }
+});
+
+app.post('/crearreceta', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, nombre, precio, ingredientes } = req.body;
+    const querySelect = 'INSERT INTO RECETAS (IdReceta, Nombre, Precio) VALUES (?, ?, ?)';
+    
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, nombre, precio]);
+
+    if (Array.isArray(ingredientes)) {
+      // Use Promise.all to wait for all queries to complete
+      await Promise.all(
+        ingredientes.map(async (ingredienteId) => {
+          const queryInsert = 'INSERT INTO RECETAS_INGREDIENTES (IdReceta, IdIngrediente, numero) VALUES (?,?, 1)';
+          await connection.promise().query(queryInsert, [id, ingredienteId]);
+        })
+      );
+
+      // All queries are successful, send a response
+      console.log('Tareas añadidas al estudiante con éxito');
+      res.status(200).json({ mensaje: 'Ingrediente creado correctamente' });
+    } else {
+      
+    }
+
+    // Mover el cierre de la conexión aquí, después de todas las operaciones
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+  } catch (error) {
+    console.error('Error al crear recetas:', error);
+    res.status(500).json({ error: 'Error al crear Ingrediente' });
+  }
+});
+
+app.delete('/borrarreceta/:id', async (req, res) => {
+  try{
+    const connection = await abrirConexion();
+    const id = parseInt(req.params.id, 10);
+
+    const query1 = 'DELETE FROM RECETAS_INGREDIENTES WHERE IdReceta = ?';
+    await connection.promise().query(query1, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar cliente-alérgeno: ' + err);
+      res.status(500).json({ error: 'Error al borrar cliente-alergeno' });
+      return;
+    }
+    res.status(201).json({ message: 'Alergeno borrado con éxito' });
+    });
+
+    const query2 = 'DELETE FROM PEDIDO_RECETAS WHERE IdReceta = ?';
+    await connection.promise().query(query2, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar ingrediente-alergeno: ' + err);
+      return;
+    }
+    });
+
+    const query3 = 'DELETE FROM RECETAS WHERE IdReceta = ?';
+    await connection.promise().query(query3, id, (err, result) => {
+    if (err) {
+      console.error('Error al borrar alergeno: ' + err);
+      return;
+    }
+
+    });
+    connection.end();
+  } catch (error){
+    console.error('Error al borrar alergeno:', error);
+    res.status(500).json({ error: 'Error al borrar alergeno' });
+  }
+  console.log('Alergeno eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Alergeno eliminado con éxito' });
+});
+
+app.get('/ingredientes/:idReceta', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.idReceta;
+    const queryTareas = 'SELECT * FROM RECETAS_INGREDIENTES JOIN INGREDIENTES ON RECETAS_INGREDIENTES.IdIngrediente = INGREDIENTES.IdIngrediente WHERE RECETAS_INGREDIENTES.IdReceta = ?';
+    const [resultado] = await connection.promise().query(queryTareas, [id]);
+    connection.end();
+
+    // Devuelve un array vacío si no hay resultados
+    res.json(resultado);
+  } catch (error) {
+    console.error('Error al obtener alergenos del ingrediente:', error);
+    res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
   }
 });
 
@@ -319,10 +679,184 @@ app.get('/verpedidosinactivos', async (req, res) => { // GET Ingredientes
   }
 });
 
-app.get('/receta', async (req, res) => { // GET receta
+app.post('/crearpedido', async (req, res) => {
   try {
     const connection = await abrirConexion();
-    const query = 'SELECT * FROM RECETAS';
+    const {id, tipoPago, clientes, recetas } = req.body;
+    const querySelect = 'INSERT INTO PEDIDO (IdPedido, Valoracion, TPago, Estado) VALUES (?, 0, ?, "Activo")';
+    
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, tipoPago]);
+
+    if (Array.isArray(clientes)) {
+      // Use Promise.all to wait for all queries to complete
+      await Promise.all(
+        clientes.map(async (clienteId) => {
+          const queryInsert = 'INSERT INTO  CLIENTES_PEDIDO (IdCliente, IdPedido) VALUES (?,?)';
+          await connection.promise().query(queryInsert, [clienteId, id]);
+        })
+      );
+
+      // All queries are successful, send a response
+      console.log('Tareas añadidas al estudiante con éxito');
+    } else {
+      
+    }
+
+    if (Array.isArray(recetas)) {
+      // Use Promise.all to wait for all queries to complete
+      await Promise.all(
+        recetas.map(async (recetaId) => {
+          const queryInsert = 'INSERT INTO  PEDIDO_RECETAS (IdReceta, IdPedido, numero) VALUES (?,?, 1)';
+          await connection.promise().query(queryInsert, [recetaId, id]);
+        })
+      );
+
+      // All queries are successful, send a response
+      console.log('Pedido añadido con éxito');
+      res.status(200).json({ mensaje: 'Pedido creado correctamente' });
+    } else {
+      
+    }
+
+
+    // Mover el cierre de la conexión aquí, después de todas las operaciones
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+  } catch (error) {
+    console.error('Error al crear pedido:', error);
+    res.status(500).json({ error: 'Error al crear Pedido' });
+  }
+});
+
+app.post('/finalizarpedido', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const {id, valoracion, trabajadores } = req.body;
+
+    if (Array.isArray(trabajadores)) {
+      // Use Promise.all to wait for all queries to complete
+      await Promise.all(
+        trabajadores.map(async (trabajadorId) => {
+          const queryInsert = 'INSERT INTO  TRABAJADOR_PEDIDO (IdTrabajador, IdPedido) VALUES (?,?)';
+          await connection.promise().query(queryInsert, [trabajadorId, id]);
+        })
+      );
+
+      // All queries are successful, send a response
+      console.log('Tareas añadidas al estudiante con éxito');
+    } else {
+      
+    }
+    const querySelect = 'UPDATE PEDIDO SET Valoracion=? WHERE IdPedido=?';
+    
+    const result = await connection.promise().query(querySelect, [valoracion, id]);
+    const querySelect2 = 'UPDATE PEDIDO SET Estado="Inactivo" WHERE IdPedido=?';
+    
+    // Cambiar el nombre de la variable result
+    const result2 = await connection.promise().query(querySelect2, [id]);
+
+      // All queries are successful, send a response
+      console.log('Pedido finalizado con éxito');
+      res.status(200).json({ mensaje: 'Pedido creado correctamente' });
+
+
+    // Mover el cierre de la conexión aquí, después de todas las operaciones
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+  } catch (error) {
+    console.error('Error al crear pedido:', error);
+    res.status(500).json({ error: 'Error al crear Pedido' });
+  }
+});
+
+
+app.post('/crearreserva', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, idP, npersonas, hora} = req.body;
+    const querySelect = 'INSERT INTO RESERVAS_PEDIDO (IdReserva, IdPedido, NumPersonas, HoraIni) VALUES (?, ?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, idP, npersonas, hora]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Reserva creada correctamente' });
+  } catch (error) {
+    console.error('Error al crear cliente:', error);
+    res.status(500).json({ error: 'Error al crear una reserva' });
+  }
+});
+
+app.post('/crearmesa', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, num} = req.body;
+    const querySelect = 'INSERT INTO RESERVAS (IdReserva, NumMesa) VALUES (?,?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, num]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Mesa creada correctamente' });
+  } catch (error) {
+    console.error('Error al crear cliente:', error);
+    res.status(500).json({ error: 'Error al crear una mesa' });
+  }
+});
+
+
+app.put('/editarreserva', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { idReserva, numPersonas, horaIni} = req.body;
+    const querySelect = 'UPDATE RESERVAS_PEDIDO SET NumPersonas=? WHERE IdReserva = ? AND HoraIni=?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [numPersonas, idReserva, horaIni]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Reserva editada correctamente' });
+  } catch (error) {
+    console.error('Error al editar la reserva:', error);
+    res.status(500).json({ error: 'Error al editar reserva' });
+  }
+});
+
+app.put('/editarmesa', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const {idReserva, numMesa} = req.body;
+    const querySelect = 'UPDATE RESERVAS SET NumMesa=? WHERE IdReserva = ?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [numMesa, idReserva]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Mesa editada correctamente' });
+  } catch (error) {
+    console.error('Error al editar la mesa:', error);
+    res.status(500).json({ error: 'Error al editar mesa' });
+  }
+});
+
+
+app.get('/reservas', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM RESERVAS_PEDIDO';
     const [resultado] = await connection.promise().query(query);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
@@ -332,353 +866,108 @@ app.get('/receta', async (req, res) => { // GET receta
   }
 });
 
-app.get('/reservas', async (req, res) => { // GET Clientes
+app.get('/reservas/:id', async (req, res) => { // GET Estudiantes
   try {
     const connection = await abrirConexion();
-    const query = 'SELECT * FROM RESERVAS_PEDIDO';
-    const [resultado] = await connection.promise().query(query);
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener reserva:', error);
+    res.status(500).json({ error: 'Error al obtener reserva' });
+  }
+});
+
+app.get('/mesas', async (req, res) => { // GET Clientes
+  try {
+    const connection = await abrirConexion();
+    const query = 'SELECT * FROM RESERVAS';
+    const [resultado] = await connection.promise().query(query);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
   }
 });
 
-app.get('/clientes/:id', async (req, res) => { // GET Estudiantes
+app.get('/mesas/:id', async (req, res) => { // GET Estudiantes
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
-    const queryEstudiantes = 'SELECT * FROM CLIENTES WHERE idCliente = ?';
+    const queryEstudiantes = 'SELECT * FROM RESERVAS WHERE IdReserva = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
-    console.error('Error al obtener cliente:', error);
-    res.status(500).json({ error: 'Error al obtener cliente' });
+    console.error('Error al obtener mesa:', error);
+    res.status(500).json({ error: 'Error al obtener mesa' });
   }
 });
 
-app.get('/ingrediente/:id', async (req, res) => { // GET Estudiantes
+app.get('/mesasdisponibles', async (req, res) => { // GET Clientes
   try {
     const connection = await abrirConexion();
-    const id = req.params.id;
-    const queryEstudiantes = 'SELECT * FROM INGREDIENTES WHERE IdIngrediente = ?';
-    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    const query = 'SELECT * FROM RESERVAS WHERE NOT EXISTS (SELECT 1 FROM RESERVAS_PEDIDO WHERE RESERVAS_PEDIDO.IdReserva = RESERVAS.IdReserva)';
+    const [resultado] = await connection.promise().query(query);
     connection.end(); // Libera recursos BD
-    res.json([resultado]); // Resultado servido en HTTP formato JSON
+    res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
-    console.error('Error al obtener Ingrediente:', error);
-    res.status(500).json({ error: 'Error al obtener Ingrediente' });
+    console.error('Error al obtener estudiantes:', error);
+    res.status(500).json({ error: 'Error al obtener estudiantes' });
   }
 });
 
-app.get('/alergeno/:id', async (req, res) => { // GET Estudiantes
+
+app.get('/infopedido/:id', async (req, res) => {
   try {
     const connection = await abrirConexion();
-    const id = req.params.id;
-    const queryEstudiantes = 'SELECT * FROM ALERGENOS WHERE IdAlergeno = ?';
-    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    const idPedido = req.params.id; // Obtener el valor del parámetro desde la URL
+    const query = 'SELECT * FROM RESERVAS_PEDIDO JOIN PEDIDO ON RESERVAS_PEDIDO.IdPedido = PEDIDO.IdPedido WHERE RESERVAS_PEDIDO.IdPedido = ?';
+
+    const [resultado] = await connection.promise().query(query, [idPedido]); // Pasar el valor del parámetro como un array
+
     connection.end(); // Libera recursos BD
-    res.json([resultado]); // Resultado servido en HTTP formato JSON
+    res.json(resultado); // Resultado servido en HTTP formato JSON  
   } catch (error) {
-    console.error('Error al obtener Ingrediente:', error);
-    res.status(500).json({ error: 'Error al obtener Ingrediente' });
+    console.error('Error al obtener información del pedido:', error);
+    res.status(500).json({ error: 'Error al obtener información del pedido' });
   }
 });
 
-app.get('/receta/:id', async (req, res) => { // GET Estudiantes
-  try {
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    const queryEstudiantes = 'SELECT * FROM RECETAS WHERE IdReceta = ?';
-    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
-    connection.end(); // Libera recursos BD
-    res.json([resultado]); // Resultado servido en HTTP formato JSON
-  } catch (error) {
-    console.error('Error al obtener Ingrediente:', error);
-    res.status(500).json({ error: 'Error al obtener Ingrediente' });
-  }
-});
-
-app.delete('/borrarcliente/:id', async (req, res) => {
+app.delete('/borrarmesa/:id', async (req, res) => {
   try{
     const connection = await abrirConexion();
     const id = req.params.id;
-    console.log("Cliente:", id);
+    console.log("Mesa:", id);
 
-    const checkQuery1 = 'SELECT * FROM  CLIENTES_ALERGENOS WHERE idCliente = ?';
+    const checkQuery1 = 'SELECT * FROM  RESERVAS_PEDIDO WHERE IdReserva = ?';
     const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM CLIENTES_ALERGENOS WHERE idCliente = ?';
-      await connection.promise().query(deleteQuery1, id);
-    }
-
-    const checkQuery2 = 'SELECT * FROM  CLIENTES_PEDIDO WHERE idCliente = ?';
-    const [result2] = await connection.promise().query(checkQuery2, id);
-
-    if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM CLIENTES_PEDIDO WHERE idCliente = ?';
-      await connection.promise().query(deleteQuery2, id);
-    }    
-
-    const checkQuery3 = 'SELECT * FROM  CLIENTES WHERE idCliente = ?';
-    const [result3] = await connection.promise().query(checkQuery3, id);
-
-    if (result3.length > 0) {
-      const deleteQuery3 = 'DELETE FROM CLIENTES WHERE idCliente = ?';
-      await connection.promise().query(deleteQuery3, id);
-    }  
-
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al borrar Ingrediente' });
-  }
-  console.log('Ingrediente eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
-});
-
-app.delete('/borrartrabajador/:id', async (req, res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    console.log("Trabajador:", id);
-
-    const checkQuery1 = 'SELECT * FROM  TRABAJADOR_PEDIDO WHERE IdTrabajador = ?';
-    const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM TRABAJADOR_PEDIDO WHERE Idtrabajador = ?';
-      await connection.promise().query(deleteQuery1, id);
-    }
-
-    const checkQuery2 = 'SELECT * FROM  TRABAJADOR WHERE IdTrabajador = ?';
-    const [result2] = await connection.promise().query(checkQuery2, id);
-
-    if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM TRABAJADOR WHERE IdTrabajador = ?';
-      await connection.promise().query(deleteQuery2, id);
-    }    
-
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar Trabajador:', error);
-    res.status(500).json({ error: 'Error al borrar Trabajador' });
-  }
-  console.log('Trabajador eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Trabajador eliminado con éxito' });
-});
-
-app.delete('/borraringrediente/:id', async (req, res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    console.log("Ingrediente:", id);
-
-    const checkQuery1 = 'SELECT * FROM  RECETAS_INGREDIENTES WHERE IdIngrediente = ?';
-    const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM RECETAS_INGREDIENTES WHERE IdIngrediente = ?';
-      await connection.promise().query(deleteQuery1, id);
-    }
-
-    const checkQuery2 = 'SELECT * FROM  INGREDIENTES_ALERGENOS WHERE IdIngrediente = ?';
-    const [result2] = await connection.promise().query(checkQuery2, id);
-
-    if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM INGREDIENTES_ALERGENOS WHERE IdIngrediente = ?';
-      await connection.promise().query(deleteQuery2, id);
-    }    
-
-    const checkQuery3 = 'SELECT * FROM  INGREDIENTES WHERE IdIngrediente = ?';
-    const [result3] = await connection.promise().query(checkQuery3, id);
-
-    if (result3.length > 0) {
-      const deleteQuery3 = 'DELETE FROM INGREDIENTES WHERE IdIngrediente = ?';
-      await connection.promise().query(deleteQuery3, id);
-    }  
-
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al borrar Ingrediente' });
-  }
-  console.log('Ingrediente eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
-});
-
-app.delete('/borrarpedido/:id', async (req, res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    console.log("Pedido:", id);
-
-    const checkQuery1 = 'SELECT * FROM  PEDIDO_RECETAS WHERE IdPedido = ?';
-    const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM PEDIDO_RECETAS WHERE IdPedido = ?';
-      await connection.promise().query(deleteQuery1, id);
-    }
-
-    const checkQuery2 = 'SELECT * FROM  RESERVAS_PEDIDO WHERE IdPedido = ?';
-    const [result2] = await connection.promise().query(checkQuery2, id);
-
-    if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM RESERVAS_PEDIDO WHERE IdPedido = ?';
-      await connection.promise().query(deleteQuery2, id);
-    }    
-
-    const checkQuery3 = 'SELECT * FROM  CLIENTES_PEDIDO WHERE IdPedido = ?';
-    const [result3] = await connection.promise().query(checkQuery3, id);
-
-    if (result3.length > 0) {
-      const deleteQuery3 = 'DELETE FROM CLIENTES_PEDIDO WHERE IdPedido = ?';
-      await connection.promise().query(deleteQuery3, id);
-    }  
-
-    const checkQuery4 = 'SELECT * FROM  TRABAJADOR_PEDIDO WHERE IdPedido = ?';
-    const [result4] = await connection.promise().query(checkQuery4, id);
-
-    if (result4.length > 0) {
-      const deleteQuery4 = 'DELETE FROM TRABAJADOR_PEDIDO WHERE IdPedido = ?';
-      await connection.promise().query(deleteQuery4, id);
-    }  
-
-    const checkQuery5 = 'SELECT * FROM  PEDIDO WHERE IdPedido = ?';
-    const [result5] = await connection.promise().query(checkQuery5, id);
-
-    if (result5.length > 0) {
-      const deleteQuery5 = 'DELETE FROM PEDIDO WHERE IdPedido = ?';
-      await connection.promise().query(deleteQuery5, id);
-    }  
-
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar Pedido:', error);
-    res.status(500).json({ error: 'Error al borrar Pedido' });
-  }
-  console.log('Pedido eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Pedido eliminado con éxito' });
-});
-
-app.delete('/borrarreserva/:id', async (req,res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-
-    console.log("Reserva:", id);
-
-    const checkQuery1 = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
-    const [result1] = await connection.promise().query(checkQuery1,id);
 
     if (result1.length > 0) {
       const deleteQuery1 = 'DELETE FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
       await connection.promise().query(deleteQuery1, id);
     }
 
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar reserva:', error);
-    res.status(500).json({ error: 'Error al borrar reserva' });
-  }
-  console.log('Reserva eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Reserva eliminado con éxito' });
-});
-
-app.delete('/borraralergeno/:id', async (req, res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    console.log("Alergeno:", id);
-
-    const checkQuery1 = 'SELECT * FROM  CLIENTES_ALERGENOS WHERE IdAlergeno = ?';
-    const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM CLIENTES_ALERGENOS WHERE IdAlergeno = ?';
-      await connection.promise().query(deleteQuery1, id);
-    }
-
-    const checkQuery2 = 'SELECT * FROM  INGREDIENTES_ALERGENOS WHERE IdAlergeno = ?';
+    const checkQuery2 = 'SELECT * FROM  RESERVAS WHERE IdReserva = ?';
     const [result2] = await connection.promise().query(checkQuery2, id);
 
     if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM INGREDIENTES_ALERGENOS WHERE IdAlergeno = ?';
+      const deleteQuery2 = 'DELETE FROM RESERVAS WHERE IdReserva = ?';
       await connection.promise().query(deleteQuery2, id);
-    }    
-
-    const checkQuery3 = 'SELECT * FROM  ALERGENOS WHERE IdAlergeno = ?';
-    const [result3] = await connection.promise().query(checkQuery3, id);
-
-    if (result3.length > 0) {
-      const deleteQuery3 = 'DELETE FROM ALERGENOS WHERE IdAlergeno = ?';
-      await connection.promise().query(deleteQuery3, id);
-    }  
-
-    connection.commit();
-    connection.end();
-
-  } catch (error){
-    console.error('Error al borrar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al borrar Ingrediente' });
-  }
-  console.log('Ingrediente eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
-});
-
-app.delete('/borrarreceta/:id', async (req, res) => {
-  try{
-    const connection = await abrirConexion();
-    const id = req.params.id;
-    console.log("Receta:", id);
-
-    const checkQuery1 = 'SELECT * FROM  PEDIDO_RECETAS WHERE IdReceta = ?';
-    const [result1] = await connection.promise().query(checkQuery1, id);
-
-    if (result1.length > 0) {
-      const deleteQuery1 = 'DELETE FROM PEDIDO_RECETAS WHERE IdReceta = ?';
-      await connection.promise().query(deleteQuery1, id);
     }
 
-    const checkQuery2 = 'SELECT * FROM  RECETAS_INGREDIENTES WHERE IdReceta = ?';
-    const [result2] = await connection.promise().query(checkQuery2, id);
-
-    if (result2.length > 0) {
-      const deleteQuery2 = 'DELETE FROM RECETAS_INGREDIENTES WHERE IdReceta = ?';
-      await connection.promise().query(deleteQuery2, id);
-    }    
-
-    const checkQuery3 = 'SELECT * FROM  RECETAS WHERE IdReceta = ?';
-    const [result3] = await connection.promise().query(checkQuery3, id);
-
-    if (result3.length > 0) {
-      const deleteQuery3 = 'DELETE FROM RECETAS WHERE IdReceta = ?';
-      await connection.promise().query(deleteQuery3, id);
-    }  
-
     connection.commit();
     connection.end();
 
   } catch (error){
-    console.error('Error al borrar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al borrar Ingrediente' });
+    console.error('Error al borrar mesa:', error);
+    res.status(500).json({ error: 'Error al borrar mesa' });
   }
-  console.log('Ingrediente eliminado con éxito en la base de datos!');
-  res.status(201).json({ message: 'Ingrediente eliminado con éxito' });
+  console.log('Mesa eliminado con éxito en la base de datos!');
+  res.status(201).json({ message: 'Mesa eliminado con éxito' });
 });
 
 app.post('/reiniciar', async (req, res) => {
@@ -764,12 +1053,7 @@ app.post('/reiniciar', async (req, res) => {
     res.status(500).json({ error: 'Error al generar la base de datos' });
   }
 });
-
-
-
-  app.listen(5050, () => { // Inicia el servidor en el puerto 5050
-    console.log('Servidor en ejecución en el puerto 5050');
-  });
   
-
-    
+app.listen(5050, () => { // Inicia el servidor en el puerto 5050
+  console.log('Servidor en ejecución en el puerto 5050');
+});

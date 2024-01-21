@@ -24,7 +24,7 @@ const App = () => {
         navigate('/mensaje', { state: { mensaje: 'Error al reiniciar la base de datos: ', error } });
     });
   };
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

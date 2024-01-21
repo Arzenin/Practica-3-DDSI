@@ -7,59 +7,42 @@ import dayjs from 'dayjs';
 
 const useHost = () => {
   if (Platform.OS === 'android') {
-    return 'http://10.0.2.2:5050/receta';
+    return 'http://10.0.2.2:5050/alergenos';
   } else {
-    return 'http://localhost:5050/receta';
+    return 'http://localhost:5050/alergenos';
   }
 };
 
 const Cabecera = () => {
   return (
     <DataTable.Header>
-      <DataTable.Title>ID Receta</DataTable.Title>
+      <DataTable.Title>ID ()</DataTable.Title>
       <DataTable.Title>Nombre</DataTable.Title>
-      <DataTable.Title>Precio</DataTable.Title>
+      <DataTable.Title>Descripciones</DataTable.Title>
+      <DataTable.Title>Eliminar</DataTable.Title>
     </DataTable.Header>
   );
 };
 
-const Receta = () => {
-  const [stockData, setStockData] = useState([]);
+const Alergenos = () => {
   const navigate = useNavigate();
   const [filas, setFilas] = useState([]);
   const [pagina, setPagina] = useState(1);
   const host = useHost();
   const [itemsPorPagina] = useState(10); // Ajustar preferencia
 
-  
   const handleAdd = () => { // Función añadir
-    navigate('/crearreceta');
+    navigate('/crearalergeno');
   };
 
-  const handleDelete = async (id) => { // Función borrar
-    try{
-      // Realizar la solicitud DELETE
-      await axios.delete(`http://localhost:5050/borrarreceta/${id}`);
-  
-      // Volver a cargar los datos después de la eliminación
-      const response = await axios.get(host);
-      const resultado = response.data[0];
-  
-      // Aplicar la paginación
-      const inicio = (pagina - 1) * itemsPorPagina;
-      const fin = inicio + itemsPorPagina;
-      const filasPaginadas = resultado.slice(inicio, fin);
-      
-      setFilas(filasPaginadas);
-    }
-    catch (error) {
-      console.error('Error al eliminar:', error);
-    };
-};
-
-	const handleEdit = (ide) => {
-		navigate('/editarreceta', { state: { id: ide }})
-	};
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borraralergeno/${id}`)
+    .then((response) => {
+      this.forceUpdate();
+      })
+      .catch((error) => console.error('Error al eliminar:', error));
+  };
 
   const handlePageChange = (page) => {  
     setPagina(page);
@@ -83,20 +66,6 @@ const Receta = () => {
     fetchData();
   }, [host, pagina]); // dependencia para que useEffect se ejecute cuando cambie
 
-  useEffect(() => {
-    // Llamada a la API al cargar el componente
-      const fetchData = async() => {
-        try{
-          const response = await axios.get('http://172.28.152.110:5050/ver');
-          const resultado = response.data[0];
-          await setStockData(resultado);
-        } catch(error) {
-        console.error('Error al realizar la solicitud:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
   const handleButtonClick = (enlace) => {
     navigate(enlace);
   };
@@ -105,24 +74,24 @@ const Receta = () => {
     <View>
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+        <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
         <Text style={styles.title}>McAndCheese - Práctica 3</Text>
       </View>
     </View>
-      <Text style={styles.title}>Subsistema de Receta</Text>
+      <Text style={styles.title}>Subsistema de Menú</Text>
+      <Text style={styles.title}>Listado de alérgenos: </Text>
       <View style={styles.table}>
       {/* Encabezado de la tabla */}
       <Cabecera />
       {/* Datos de la tabla */}
       <DataTable>
         {filas.map((item) => (
-          <DataTable.Row key={item.IdReceta}>
-            <DataTable.Cell>{item.IdReceta}</DataTable.Cell>
+          <DataTable.Row key={item.IdAlergeno}>
+            <DataTable.Cell>{item.IdAlergeno}</DataTable.Cell>
             <DataTable.Cell>{item.Nombre}</DataTable.Cell>
-            <DataTable.Cell>{item.Precio}</DataTable.Cell>
+            <DataTable.Cell>{item.Descripcion}</DataTable.Cell>
             {/* Botones de las filas */}
-            <IconButton icon="pencil" onPress={() => handleEdit(item.IdReceta)} />
-            <IconButton icon="delete" onPress={() => handleDelete(item.IdReceta)} />
+            <IconButton icon="delete" onPress={() => handleDelete(item.IdAlergeno)} />
           </DataTable.Row>
         ))}
         <DataTable.Pagination
@@ -204,5 +173,4 @@ const styles = StyleSheet.create({
        justifyContent: 'center',
      }
   });
-
-export default Receta;
+export default Alergenos;

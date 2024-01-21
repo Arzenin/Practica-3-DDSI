@@ -14,29 +14,35 @@ const useHost = () => {
     }
 };
 
-const EditarIngrediente = ()=>{
+const InfoPedido = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-    const [idIngrediente, setIdIngrediente] = useState('');
-    const [nombre, setNombre] = useState('');
-    const [numStock, setNumStock] = useState('');
+    const [idReserva, setIdReserva] = useState('');
+    const [idPedido, setIdPedido] = useState('');
+    const [valoracion, setValoracion] = useState('');
+    const [tPago, setTPago] = useState('');
+    const [estado, setEstado] = useState('');
+   
     const { state } = useLocation();
     const id = state ? state.id : '';
-
-
-    const getDatosIngrediente = () => {
-        axios.get(`${useHost()}/ingrediente/${id}`)
+    
+    
+    const getDatosInfoPedido = () => {
+        axios.get(`${useHost()}/infopedido/${id}`)
             .then((response) => {
-                const resultado = response.data[0];
+                console.log("Respuesta del servidor:", response.data);
+                const resultado = response.data;
                 if (resultado && resultado.length > 0 && Array.isArray(resultado)) {
-                    resultado.forEach((ingrediente) => {
-                        setIdIngrediente(ingrediente.IdIngrediente);
-                        setNombre(ingrediente.Nombre);
-                        setNumStock(ingrediente.NumStock);
+                    resultado.forEach((infopedido) => {
+                        setIdReserva(infopedido.IdReserva);
+                        setIdPedido(infopedido.IdPedido);
+                        setValoracion(infopedido.Valoracion);
+                        setTPago(infopedido.TPago);
+                        setEstado(infopedido.Estado);
                     });
                 }
             })
@@ -47,58 +53,33 @@ const EditarIngrediente = ()=>{
     };
 
     useEffect(() => {
-        getDatosIngrediente();
+        getDatosInfoPedido();
     }, [])
-
-    const handleEditarIngrediente = () => {
-
-        // Realiza una solicitud POST al servidor backend para crear un alumno
-        axios.put(`${useHost()}/editaringrediente`, {idIngrediente,nombre,numStock})
-        .then((response) => {
-            // Maneja la respuesta exitosa
-            navigate('/ingrediente');
-        })
-        .catch((error) => {
-            // Maneja los errores
-            console.error("Error al editar Ingrediente: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error al editar Ingrediente',error } });
-        });
-        
-    };
 
     return(
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Sistema de Ingredientes</Text>
-            <Text style={styles.titleText}>Editar Ingrediente</Text>
+
+            <Text style={styles.titleText}>Información del pedido</Text>
             
-            <Text style={styles.text}>IdIngrediente:</Text>
-            <Text style={styles.text}>{idIngrediente}</Text>
-            <Text style={styles.text}>Nombre:</Text>
-            <TextInput style={styles.textInput}
-                value={nombre}
-                onChangeText={text => setNombre(text)}
-            />
-
-            <Text style={styles.text}>Numero de Stock:</Text>
-            <TextInput style={styles.textInput}
-                value={numStock}
-                onChangeText={text => setNumStock(text)}
-            />
+            <Text style={styles.text}>ID Reserva:</Text>
+            <Text style={styles.text}>{idReserva}</Text>
+            <Text style={styles.text}>ID Pedido:</Text>
+            <Text style={styles.text}>{idPedido}</Text>
+            <Text style={styles.text}>Valoracion:</Text>
+            <Text style={styles.text}>{valoracion}</Text>
+            <Text style={styles.text}>Tipo de pago:</Text>
+            <Text style={styles.text}>{tPago}</Text>
+            <Text style={styles.text}>Estado del pedido:</Text>
+            <Text style={styles.text}>{estado}</Text>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleEditarIngrediente}>
-                    <Text style={styles.pressableText}>Editar Ingrediente</Text>
-                </Pressable> 
-            </View>
-
-            <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/ingrediente')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/reservas')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -196,7 +177,4 @@ const styles=StyleSheet.create({
       }
 })
 
-
-
-
-export default EditarIngrediente
+export default InfoPedido

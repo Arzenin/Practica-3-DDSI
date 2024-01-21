@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   db:
     image: mysql:5.7
     container_name: mysql-db-ddsi-p3
@@ -9,7 +10,7 @@ services:
       MYSQL_DATABASE: ddsip3
     ports:
       - "3000:3306"
-  
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-interface-ddsi-p3
@@ -20,4 +21,3 @@ services:
       - "8080:80"
     depends_on:
       - db
-

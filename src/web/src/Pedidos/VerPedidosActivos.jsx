@@ -36,25 +36,8 @@ const VerPedidos = () => {
         navigate('/crearcliente');
     };
 
-    const handleDelete = async (id) => { // Función borrar
-        try{
-          // Realizar la solicitud DELETE
-          await axios.delete(`http://localhost:5050/borrarpedido/${id}`);
-      
-          // Volver a cargar los datos después de la eliminación
-          const response = await axios.get(host);
-          const resultado = response.data[0];
-      
-          // Aplicar la paginación
-          const inicio = (pagina - 1) * itemsPorPagina;
-          const fin = inicio + itemsPorPagina;
-          const filasPaginadas = resultado.slice(inicio, fin);
-          
-          setFilas(filasPaginadas);
-        }
-        catch (error) {
-          console.error('Error al eliminar:', error);
-        };
+    const handleFinalizar = async (id) => { // Función borrar
+        navigate('/finalizarpedido', { state: { id:id }} )
     };
 
     const handlePageChange = (page) => {  
@@ -78,20 +61,6 @@ const VerPedidos = () => {
     
         fetchData();
     }, [host, pagina]);
-
-    useEffect(() => {
-        // Llamada a la API al cargar el componente
-            const fetchData = async() => {
-            try{
-                const response = await axios.get('http://172.28.152.110:5050/ver');
-                const resultado = response.data[0];
-                await setStockData(resultado);
-            } catch(error) {
-            console.error('Error al realizar la solicitud:', error);
-            }
-        };
-        fetchData();
-    }, []);
 
     const handleButtonClick = (enlace) => {
       navigate(enlace);
@@ -119,7 +88,7 @@ const VerPedidos = () => {
                 <DataTable.Cell>{item.Estado}</DataTable.Cell>
                 {/* Botones de las filas */}
                 {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                <IconButton icon="delete" onPress={() => handleDelete(item.IdPedido)} />
+                <IconButton icon="check" color="green" onPress={() => handleFinalizar(item.IdPedido)} />
               </DataTable.Row>
             ))}
             <DataTable.Pagination

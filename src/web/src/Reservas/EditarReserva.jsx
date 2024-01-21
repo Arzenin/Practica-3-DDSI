@@ -14,28 +14,33 @@ const useHost = () => {
     }
 };
 
-const EditarAlergeno = ()=>{
+const EditarReserva = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-    const [idAlergeno, setIdAlergeno] = useState('');
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
+    const [idReserva, setIdReserva] = useState('');
+    const [IdPedido, setIdPedido] = useState('');
+    const [numPersonas, setNumPersonas] = useState('');
+    const [horaIni, setHoraIni] = useState('');
+   
     const { state } = useLocation();
     const id = state ? state.id : '';
+    
 
-    const getDatosAlergeno = () => {
-        axios.get(`${useHost()}/alergeno/${id}`)
+
+    const getDatosReserva = () => {
+        axios.get(`${useHost()}/reservas/${id}`)
             .then((response) => {
                 const resultado = response.data[0];
                 if (resultado && resultado.length > 0 && Array.isArray(resultado)) {
-                    resultado.forEach((alergeno) => {
-                        setIdAlergeno(alergeno.IdAlergeno);
-                        setNombre(alergeno.Nombre);
-                        setDescripcion(alergeno.Descripcion);
+                    resultado.forEach((reserva) => {
+                        setIdReserva(reserva.IdReserva);
+                        setIdPedido(reserva.IdPedido);
+                        setNumPersonas(reserva.NumPersonas);
+                        setHoraIni(reserva.HoraIni);
                     });
                 }
             })
@@ -46,22 +51,21 @@ const EditarAlergeno = ()=>{
     };
 
     useEffect(() => {
-        getDatosAlergeno();
+        getDatosReserva();
     }, [])
 
-    const handleEditarAlergeno = () => {
-
-        // Realiza una solicitud POST al servidor backend para crear un alumno
-        axios.put(`${useHost()}/editaralergeno`, {idAlergeno,nombre,descripcion})
-        .then((response) => {
-            // Maneja la respuesta exitosa
-            navigate('/alergeno');
-        })
-        .catch((error) => {
-            // Maneja los errores
-            console.error("Error al editar Alergeno: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error al editar Alergeno',error } });
-        });
+    const handleEditarReserva = () => {
+       // Realiza una solicitud POST al servidor backend para crear un alumno
+       axios.put(`${useHost()}/editarreserva`, {idReserva,numPersonas, horaIni})
+       .then((response) => {
+           // Maneja la respuesta exitosa
+           navigate('/reservas');
+       })
+       .catch((error) => {
+           // Maneja los errores
+           console.error("Error al editar reserva: ",error);
+           navigate('/mensaje', { state: { mensaje: 'Error al editar reserva',error } });
+       });
         
     };
 
@@ -69,35 +73,32 @@ const EditarAlergeno = ()=>{
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Sistema de Alergenos</Text>
-            <Text style={styles.titleText}>Editar Alergenos</Text>
+            <Text style={styles.titleText}>Subsistema de Reservas</Text>
+            <Text style={styles.titleText}>Editar número de conmensales</Text>
             
-            <Text style={styles.text}>IdAlergeno:</Text>
-            <Text style={styles.text}>{idAlergeno}</Text>
-            <Text style={styles.text}>Nombre:</Text>
+            <Text style={styles.text}>Número de mesa:</Text>
+            <Text style={styles.text}>{idReserva}</Text>
+            <Text style={styles.text}>Hora de Inicio:</Text>
+            <Text style={styles.text}>{horaIni}</Text>
+            
+            <Text style={styles.text}>Nuevo número de conmensales:</Text>
             <TextInput style={styles.textInput}
-                value={nombre}
-                onChangeText={text => setNombre(text)}
-            />
-
-            <Text style={styles.text}>Descripcion:</Text>
-            <TextInput style={styles.textInput}
-                value={descripcion}
-                onChangeText={text => setDescripcion(text)}
+                value={numPersonas}
+                onChangeText={text => setNumPersonas(text)}
             />
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleEditarAlergeno}>
-                    <Text style={styles.pressableText}>Editar Descripcion</Text>
+                <Pressable style={styles.pressableButton} onPress={handleEditarReserva}>
+                    <Text style={styles.pressableText}>Editar número de conmensales</Text>
                 </Pressable> 
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/alergeno')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/reservas')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -195,7 +196,4 @@ const styles=StyleSheet.create({
       }
 })
 
-
-
-
-export default EditarAlergeno
+export default EditarReserva

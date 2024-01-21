@@ -1,9 +1,9 @@
 import {  Image, Platform, Pressable , StyleSheet, Text, View} from 'react-native'
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
-import { useNavigate } from 'react-router-native';
-import {useState} from 'react'
-
+import { useNavigate, useLocation } from 'react-router-native';
+import {useState, useEffect} from 'react'
+import MultiSelect from 'react-native-multiple-select';
 
 const useHost = () => {
     if (Platform.OS === 'android') {
@@ -13,27 +13,56 @@ const useHost = () => {
     }
 };
 
-const CrearAlergeno = ()=>{
+const FinalizarPedido = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-    const [id, setId] = useState('');
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    
+    const { state } = useLocation();
+    const [valoracion, setValoracion] = useState('');
+    const id = state ? state.id : '';
+    const [trabajadores, setTrabajadores] = useState([]);
+    const [selectedTrabajadores, setSelectedTrabajadores] = useState([]);
 
-    const handleCreateAlergeno = () => {
-        try{
-            axios.post(`${useHost()}/crearalergeno`, {id, nombre, descripcion})
-            navigate('/alergeno');
-        }
-        catch(error){
-            console.error("Error al crear un alergeno: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error en la creación del alergeno',error } });
-        }
+
+    const getTrabajadores = async () =>{
+        axios.get(`${useHost()}/trabajadores`)
+      .then((response) => {
+        setTrabajadores(response.data[0]); // Almacena la lista de estudiantes en el estado
+        })
+      .catch((error) => {
+        console.error('Error al obtener la lista de trabajadores:', error);
+      });
+    }
+
+    useEffect(() => {
+        getTrabajadores();
+    }, [])
+
+    const handleSelectedTrabajadoresChange = (selectedItems) => {
+        setSelectedTrabajadores(selectedItems);
+      };
+
+
+    const handleFinalizarPedido = () => {
+
+        // Realiza una solicitud POST al servidor backend para crear un alumno
+        axios.post(`${useHost()}/finalizarpedido`, {
+            id,
+            valoracion, 
+            trabajadores:selectedTrabajadores
+        })
+        .then((response) => {
+            // Maneja la respuesta exitosa
+            navigate('/verpedidosinactivos');
+        })
+        .catch((error) => {
+            // Maneja los errores
+            console.error("Error al finalizar pedido: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error en la finalización del pedido',error } });
+        });
         
     };
 
@@ -41,41 +70,40 @@ const CrearAlergeno = ()=>{
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Subsistema de Alergenos</Text>
-            <Text style={styles.titleText}>Crear un Nuevo Alergeno</Text>
-            
-            <Text style={styles.text}>Id:</Text>
-            <TextInput style={styles.textInput}
-                label="id del alergeno"
-                value={id}
-                onChangeText={text => setId(text)}
+            <Text style={styles.titleText}>Subsistema de Pedidos</Text>
+            <Text style={styles.titleText}>Finalizar Pedido {id}</Text>
+            <Text style={styles.text}>Primero, debe seleccionar el/los trabajadores implicados en el pedido: </Text>
+            <MultiSelect style={styles.multiselect}
+            items={trabajadores.map((trabajador) => ({
+                id: trabajador.IdTrabajador,
+                name: trabajador.Nombre,
+            }))}
+            uniqueKey="id"
+            onSelectedItemsChange={handleSelectedTrabajadoresChange}
+            selectedItems={selectedTrabajadores}
+            selectText="Seleccione trabajador/es"
+            searchInputPlaceholderText="Buscar trabajadores..."
+            hideSubmitButton
             />
-            <Text style={styles.text}>Nombre:</Text>
+            <Text style={styles.text}>A continuación, valore el pedido del 0 (muy malo) al 10 (excelente):</Text>
             <TextInput style={styles.textInput}
-                label="nombre"
-                value={nombre}
-                onChangeText={text => setNombre(text)}
-            />
-
-            <Text style={styles.text}>Descripcion:</Text>
-            <TextInput style={styles.textInput}
-                label="descripcion"
-                value={descripcion}
-                onChangeText={text => setDescripcion(text)}
-            />
+                label="Valoración"
+                value={valoracion}
+                onChangeText={text => setValoracion(text)}
+            />          
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleCreateAlergeno}>
-                    <Text style={styles.pressableText}>Crear Alergeno</Text>
+                <Pressable style={styles.pressableButton} onPress={handleFinalizarPedido}>
+                    <Text style={styles.pressableText}>Finalizar Pedido</Text>
                 </Pressable> 
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/alergeno')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/pedidos')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -87,6 +115,12 @@ const CrearAlergeno = ()=>{
 
 const styles=StyleSheet.create({
     image: {
+        width: 200, // Ajusta el ancho según tus necesidades
+        height: 200, // Ajusta la altura según tus necesidades
+        borderRadius: 0,
+        marginBottom: 20,
+      },
+      multiselect: {
         width: 200, // Ajusta el ancho según tus necesidades
         height: 200, // Ajusta la altura según tus necesidades
         borderRadius: 0,
@@ -176,4 +210,4 @@ const styles=StyleSheet.create({
 
 
 
-export default CrearAlergeno
+export default FinalizarPedido

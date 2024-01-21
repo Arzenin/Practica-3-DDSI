@@ -2,44 +2,109 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import axios from 'axios';
+import { DataTable, FAB, IconButton} from 'react-native-paper';
 
 const Menú = () => {
-  const [stockData, setStockData] = useState([]);
   const navigate = useNavigate();
+  const [filas, setFilas] = useState([]);
+  const [pagina, setPagina] = useState(1);
+  const [itemsPorPagina] = useState(10);
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5050/recetas`);
+      const resultado = response.data[0];
+      // Aplicar la paginación
+      const inicio = (pagina - 1) * itemsPorPagina;
+      const fin = inicio + itemsPorPagina;
+      const filasPaginadas = resultado.slice(inicio, fin);
+      setFilas(filasPaginadas);
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+  };
 
   useEffect(() => {
-    // Llamada a la API al cargar el componente
-      const fetchData = async() => {
-        try{
-          const response = await axios.get('http://172.28.152.110:5050/ver');
-          const resultado = response.data[0];
-          await setStockData(resultado);
-        } catch(error) {
-        console.error('Error al realizar la solicitud:', error);
-      }
-    };
     fetchData();
-  }, []);
-
+  }, []); // dependencia para que useEffect se ejecute cuando cambie
+  
   const handleButtonClick = (enlace) => {
     navigate(enlace);
   };
 
+  const handlePageChange = (page) => {  
+    setPagina(page);
+  };
+
+  const handleSee = (ide, nombre) => {
+		navigate('/verreceta', { state: { id: ide, nombre:nombre }})
+	};
+  const handleAdd = () => {
+		navigate('/crearreceta');
+	};
+
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borrarreceta/${id}`)
+    .then((response) => {
+        fetchData();
+      })
+      .catch((error) => console.error('Error al eliminar:', error));
+  };
+
+
+  const Cabecera = () => {
+    return (
+      <DataTable.Header>
+        <DataTable.Title>ID</DataTable.Title>
+        <DataTable.Title>Nombre</DataTable.Title>
+        <DataTable.Title>Precio</DataTable.Title>
+        <DataTable.Title>Acciones</DataTable.Title>
+      </DataTable.Header>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
-        <Text style={styles.title}>McAndCheese - Práctica 3</Text>
+    <View>  
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
+          <Text style={styles.title}>McAndCheese - Práctica 3</Text>
+        </View>
       </View>
       <Text style={styles.title}>Subsistema de Menú</Text>
-      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/alergeno')}>
-        <Text style={styles.pressableText}>Sistema de Alergenos</Text>
+      {/* Encabezado de la tabla */}
+      <Cabecera />
+      {/* Datos de la tabla */}
+      <DataTable>
+        {filas.map((item) => (
+          <DataTable.Row key={item.IdReceta}>
+            <DataTable.Cell>{item.IdReceta}</DataTable.Cell>
+            <DataTable.Cell>{item.Nombre}</DataTable.Cell>
+            <DataTable.Cell>{item.Precio}</DataTable.Cell>
+            {/* Botones de las filas */}
+            <IconButton icon="delete" onPress={() => handleDelete(item.IdReceta)} />
+            <IconButton icon="eye" onPress={() => handleSee(item.IdReceta, item.Nombre)} />
+          </DataTable.Row>
+        ))}
+        <DataTable.Pagination
+        page={pagina} /* Página actual */
+        numberOfPages={Math.ceil(filas.length / itemsPorPagina)} /* Paginas = Filas/itemsXPagina */
+        onPageChange={handlePageChange}
+        label={`${pagina} de ${Math.ceil(filas.length / itemsPorPagina)}`} // Etiqueta
+      />
+      </DataTable>
+      <FAB
+        icon="plus"
+        style={styles.fabStyle}
+        color='white'
+        onPress={() => handleAdd()}
+      />
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/ingredientes')}>
+        <Text style={styles.pressableText}>Ingredientes</Text>
       </Pressable>
-      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/ingrediente')}>
-        <Text style={styles.pressableText}>Sistema de Ingrediente</Text>
-      </Pressable>
-      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/receta')}>
-        <Text style={styles.pressableText}>Sistema de Receta</Text>
+      <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/alergenos')}>
+        <Text style={styles.pressableText}>Alérgenos</Text>
       </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
         <Text style={styles.pressableText}>Volver</Text>
@@ -63,6 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 20,
+    alignSelf: 'center'
   },
   image: {
     width: 200, // Ajusta el ancho según tus necesidades
@@ -94,7 +160,13 @@ const styles = StyleSheet.create({
     marginTop: 100,
     fontSize: 14,
     fontWeight: 'bold'
-  }
+  },
+  fabStyle: {
+    width: 55,
+   backgroundColor: '#049CDC',
+   alignSelf: 'right',
+   justifyContent: 'center',
+ }
 });
 
 export default Menú;

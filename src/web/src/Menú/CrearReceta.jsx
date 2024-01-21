@@ -1,10 +1,9 @@
-
 import {  Image, Platform, Pressable , StyleSheet, Text, View} from 'react-native'
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
 import { useNavigate } from 'react-router-native';
-import {useState} from 'react'
-
+import {useState, useEffect} from 'react'
+import MultiSelect from 'react-native-multiple-select';
 
 const useHost = () => {
     if (Platform.OS === 'android') {
@@ -14,40 +13,55 @@ const useHost = () => {
     }
 };
 
-const CrearReserva = ()=>{
+const CrearReceta = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
-    
-    
-    const [nombre, setNombre] = useState('');
-    const [email, setEmail] = useState('');
-    const [contraseña, setContraseña] = useState('');
-    const [username, setUsername] = useState('');
-    const [domicilio, setDomicilio] = useState('');
-    const [datosPago, setDatosPago] = useState('');
-    const [hidePass, setHidePass] = useState(true);
-    /* Diferencia entre fechas debido a que en BD se introduce cómo string */
-    const [date, setDate] = useState('');
-    
 
     const [id, setId] = useState('');
-    const [idP, setIdP] = useState('');
-    const [npersonas, setnpersonas] = useState('');
-    const [hora, sethora] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [precio, setPrecio] = useState('');
+    const [ingredientes, setIngredientes] = useState([]);
+    const [selectedIngredientes, setSelectedIngredientes] = useState([]);
 
+    const getIngredientes = async () =>{
+        axios.get(`${useHost()}/ingredientes`)
+      .then((response) => {
+        setIngredientes(response.data[0]); // Almacena la lista de estudiantes en el estado
+        })
+      .catch((error) => {
+        console.error('Error al obtener la lista de alergenos:', error);
+      });
+    }
+    useEffect(() => {
+        getIngredientes();
+    }, [])
 
-    const handleCreateReserva = () => {
-        try{
-            axios.post(`${useHost()}/crearreserva`, {id,idP,npersonas,hora})
-            navigate('/reservas');
-        }
-        catch(error){
-            console.error("Error al crear una reserva: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error en la creación de la reserva', error } });
-        } 
+    const handleSelectedIngredientesChange = (selectedItems) => {
+        setSelectedIngredientes(selectedItems);
+      };
+
+    const handleCreateReceta = () => {
+
+        // Realiza una solicitud POST al servidor backend para crear un alumno
+        axios.post(`${useHost()}/crearreceta`, {
+            id,
+            nombre,
+            precio,
+            ingredientes:selectedIngredientes
+        })
+        .then((response) => {
+            // Maneja la respuesta exitosa
+            navigate('/menu');
+        })
+        .catch((error) => {
+            // Maneja los errores
+            console.error("Error al crear alergeno: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error en la creación del alergeno',error } });
+        });
+        
     };
 
     return(
@@ -58,49 +72,53 @@ const CrearReserva = ()=>{
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Subsistema de Reservas</Text>
-            <Text style={styles.titleText}>Crear una nueva reserva</Text>
+            <Text style={styles.titleText}>Subsistema de Menú</Text>
+            <Text style={styles.titleText}>Crear una Nueva Receta</Text>
             
-            <Text style={styles.text}>Id Reserva:</Text>
+            <Text style={styles.text}>ID de la receta:</Text>
             <TextInput style={styles.textInput}
-                label="Id Reserva"
+                label="ID"
                 value={id}
                 onChangeText={text => setId(text)}
             />
-            <Text style={styles.text}>Id Pedido:</Text>
+
+            <Text style={styles.text}>Nombre de la receta:</Text>
             <TextInput style={styles.textInput}
-                label="Id Pedido"
-                value={idP}
-                onChangeText={text => setIdP(text)}
+                label="Nombre"
+                value={nombre}
+                onChangeText={text => setNombre(text)}
+            />
+            <Text style={styles.text}>Precio de la receta (en €):</Text>
+            <TextInput style={styles.textInput}
+                label="Precio"
+                value={precio}
+                onChangeText={text => setPrecio(text)}
+            />
+            <Text style={styles.text}>Añadir ingredientes a la receta: </Text>
+            <MultiSelect style={styles.multiselect}
+            items={ingredientes.map((ingrediente) => ({
+                id: ingrediente.IdIngrediente,
+                name: ingrediente.Nombre,
+            }))}
+            uniqueKey="id"
+            onSelectedItemsChange={handleSelectedIngredientesChange}
+            selectedItems={selectedIngredientes}
+            selectText="Selecciona ingredientes a añadir"
+            searchInputPlaceholderText="Buscar ingredientes..."
+            hideSubmitButton
             />
 
-            <Text style={styles.text}>Número de personas:</Text>
-            <TextInput style={styles.textInput}
-                label="NumPersonas"
-                value={npersonas}
-                onChangeText={text => setnpersonas(text)}
-            />
-
-            <Text style={styles.text}>Hora de Inicio: </Text>
-            <TextInput style={styles.textInput}
-                label="HoraIni"
-                value={hora}
-                onChangeText={text => sethora(text)}
-            />           
-            
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleCreateReserva}>
-                    <Text style={styles.pressableText}>Crear Reserva</Text>
+                <Pressable style={styles.pressableButton} onPress={handleCreateReceta}>
+                    <Text style={styles.pressableText}>Crear Receta</Text>
                 </Pressable> 
             </View>
-            
+
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/reservas')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/menu')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
-            
-
             
         </View>
         
@@ -109,6 +127,12 @@ const CrearReserva = ()=>{
 
 const styles=StyleSheet.create({
     image: {
+        width: 200, // Ajusta el ancho según tus necesidades
+        height: 200, // Ajusta la altura según tus necesidades
+        borderRadius: 0,
+        marginBottom: 20,
+      },
+      multiselect: {
         width: 200, // Ajusta el ancho según tus necesidades
         height: 200, // Ajusta la altura según tus necesidades
         borderRadius: 0,
@@ -195,4 +219,7 @@ const styles=StyleSheet.create({
       }
 })
 
-export default CrearReserva
+
+
+
+export default CrearReceta

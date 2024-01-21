@@ -2,8 +2,8 @@ import {  Image, Platform, Pressable , StyleSheet, Text, View} from 'react-nativ
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
 import { useNavigate } from 'react-router-native';
-import {useState} from 'react'
-
+import {useState, useEffect} from 'react'
+import MultiSelect from 'react-native-multiple-select';
 
 const useHost = () => {
     if (Platform.OS === 'android') {
@@ -22,51 +22,84 @@ const CrearIngrediente = ()=>{
 
     const [id, setId] = useState('');
     const [nombre, setNombre] = useState('');
-    const [numStock, setNumStock] = useState('');
+    const [alergenos, setAlergenos] = useState([]);
+    const [selectedAlergenos, setSelectedAlergenos] = useState([]);
 
-    /* Diferencia entre fechas debido a que en BD se introduce cómo string */
+    const getAlergenos = async () =>{
+        axios.get(`${useHost()}/alergenos`)
+      .then((response) => {
+        setAlergenos(response.data[0]); // Almacena la lista de estudiantes en el estado
+        })
+      .catch((error) => {
+        console.error('Error al obtener la lista de alergenos:', error);
+      });
+    }
+    useEffect(() => {
+        getAlergenos();
+    }, [])
+
+    const handleSelectedAlergenosChange = (selectedItems) => {
+        setSelectedAlergenos(selectedItems);
+      };
+
     const handleCreateIngrediente = () => {
 
-        try{
-            axios.post(`${useHost()}/crearingrediente`,{id,nombre,numStock})
-            navigate('/ingrediente');
-        }
-        catch(error){
-            console.error("Error al crear Ingrediente: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error en la creación del Ingrediente',error } });
-        };
+        // Realiza una solicitud POST al servidor backend para crear un alumno
+        axios.post(`${useHost()}/crearingrediente`, {
+            id,
+            nombre,
+            alergenos:selectedAlergenos
+        })
+        .then((response) => {
+            // Maneja la respuesta exitosa
+            navigate('/ingredientes');
+        })
+        .catch((error) => {
+            // Maneja los errores
+            console.error("Error al crear alergeno: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error en la creación del alergeno',error } });
+        });
+        
     };
 
     return(
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Subsistema de Ingredientes</Text>
-            <Text style={styles.titleText}>Crear un Ingredientes</Text>
+            <Text style={styles.titleText}>Subsistema de Menú</Text>
+            <Text style={styles.titleText}>Crear un Nuevo Ingrediente</Text>
             
-            <Text style={styles.text}>Id Ingrediente:</Text>
+            <Text style={styles.text}>ID del ingrediente:</Text>
             <TextInput style={styles.textInput}
-                label="Id Ingrediente"
+                label="ID"
                 value={id}
                 onChangeText={text => setId(text)}
             />
-            <Text style={styles.text}>Nombre:</Text>
+
+            <Text style={styles.text}>Nombre del ingrediente:</Text>
             <TextInput style={styles.textInput}
                 label="Nombre"
                 value={nombre}
                 onChangeText={text => setNombre(text)}
             />
-
-            <Text style={styles.text}>numStock:</Text>
-            <TextInput style={styles.textInput}
-                label="numStock"
-                value={numStock}
-                onChangeText={text => setNumStock(text)}
+            <Text style={styles.text}>Añadir alérgenos del nuevo ingrediente: </Text>
+            <MultiSelect style={styles.multiselect}
+            items={alergenos.map((alergeno) => ({
+                id: alergeno.IdAlergeno,
+                name: alergeno.Nombre,
+            }))}
+            uniqueKey="id"
+            onSelectedItemsChange={handleSelectedAlergenosChange}
+            selectedItems={selectedAlergenos}
+            selectText="Selecciona alegernos a añadir"
+            searchInputPlaceholderText="Buscar alergenos..."
+            hideSubmitButton
             />
+
             <View style={styles.button}>
                 <Pressable style={styles.pressableButton} onPress={handleCreateIngrediente}>
                     <Text style={styles.pressableText}>Crear Ingrediente</Text>
@@ -74,17 +107,24 @@ const CrearIngrediente = ()=>{
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/ingrediente')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/ingredientes')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
             
         </View>
+        
     )
 }
 
 const styles=StyleSheet.create({
     image: {
+        width: 200, // Ajusta el ancho según tus necesidades
+        height: 200, // Ajusta la altura según tus necesidades
+        borderRadius: 0,
+        marginBottom: 20,
+      },
+      multiselect: {
         width: 200, // Ajusta el ancho según tus necesidades
         height: 200, // Ajusta la altura según tus necesidades
         borderRadius: 0,

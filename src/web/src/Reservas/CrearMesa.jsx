@@ -1,3 +1,4 @@
+
 import {  Image, Platform, Pressable , StyleSheet, Text, View} from 'react-native'
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
@@ -13,28 +14,38 @@ const useHost = () => {
     }
 };
 
-const CrearTrabajadores = ()=>{
+const CrearMesa = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
+    
+    
+    const [nombre, setNombre] = useState('');
+    const [email, setEmail] = useState('');
+    const [contraseña, setContraseña] = useState('');
+    const [username, setUsername] = useState('');
+    const [domicilio, setDomicilio] = useState('');
+    const [datosPago, setDatosPago] = useState('');
+    const [hidePass, setHidePass] = useState(true);
+    /* Diferencia entre fechas debido a que en BD se introduce cómo string */
+    const [date, setDate] = useState('');
+    
 
     const [id, setId] = useState('');
-    const [turno, setTurno] = useState('');
-    const [bono, setBono] = useState('');
+    const [num, setNum] = useState('');
 
-    const handleCreateTrabajadores = () => {
 
+    const handleCreateMesa = () => {
         try{
-            axios.post(`${useHost()}/creartrabajadores`, {id, turno, bono})
-            navigate('/trabajadores');
+            axios.post(`${useHost()}/crearmesa`, {id, num})
+            navigate('/mesas');
         }
         catch(error){
-            console.error("Error al crear trabajador: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error en la creación del trabajador',error } });
-        }
-        
+            console.error("Error al crear una mesa: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error en la creación de la mesa', error } });
+        } 
     };
 
     return(
@@ -45,40 +56,36 @@ const CrearTrabajadores = ()=>{
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Subsistema de Trabajadores</Text>
-            <Text style={styles.titleText}>Crear un Nuevo Trabajador</Text>
+            <Text style={styles.titleText}>Subsistema de Mesas</Text>
+            <Text style={styles.titleText}>Crear una nueva mesa</Text>
             
-            <Text style={styles.text}>Id:</Text>
+            <Text style={styles.text}>ID Reserva:</Text>
             <TextInput style={styles.textInput}
-                label="id"
+                label="Id Reserva"
                 value={id}
                 onChangeText={text => setId(text)}
-            />
-            <Text style={styles.text}>Turno:</Text>
-            <TextInput style={styles.textInput}
-                label="Turno"
-                value={turno}
-                onChangeText={text => setTurno(text)}
-            />
+            />  
 
-            <Text style={styles.text}>Bono:</Text>
+            <Text style={styles.text}>Número de mesa:</Text>
             <TextInput style={styles.textInput}
-                label="Bono"
-                value={bono}
-                onChangeText={text => setBono(text)}
-            />
-
+                label="NumMesa"
+                value={num}
+                onChangeText={text => setNum(text)}
+            />         
+            
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleCreateTrabajadores}>
-                    <Text style={styles.pressableText}>Crear Trabajador</Text>
+                <Pressable style={styles.pressableButton} onPress={handleCreateMesa}>
+                    <Text style={styles.pressableText}>Crear Mesa</Text>
                 </Pressable> 
             </View>
-
+            
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/trabajadores')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/mesas')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
+            
+
             
         </View>
         
@@ -173,7 +180,4 @@ const styles=StyleSheet.create({
       }
 })
 
-
-
-
-export default CrearTrabajadores
+export default CrearMesa

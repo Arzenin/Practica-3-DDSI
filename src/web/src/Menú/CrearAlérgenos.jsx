@@ -13,69 +13,79 @@ const useHost = () => {
     }
 };
 
-const CrearReceta = ()=>{
+const CrearAlergeno = ()=>{
     const navigate = useNavigate();
         const handleButtonClick = (enlace) => {
         
         navigate(enlace);
     };
 
-
     const [id, setId] = useState('');
-    const [precio, setPrecio] = useState('');
     const [nombre, setNombre] = useState('');
+    const [descripcion, setDescripcion] = useState('');
 
-    const handleCreateReceta = () => {
 
-        try{
-            axios.post(`${useHost()}/crearreceta`, {id, precio, nombre})
-            navigate('/receta');
-        }
-        catch(error){
-            console.error("Error al crear una Receta: ",error);
-            navigate('/mensaje', { state: { mensaje: 'Error en la creación de la Recta',error } });
-        }
-    
+
+    const handleCreateAlergeno = () => {
+
+        // Realiza una solicitud POST al servidor backend para crear un alumno
+        axios.post(`${useHost()}/crearalergeno`, {
+            id,
+            nombre, 
+            descripcion
+        })
+        .then((response) => {
+            // Maneja la respuesta exitosa
+            navigate('/alergenos');
+        })
+        .catch((error) => {
+            // Maneja los errores
+            console.error("Error al crear alergeno: ",error);
+            navigate('/mensaje', { state: { mensaje: 'Error en la creación del alergeno',error } });
+        });
+        
     };
 
     return(
         <View>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image style={styles.image} source={require('../../../LogoMcAndCheese.png')} />
+                    <Image style={styles.image} source={require('../../LogoMcAndCheese.png')} />
                     <Text style={styles.title}>McAndCheese - Práctica 3</Text>
                 </View>
             </View>
-            <Text style={styles.titleText}>Subsistema de Recetas</Text>
-            <Text style={styles.titleText}>Crear una Nueva Raceta</Text>
+            <Text style={styles.titleText}>Subsistema de Menú</Text>
+            <Text style={styles.titleText}>Crear un Nuevo Alergeno</Text>
             
-            <Text style={styles.text}>Id:</Text>
+            <Text style={styles.text}>ID del alergeno:</Text>
             <TextInput style={styles.textInput}
-                label="Id de la receta"
+                label="ID"
                 value={id}
                 onChangeText={text => setId(text)}
             />
-            <Text style={styles.text}>Nombre:</Text>
+
+            <Text style={styles.text}>Nombre del alergeno:</Text>
             <TextInput style={styles.textInput}
                 label="Nombre"
                 value={nombre}
                 onChangeText={text => setNombre(text)}
             />
-            <Text style={styles.text}>Precio:</Text>
-            <TextInput style={styles.textInput}
-                label="Precio"
-                value={precio}
-                onChangeText={text => setPrecio(text)}
-            />
 
+            
+            <Text style={styles.text}>Descripcion: </Text>
+            <TextInput style={styles.textInput}
+            label="Descripción"
+            value={descripcion}
+            onChangeText={text => setDescripcion(text)}
+            />
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={handleCreateReceta}>
-                    <Text style={styles.pressableText}>Crear Receta</Text>
+                <Pressable style={styles.pressableButton} onPress={handleCreateAlergeno}>
+                    <Text style={styles.pressableText}>Crear Alergeno</Text>
                 </Pressable> 
             </View>
 
             <View style={styles.button}>
-                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/receta')}>
+                <Pressable style={styles.pressableButton} onPress={() => handleButtonClick('/alergenos')}>
                     <Text style={styles.pressableText}>Volver atrás</Text>
                 </Pressable> 
             </View>
@@ -176,4 +186,4 @@ const styles=StyleSheet.create({
 
 
 
-export default CrearReceta
+export default CrearAlergeno

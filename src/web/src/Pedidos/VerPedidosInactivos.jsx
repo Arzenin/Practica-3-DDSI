@@ -79,20 +79,6 @@ const VerPedidos = () => {
         fetchData();
     }, [host, pagina]);
 
-    useEffect(() => {
-        // Llamada a la API al cargar el componente
-            const fetchData = async() => {
-            try{
-                const response = await axios.get('http://172.28.152.110:5050/ver');
-                const resultado = response.data[0];
-                await setStockData(resultado);
-            } catch(error) {
-            console.error('Error al realizar la solicitud:', error);
-            }
-        };
-        fetchData();
-    }, []);
-
     const handleButtonClick = (enlace) => {
       navigate(enlace);
     };
@@ -117,9 +103,6 @@ const VerPedidos = () => {
                 <DataTable.Cell>{item.Valoracion}</DataTable.Cell>
                 <DataTable.Cell>{item.TPago}</DataTable.Cell>
                 <DataTable.Cell>{item.Estado}</DataTable.Cell>
-                {/* Botones de las filas */}
-                {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
-                <IconButton icon="delete" onPress={() => handleDelete(item.IdPedido)} />
               </DataTable.Row>
             ))}
             <DataTable.Pagination
