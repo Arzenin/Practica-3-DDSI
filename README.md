@@ -88,5 +88,55 @@ como del backend.
 En conclusión nuestro objetivo es el de demostrar todo el conocimiento que hemos adquirido entre todos a lo largo del año, automatizar determinadas funciones para una mejor distribución de la carga computacional y por último alcanzar una mayor profundidad dentro de la progración web.
 
 
+# 3. Docker
+
+De nuevo, hemos vuelto a usar Docker al igual que en el seminario 2.
+Docker es un software que se especializa en en la creación y uso de contenedores, los cuales funcionan de tal forma que se pueden ejecutar aplicaciones de forma compartimentada dentro del sistema o aplicación.
+
+Gracias a esto se nos permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicacion fuera de nuestro propio sistema. Destacar que con docker no es necesario realizar modificaciones en el nuevo sistema.
+
+Mientras que una máquina virtual usa virtualización de hardware de nuestro sistema, docker virtualiza el sistema operativo que queramos, además de que este es más ligero y eficiente que una máquina virtual al no consumir tantos recursos.
+
+Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados por parte de empresas como por ejemplo MySQL, y por supuesto también se nos permite generar nuestro propio docker.
+
+De nuevo, nuestra motivación para usar docker es el tener una cara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el mantenimientro y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra página copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
+
+3.1 Instalación de Docker
+
+A partir de este apartado será necesaria la descarga de todas las herramientas para el correcto funcionamiento de la aplicación en sus diferentes versiones.
+
+__Ubuntu__:(Cada apartado es una única línea, son comandos de gran longitud)
+1-sudo apt update
+ 
+2-sudo apt install apt-transport-https ca-certificates curl	software-properties-common
+  
+3-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o         /usr/share/keyrings/docker-archive-keyring.gpg
+  
+4-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]   https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee   /etc/apt/sources.list.d/docker.list > /dev/null
+  
+5-Una vez instaladas estas dependencias de nuevo ejecutaremos:
+sudo apt update
+
+6-sudo apt install docker-ce docker-ce-cli containerd.io
+
+7-Comprobamos la correcta instalación con:
+docker --version
+
+Con esto ya estaría instalado docker dentro del sistema ubuntu
+
+__Windows__:
+1-Nos dirigiremos al siguiente enlace y descargamos la versión correspondiente a nuestro sistema:
+https://www.docker.com/products/docker-desktop/
+
+2-Ejecutamos el instalador con los valores por defecto, ya que en esta ocasión se añadirá esta variable automáticamente a PATH
+
+3-Reiniciamos el ordenador
+
+4-Abrimos la Powershell y ejecutamos docker --version para comprobar la correcta instalación
+
+
+
+ 
+
 
 
