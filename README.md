@@ -44,9 +44,9 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
       1. [Instalación de Docker](#411-instalación-de-docker)
    2. [ZeroTier](#42-zerotier)
       1. [Instalación de ZeroTier](#421-instalación-de-zerotier)
-   3. [Node.js,Rect Native y Expo](#43-node.js,react-native-y-expo)
-      1. [Instalación de Node.js,React Native y Expo](#431-instalación-de-node.js,react-native-y-expo)
-   4. [PHPMyAdmin y el conector MySQL2](#44-phpmyadmin-y-el-conector-mysql2)
+   3. [WAF](#43-waf)
+      1. [Instalación de WAF](#431-instalación-de-waf)
+   4. [PHPMyAdmin y MySQL2](#44-phpmyadmin-y-mysql2)
       1. [Instalación de PHPMyAdmin](#441-instalación-de-phpmyadmin)
 5. [Explicación del Código](#5-explicación-del-código)
    1. [Explicación del Código en SQL](#51-explicación-del-código-sql)
@@ -245,7 +245,7 @@ __*Windows:*__
      2. __Windows:__ Click sobre el icono de zeroTier de la barra de tareas y join new network,
      copiamos el network id en el campo correspondiente.
 
-# 4.3 Node.js, React Native y Expo
+# 4.3 WAF
 
 Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript por medio de __*Node.js*__
 
@@ -268,8 +268,7 @@ Para implementar la interfaz de la aplicación usando React Native, hemos usado 
 móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de 
 configurar y mantener manualmente ciertos aspectos del proyecto.
 
-
-### 4.3.1 Instalación de Node.js,React Native y Expo
+### 4.3.1 Instalación de WAF
 
 __*Ubuntu:*__
 
@@ -293,6 +292,54 @@ y `node –version`, en caso de que estos fallen se deberá a que no se han aña
 5. `npm install` para asegurar que tenemos todas las dependencias, esto debería de instalar también __*MySQL2*__ el cual explicaremos en
 __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
+# 4.4 PHPMyAdmin y MySQL2
+
+Para la administración de nuestro SGBD noe hemos decantado por _PHPMyAdmin_, ya a parte de ser una herramienta de código abierto y gratuita, es ampliamente 
+utilizada en el desarrollo web y la administración de bases de datos MySQL debido a su facilidad de uso y su capacidad para realizar diversas tareas de 
+administración de bases de datos de manera eficiente. Se suele instalar en servidores web para permitir a los desarrolladores y administradores de bases de datos 
+interactuar con sus bases de datos de una manera más visual.
+Algunas de las funciones de PHPMyAdmin son las siguientes:
+
+1. Nos permite gestionar las bases de datos de forma visual.
+2. Nos permite hacer la gestión de tablas.
+3. Nos permite la manipulación de datos de manera sencilla.
+4. Permite la geastión de usuarios y privilegios.
+5. Ejecución de Consultas SQL.
+6. Importación y Exportación de datos.
+7. Nos permite visualizar la estructura de la base de datos.
+
+
+Para la conexión con la base de datos hemos usado el driver _MySQL2_, que es una biblioteca de Node.js diseñada para facilitar la conexión e interacción con bases 
+de datos MySQL mediante JavaScript. Este driver es una evolución del anterior mysql y destaca por su rendimiento mejorado y algunas funcionalidades adicionales. 
+MySQL2 nos permite una fácil conexión y manipulación de datos, así como manejar los errores que se puedan presentar a la hora de realizar la conexión o el manejo 
+de los datos.
+
+
+## 4.4.1 Instalación de PHPMyAdmin
+
+_Ubuntu_:
+
+Abrimos una terminal e introducimos los siguientes comandos:
+
+1. sudo apt install apache2 php mysql-server php-mysql
+2. sudo apt install phpmyadmin (para instalar phpmyadmin)
+3. Seguir la instrucciones de la terminal para la configuración
+4. Acceder a phpmyadmin a través del navegador con http://localhost/phpmyadmin
+
+
+_Windows_:
+
+1. Descargar PHPMyAdmin y descomprimir el archivo ZIP en el directorio raíz del servidor web local.
+   
+2. Si utilizas XAMPP, por ejemplo, abrir el archivo `httpd-xampp.conf`y agregar la siguiente línea al final del archivo:
+Alias /phpmyadmin "C:/ruta/del/directorio/phpmyadmin/"
+La ruta tiene que ser la misma donde se colocó PHPMyAdmin.
+
+3. Reiniciar el servidor web para aplicar los cambios.
+   
+4. Abrir el navegador y acceder a http://localhost/phpmyadmin.
+
+5. Poner el usuario y contraseña para iniciar sesión en PHPMyAdmin.
 
 
 # 5 Explicación del Código
