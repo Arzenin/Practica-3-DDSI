@@ -39,10 +39,10 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
       1. [Instalación de Git](#321-instalación-de-git)
       2. [Clonar un Repositorio](#322-clonar-un-repositorio)
 4. [Instalación de la Herramienta](#4-instalación-de-la-herramienta)
-   2. [Docker](#42-docker)
-   3. [ZeroTier](#43-zerotier)
-   4. [MySQL y el conector de MySQL2](#44-mysql-y-el-conector-de-mysql2)
-   5. [Node.js,Rect Native y Expo](#45-node.js,react-native-y-expo)
+   1. [Docker](#41-docker)
+   2. [ZeroTier](#42-zerotier)
+   3. [MySQL y el conector de MySQL2](#43-mysql-y-el-conector-de-mysql2)
+   4. [Node.js,Rect Native y Expo](#44-node.js,react-native-y-expo)
 5. [Explicación del Código](#5-explicación-del-código)
    1. [Explicación del Código en SQL](#51-explicación-del-sql)
       1. [Tablas](#511-tablas)
@@ -53,45 +53,6 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
       1. [Frontend](#531-frontend)
       2. [Backend](#532-Backend)
  5. [Ejeccución del Código](#54-ejecución-del-código)
-
-a
-
-
-a
-
-
-
-a
-
-
-
-a
-
-
-
-a
-
-
-
-a
-
-
-
-
-a
-
-
-
-a
-
-
-
-
-a
-
-
-
-a
 
 
 # 4. Instalación de la Herramienta
