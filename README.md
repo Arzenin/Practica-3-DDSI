@@ -405,16 +405,40 @@ __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
     1. Archivo de Test Completo
  
 
-
+ejemplo de rollback:
   ```javascript
-    CREATE TABLE IF NOT EXISTS RECETAS_INGREDIENTES (
-      IdReceta INT,
-      IdIngrediente INT,
-      numero INT CHECK (numero >= 1),
-      PRIMARY KEY(IdReceta,IdIngrediente),
-      FOREIGN KEY(IdReceta) REFERENCES RECETAS(IdReceta),
-      FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente)
-    );
+    app.post('/crearmesa', async (req, res) => {
+  let connection;    //esta linea
+  try {
+    const connection = await abrirConexion();
+    const { id, num} = req.body;
+    const querySelect = 'INSERT INTO RESERVAS (IdReserva, NumMesa) VALUES (?,?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, num]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Mesa creada correctamente' });
+  } catch (error) {
+    console.error('Error al crear cliente:', error);
+    res.status(500).json({ error: 'Error al crear una mesa' });
+
+    // Rollback en caso de excepción
+    if (connection) {           //este if
+      await connection.promise().rollback();
+    }
+
+  }finally {  // este finally
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
+  }
+});
 ```
 
 
