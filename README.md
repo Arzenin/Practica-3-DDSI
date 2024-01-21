@@ -354,4 +354,55 @@ __[triggers](#512-triggers)__, pese a que se mostrará el código en este archiv
 __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
 
 
+# 5.2 Explicación de los Tests
+
+
+- Resetear_BD() :
+  Este método se encarga de resetear la base de datos e introduce una serie de valores por defecto. Lo primero que se hace es el borrado de todas
+  las tablas de la base de datos, acontinuación se encarga de crear las tablas y diversos triggers. Y por último se introduce unos valores para realizar pruebas y
+  se maneja excepciones para los errores.
+
+
+- TestActualizarStockANDComprobarStockNoNegativo() :
+  Se encarga de comprobar el funcionamiento de los trigger ActualizarStock y ComprobarStockNoNegativo. Al principio se insertan datos de prueba en las
+  tablas CLIENTES, INGREDIENTES, RECETAS, RECETAS_INGREDIENTES, PEDIDO, CLIENTES_PEDIDO y PEDIDO_RECETAS para simular una situación realista. Luego, intenta realizar
+  algunas operaciones incorrectas, como la inserción de números negativos o cero en los triggers asociados a las recetas y pedidos, así como actualizaciones con
+  valores incorrectos en los precios de las recetas y métodos de pago, stas operaciones fallidas están comentadas. Finalmente, se consulta la base de datos
+  para recuperar el valor actual de NumStock de dos ingredientes y se imprime en la consola. Cualquier excepción durante la ejecución se captura y se imprime un mensaje de error.
+
+
+- TestRestarPuntosySumar():
+  Realiza una prueba de los triggers RestarPuntos y SumarPuntos. Simula una situación donde se inserta un pedido y se añade un receta. Luego, consulta la base de datos
+  para obtener y mostrar los puntos acumulados por el cliente. Se espera que los puntos se actualicen correctamente. Cualquier excepción durante la ejecución se captura y
+  se imprime un mensaje de error.
+  
+
+- TestRellenarStock():
+  El método evalúa el funcionamiento del trigger ActualizarStock al representar la inserción de un pedido, la cual utiliza un ingredient con un stock inicial.
+  La receta requiere ciertas unidades del ingrediente. Después de la operación, se espera que el stock del ingrediente se actualice mediante el trigger, incrementándose en 200
+  unidades debido a que el stock resultante es inferior a 10. Cualquier excepción durante la ejecución se captura y se imprime un mensaje de error.
+
+
+- TestDetectarAlergenos():
+  El método verifica el funcionamiento del trigger ContieneAlergeno. En el escenario de prueba, se inserta un alérgeno y se asocia a un ingrediente, luego se crea una receta
+  que utiliza dicho ingrediente. Al intentar añadir esta receta a un pedido asociado a un cliente con el alérgeno registrado, se espera que el trigger genere un error.
+  La salida esperada se basa en la detección del alérgeno y la interrupción del proceso posterior al error.
+
+
+- TestReservasInferior():
+  Evalúa el comportamiento del sistema al gestionar reservas asociadas a pedidos. El código incluye casos donde se intenta asignar un número de personas negativo o igual a 0,
+  lo cual debería generar un error. Además, se verifica que un pedido no pueda tener más de una reserva asociada. También, se comprueba un posible de error al intentar
+  actualizar el número de personas a un valor mayor al anterior, esto se debe a que no podemos asegurar que el local tenga suficiente espacio.
+
+
+- CalcularBonus():
+  La función simula la actualización del bono de un trabajador basándose en el desempeño de los pedidos. Se inserta un trabajador con un bono inicial de 0 y se le asigna un pedido.
+  Luego, se consulta y muestra el bono antes del cálculo. Se actualiza la valoración y el estado de un pedido asociado al trabajador, y posteriormente se muestra
+  el bono después del cálculo. Cualquier excepción se gestiona, imprimiendo un mensaje de error.
+
+
+      
+    1. Archivo de Test Completo
+
+
  
