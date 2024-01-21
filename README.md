@@ -46,7 +46,7 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
       2. [Clonar un Repositorio](#322-clonar-un-repositorio)
 4. [Explicación e Instalaciones de las Herramientas](#4-explicación-e-instalaciones-de-las-herramientas)
    1. [Docker](#41-docker)
-      1.[Instalación de Docker](#411-instalación-de-docker)
+      1. [Instalación de Docker](#411-instalación-de-docker)
    2. [ZeroTier](#42-zerotier)
       1. [Instalación de ZeroTier](#421-instalación-de-zerotier)
    4. [PHP my Admin y el conector de MySQL2](#43-php-my-admin-y-el-conector-de-mysql2)
