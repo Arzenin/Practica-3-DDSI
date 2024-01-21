@@ -101,7 +101,7 @@ Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados
 
 De nuevo, nuestra motivación para usar docker es el tener una cara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el mantenimientro y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra página copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
 
-3.1 Instalación de Docker
+__Instalación de Docker__
 
 A partir de este apartado será necesaria la descarga de todas las herramientas para el correcto funcionamiento de la aplicación en sus diferentes versiones.
 
