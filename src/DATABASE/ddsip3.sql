@@ -25,6 +25,7 @@ SET foreign_key_checks = 1;
 
 CREATE TABLE IF NOT EXISTS TRABAJADOR (
     IdTrabajador VARCHAR(20),
+    Libre tinyint(1) NOT NULL,
     Turno INT,
     Bono INT CHECK(Bono <= 500),
     PRIMARY KEY(IdTrabajador)

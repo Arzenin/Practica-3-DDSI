@@ -18,6 +18,7 @@ const useHost = () => {
       <DataTable.Header>
         <DataTable.Title>ID Trabajador</DataTable.Title>
         <DataTable.Title>Turno</DataTable.Title>
+        <DataTable.Title>Libre</DataTable.Title>
         <DataTable.Title>Bono</DataTable.Title>
       </DataTable.Header>
     );
