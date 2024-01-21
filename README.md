@@ -50,8 +50,9 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
    2. [ZeroTier](#42-zerotier)
       1. [Instalación de ZeroTier](#421-instalación-de-zerotier)
    3. [Node.js,Rect Native y Expo](#43-node.js,react-native-y-expo)
+      1. [Instalación de Node.js,React Native y Expo](#431-instalación-de-node.js,react-native-y-expo)
    4. [PHPMyAdmin y el conector MySQL2](#44-phpmyadmin-y-el-conector-mysql2)
-      1. [Instalación de PHPMyAdmin y MySQL2](#441-instalación-de-phpmyadmin-y-mysql2)
+      1. [Instalación de PHPMyAdmin](#441-instalación-de-phpmyadmin)
 5. [Explicación del Código](#5-explicación-del-código)
    1. [Explicación del Código en SQL](#51-explicación-del-código-sql)
       1. [Tablas](#511-tablas)
@@ -189,17 +190,18 @@ página copiando el docker y redireccionando estas peticiones a los dockers para
 
 ### 4.1.1 Instalación de Docker
 
-__Ubuntu__:
+__*Ubuntu:*__
 
 1. `sudo apt update`
 2. `sudo apt install apt-transport-https ca-certificates curl software-properties-common`
 3. `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg`
-4. `echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null`
-5. `sudo apt update`
-6. `sudo apt install docker-ce docker-ce-cli containerd.io`
-7. `docker --version`
+4. `echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee
+/etc/apt/sources.list.d/docker.list > /dev/null`
+6. `sudo apt update`
+7. `sudo apt install docker-ce docker-ce-cli containerd.io`
+8. `docker --version`
 
-__Windows__:
+__*Windows:*__
 
 1-Nos dirigiremos al siguiente enlace y descargamos la versión correspondiente a nuestro sistema:
 https://www.docker.com/products/docker-desktop/
@@ -247,3 +249,54 @@ __*Windows:*__
      1. __Ubuntu:__ `sudo zerotier-cli join <ID_de_Red>`
      2. __Windows:__ Click sobre el icono de zeroTier de la barra de tareas y join new network,
      copiamos el network id en el campo correspondiente.
+
+# 4.3 Node.js, React Native y Expo
+
+Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript por medio de __*Node.js*__
+
+
+__*Node.js*__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que nos da la posibilidad de 
+crear aplicaciones backend escalables y eficientes. Node.js utiliza un modelo de E/S sin bloqueo, por lo tanto lo hace adecuado para aplicaciones que requieren un alto 
+rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backnend de nuestra aplicación usamos este mismo entorno, este backend será el encargado de
+conectarse a la base de datos y manipularla.
+
+
+De cara a la interfaz de usuario hemos eliegido __*React Native*__,ya  que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar 
+__*React*__(biblioteca de JavaScript destinada a construir interfaces de usuario) para crear aplicaciones nativas en iOS y Android. Esto se consigue al proporcionar una capa 
+de abstracción sobre los componentes nativos, permitiendo así a los desarrolladores compartir código base entre plataformas.
+
+En concreto hemos elegido __*React Native*__ porque además de ser una herramienta que nos permite realizar interfaces de forma sencilla e intuitiva, nos permitía crear 
+aplicaciones web compatibles con dispositivos móviles.
+
+
+Para implementar la interfaz de la aplicación usando React Native, hemos usado __*Expo*__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones 
+móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de 
+configurar y mantener manualmente ciertos aspectos del proyecto.
+
+
+### 4.3.1 Instalación de Node.js,React Native y Expo
+
+__*Ubuntu:*__
+
+1. `sudo apt update`
+2. `sudo apt install nodejs npm`
+3. `node -v`
+4. `npm -v`
+5. `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash`
+6. `source ~/.bashrc`
+7. `source ~/.zshrc`
+8. `npm install stable`
+9. Verificaremos la instalación por medio de ejecutar `node -v y npm -v`
+
+__*Windows:*__
+
+1. Nos dirigimos a la web de https://nodejs.org/en y descargamos el instalador
+2. Verificamos la instalación con los comandos `node –version` 
+y `node –version`, en caso de que estos fallen se deberá a que no se han añadido correctamente a la variable paths
+3. Instalamos __*Expo*__ por medio de `npm install -g expo-cli en la terminal`
+4. Nos dirigimos al directorio de `/src/app` en caso de no tenerlo clonado lo descargamos.
+5. `npm install` para asegurar que tenemos todas las dependencias, esto debería de instalar también __*MySQL2*__ el cual explicaremos en __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
+
+
+ 
+
