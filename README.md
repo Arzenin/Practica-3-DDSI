@@ -58,7 +58,7 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
    3. [Explicación del Código Web](#53-explicación-del-codigo-web)
       1. [Frontend](#531-frontend)
       2. [Backend](#532-Backend)
-         1.[Código del Backend](#5321-código-del-backend)
+         1. [Código del Backend](#5321-código-del-backend)
  6. [Ejecución del Código](#6-ejecución-del-código)
 
 # 1. Introducción y Motivación
