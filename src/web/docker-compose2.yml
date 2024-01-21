@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "19006:19006"
+      - "5050:5050"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: mysql-db-ddsi-p3
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: ddsip3
+    ports:
+      - "3000:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-interface-ddsi-p3
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
