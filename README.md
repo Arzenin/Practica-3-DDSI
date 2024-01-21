@@ -416,7 +416,8 @@ ejemplo de rollback:
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, num]);
-    
+
+    await connection.promise().commit();    //esta linea
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
