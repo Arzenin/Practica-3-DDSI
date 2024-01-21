@@ -294,5 +294,20 @@ y `node –version`, en caso de que estos fallen se deberá a que no se han aña
 __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
 
- 
 
+# 5 Explicación del Código
+
+En esta sección explicaremos el código en profundidad, centrandonos individualemente en el código implementado tanto en MySQL como en java y para finalizar el 
+código en JavaScript de la aplicación web.
+
+
+# 5.1 Explicación del Código en SQL
+
+Este apartado tiene la función de explicar la base de datos implementada en MySQL, ya que será necesario conocer la estructura de la misma y los triggers 
+implementados para poder comprender el razonamiento de la implementación de determinados requisitos. Ya que es un código de gran longitud hemos decidido dividir 
+su explicación en dos secciones. Una destinada a las __[tabalas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
+__[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos tambien su visualización en el archivo  
+__[ddsi3.sql(src/DATABASE/ddsip3.sql)__
+
+
+ 
