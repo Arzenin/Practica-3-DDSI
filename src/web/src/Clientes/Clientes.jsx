@@ -41,24 +41,13 @@ const Clientes = () => {
     navigate('/crearcliente');
   };
 
-  const handleDelete = async (id) => { // Función borrar
-    try{
-      console.log(id);
-      axios.delete(`http://localhost:5050/borrarcliente/${id}`)
-      // Volver a cargar los datos después de la eliminación
-      const response = await axios.get(host);
-      const resultado = response.data[0];
-  
-      // Aplicar la paginación
-      const inicio = (pagina - 1) * itemsPorPagina;
-      const fin = inicio + itemsPorPagina;
-      const filasPaginadas = resultado.slice(inicio, fin);
-      
-      setFilas(filasPaginadas);
-    }
-    catch (error) {
-      console.error('Error al eliminar:', error);
-    };
+  const handleDelete = (id) => { // Función borrar
+    console.log(id);
+    axios.delete(`http://localhost:5050/borrarcliente/${id}`)
+    .then((response) => {
+      this.forceUpdate();
+      })
+      .catch((error) => console.error('Error al eliminar:', error));
   };
 
 	const handleEdit = (ide) => {
@@ -86,20 +75,6 @@ const Clientes = () => {
 
     fetchData();
   }, [host, pagina]); // dependencia para que useEffect se ejecute cuando cambie
-
-  useEffect(() => {
-    // Llamada a la API al cargar el componente
-      const fetchData = async() => {
-        try{
-          const response = await axios.get('http://172.28.152.110:5050/ver');
-          const resultado = response.data[0];
-          await setStockData(resultado);
-        } catch(error) {
-        console.error('Error al realizar la solicitud:', error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleButtonClick = (enlace) => {
     navigate(enlace);
@@ -148,6 +123,9 @@ const Clientes = () => {
         onPress={() => handleAdd()}
       />
     </View>
+    <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/alergenosclientes')}>
+        <Text style={styles.pressableText}>Alérgenos</Text>
+      </Pressable>
       <Pressable style={[styles.pressableButton, { alignSelf: 'center' }]} onPress={() => handleButtonClick('/')}>
         <Text style={styles.pressableText}>Volver</Text>
       </Pressable>
