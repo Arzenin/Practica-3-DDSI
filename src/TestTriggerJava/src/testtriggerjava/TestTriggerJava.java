@@ -434,8 +434,6 @@ public class TestTriggerJava {
             }
             connection.commit();
             
-            //Si se descomenta esta linea dara error por tratar de asignar un numero mayor de comensales al anterior
-            //sentencia.executeUpdate("UPDATE RESERVAS_PEDIDO SET NumPersonas = 6 WHERE IdReserva = 1 AND HoraIni = '15:00/21/12/2002';");
         }
         catch(Exception e){
             System.out.println("TestReservasInferior");
