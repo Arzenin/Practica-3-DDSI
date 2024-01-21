@@ -56,6 +56,18 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
       2. [Backend](#532-Backend)
  5. [Ejeccución del Código](#54-ejecución-del-código)
 
+# 1. Introducción y Motivación
+
+En esta practica se nos presenta la continuación e implementación de nustro sistema Mc And Cheese. Tras dejar la base de la P2, donde ya teniamos todos los subsistemas 
+implementados, se ha seguido evolucionando el codigo y la base de datos. Basandonos tambien en los seminarios, especialmente en el segundo, hemos decidido implementar nustro 
+sistema en una pagina web. Estuvimos dando muchas vueltas a la hora de elergir la implementacion , ya que java tambien era una muy buena opcion, pero nos decantamos por la 
+programacion web.
+
+
+Nuestra motivación al elegir nuestro sistema fue la amplia gama de funcionalidades que puede tomar, asi como que es un tema muy común y representativo de la realidad. 
+Queríamos poder aprender a realizar proyectos reales, los cuales se pudieran reflejar en algún caso real de nuestro futuro profesional, ya que en asignaturas pasadas siempre 
+se realizan ejemplos muy aislados, que no representan lo que se puede pedir a un programador en la vida real. Esa fue una de las motivaciones mas fuertes a la hora de 
+elegir Mc And Cheese.
 
 # 2. Objetivos
 
@@ -74,4 +86,7 @@ como del backend.
 
 
 En conclusión nuestro objetivo es el de demostrar todo el conocimiento que hemos adquirido entre todos a lo largo del año, automatizar determinadas funciones para una mejor distribución de la carga computacional y por último alcanzar una mayor profundidad dentro de la progración web.
+
+
+
 
