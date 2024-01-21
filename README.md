@@ -138,6 +138,56 @@ https://www.docker.com/products/docker-desktop/
 4-Abrimos la Powershell y ejecutamos docker --version para comprobar la correcta instalación
 
 
+# 4. Node.js, React Native y Expo
+
+Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript. Hemos investigado diferentes posibilidades y nos decantamos por Node.js
+
+__Node.js__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que nos da la posibilidad de crear aplicaciones backend escalables y eficientes. Node.js utiliza un modelo de E/S sin bloqueo, por lo tanto lo hace adecuado para aplicaciones que requieren un alto rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backnend de nuestra aplicación, usamos node.js, que se encarga de conectarse a la base de datos y manipularla.
+
+
+Para la interfaz de usuario hemos eliegido __React Native__, que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar React(una biblioteca de JavaScript para construir interfaces de usuario) para crear aplicaciones nativas en iOS y Android. Esto se consigue al proporcionar una capa de abstracción sobre los componentes nativos, permitiendo así a los desarrolladores compartir código base entre plataformas.
+Elegimos React Native porque además de ser una herramienta que nos permite realizar interfaces de forma sencilla e intuitiva, nos permitía crear aplicaciones web compatibles con dispositivos móviles.
+
+
+Para implementar la interfaz de la aplicación usando React Native, hemos usado __Expo__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de configurar y mantener manualmente ciertos aspectos del proyecto.
+
+
+__Instalación de Node.js, React Native y Expo__
+
+__Ubuntu__:
+
+1-sudo apt update
+
+2-sudo apt install nodejs npm
+
+3-node -v
+
+4-npm -v
+
+5-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+6-source ~/.bashrc
+
+7-source ~/.zshrc
+
+8-npm install stable
+
+9- Verificaremos la instalación por medio de ejecutar node -v y npm -v
+
+
+__Windows__:
+
+1- Nos dirigimos a la web de https://nodejs.org/en y descargamos el instalador
+
+2-Verificamos la instalación con los comandos node –version 
+y node –version, en caso de que estos fallen se deberá a que no se han añadido correctamente a la variable paths para esto usaremos el tutorial de la bibliografía
+
+3-Instalamos expo por medio de npm install -g expo-cli en la terminal
+
+4-Nos dirigimos al directorio de /src/app en caso de no tenerlo clonado lo descargamos.
+
+5- npm install para asegurar que tenemos todas las dependencias, esto debería de instalar también Mysql2
+
 
  
 
