@@ -2513,6 +2513,27 @@ public class TestTriggerJava {
     
 }
 ```
+[Volver al índice](#0-índice)
 
+# 6. Ejecución del Código
+
+Para finalizar debemos de destacar 2 cosas, hay diversos tipos de ejecución que podemos realizar en esta alplicación, en este caso explicaremos en profundidad como ejecutar 
+__la base de datos en un docker junto a el servicio de PHPMyAdmin__ y el __WAF__ tanto el __front end como el back end__ en la máquina de forma local. En caso de querer 
+ejecutar la aplicación de forma distribuida lo único que se deberá de hacer es __cambiar las IP tanto de la api como del front end por la que tengamos en zero tier y 
+ejecutar el fichero dockercompose2__
+
+1. Nada más descargar el directorio deberemos de abrir la terminal y dirigirnos a la carpeta __[web](src/web/)__
+2. Desde ahi deberemos de ejecutar el comando `docker-compose up`
+3. Tras esto nos dirigiremos al navegador y nos dirigiremos a `localhost:8080`
+4. Seleccionaremos la base de datos `ddsip3`
+5. Importaremos el fichero __[ddsi3.sql](src/DATABASE/ddsip3.sql)__ en el directorio __[DATABASE](src/DATABASE)__
+6. Una vez hecho esto nos dirigiremos de nuevo a la terminal en la misma ubicación que antes y haremos `npm install`
+7. Tras esto `expo start` para lanzar el frontend
+8. `node ./src/api.js` para ejecutar el backend
+9. Nos dirigiremos en el navegador a la dirección `localhost:19006`
+
+
+Una vez seguidos todos estos pasos habremos obtenido nustra aplicación web, se debe de remarcar de nuevo que en caso de querer usar zeroTier __solo deberemos de usar las IP
+correspondientes a los diferentes servicios__ además de esto si ejecutamos __dockercompose2.yml__ podremos ejecutar al App web desde un docker 
 
 [Volver al índice](#0-índice)
