@@ -294,53 +294,50 @@ __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
 # 4.4 PHPMyAdmin y MySQL2
 
-Para la administración de nuestro SGBD noe hemos decantado por _PHPMyAdmin_, ya a parte de ser una herramienta de código abierto y gratuita, es ampliamente 
-utilizada en el desarrollo web y la administración de bases de datos MySQL debido a su facilidad de uso y su capacidad para realizar diversas tareas de 
-administración de bases de datos de manera eficiente. Se suele instalar en servidores web para permitir a los desarrolladores y administradores de bases de datos 
-interactuar con sus bases de datos de una manera más visual.
-Algunas de las funciones de PHPMyAdmin son las siguientes:
+En el aspecto de la administración de nuestro SGBD nos hemos decantado por _PHPMyAdmin_, ya que por una parte es herramienta de código abierto y gratuita, y por 
+otra es ampliamente utilizada en el campo de desarrollo web y la administración de bases de datos MySQL debido a su facilidad de uso y su capacidad para realizar
+diversas tareas de administración de bases de datos de manera eficiente. Se suele instalar en servidores web para permitir a los desarrolladores y administradores
+de bases de datos interactuar con sus bases de datos de una manera más visual. Algunas de las funciones de PHPMyAdmin son las siguientes:
 
-1. Nos permite gestionar las bases de datos de forma visual.
-2. Nos permite hacer la gestión de tablas.
-3. Nos permite la manipulación de datos de manera sencilla.
-4. Permite la geastión de usuarios y privilegios.
+1. Gestionar las bases de datos de forma visual.
+2. Ralizar la gestión de tablas.
+3. Manipulación de datos de manera sencilla.
+4. Gestión de usuarios y privilegios.
 5. Ejecución de Consultas SQL.
 6. Importación y Exportación de datos.
-7. Nos permite visualizar la estructura de la base de datos.
+7. Visualización de la estructura dentro de la base de datos.
 
 
-Para la conexión con la base de datos hemos usado el driver _MySQL2_, que es una biblioteca de Node.js diseñada para facilitar la conexión e interacción con bases 
-de datos MySQL mediante JavaScript. Este driver es una evolución del anterior mysql y destaca por su rendimiento mejorado y algunas funcionalidades adicionales. 
-MySQL2 nos permite una fácil conexión y manipulación de datos, así como manejar los errores que se puedan presentar a la hora de realizar la conexión o el manejo 
-de los datos.
+Respecto a la conexión con la base de datos hemos utilizado el driver __MySQL2__, que es una biblioteca de Node.js diseñada para facilitar la conexión e 
+interacción con bases de datos MySQL mediante JavaScript. Este driver es una evolución del anterior MySQL y destaca por su rendimiento mejorado y algunas 
+funcionalidades adicionales. MySQL2 nos permite una fácil conexión y manipulación de datos, así como manejar los errores que se puedan presentar a la hora de 
+realizar la conexióno el manejo de los datos.
 
 
 ## 4.4.1 Instalación de PHPMyAdmin
 
 _Ubuntu_:
 
-Abrimos una terminal e introducimos los siguientes comandos:
-
-1. sudo apt install apache2 php mysql-server php-mysql
-2. sudo apt install phpmyadmin (para instalar phpmyadmin)
+1. `sudo apt install apache2 php mysql-server php-mysql`
+2. `sudo apt install phpmyadmin (para instalar phpmyadmin)`
 3. Seguir la instrucciones de la terminal para la configuración
 4. Acceder a phpmyadmin a través del navegador con http://localhost/phpmyadmin
 
 
 _Windows_:
 
-1. Descargar PHPMyAdmin y descomprimir el archivo ZIP en el directorio raíz del servidor web local.
-   
-2. Si utilizas XAMPP, por ejemplo, abrir el archivo `httpd-xampp.conf`y agregar la siguiente línea al final del archivo:
-Alias /phpmyadmin "C:/ruta/del/directorio/phpmyadmin/"
+1. Descargar PHPMyAdmin y descomprimir el archivo `.ZIP` en el directorio raíz del servidor web local.   
+2. Si se utiliza XAMPP, por ejemplo, abrir el archivo `httpd-xampp.conf`y agregar la siguiente línea al final del archivo:
+`Alias /phpmyadmin "C:/ruta/del/directorio/phpmyadmin/"`
 La ruta tiene que ser la misma donde se colocó PHPMyAdmin.
-
 3. Reiniciar el servidor web para aplicar los cambios.
-   
-4. Abrir el navegador y acceder a http://localhost/phpmyadmin.
-
+4. Abrir el navegador y acceder a `http://localhost/phpmyadmin`.
 5. Poner el usuario y contraseña para iniciar sesión en PHPMyAdmin.
 
+
+__En nuestro caso para facilitar su instalación, hemos hecho que se ejecute en un docker compose el cual se podrá encontrar en el directorio __[DATABASE](src/DATABASE)__, concretamente en el fichero 
+En el directorio  encontraremos los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo queremos destacar el 
+fichero __[docker-compose.yml](src/DATABASE/docker-compose.yml)__ 
 
 # 5 Explicación del Código
 
