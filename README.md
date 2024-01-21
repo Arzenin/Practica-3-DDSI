@@ -694,8 +694,14 @@ también determinaría que alergenos contiene cada receta. Sus atributos son los
 1. `IdIngrediente`: Es el identidicador del ingrediente del cual quieren saberse los alergenos
 2. `IdAlergeno`: Es el identificador de un alergeno determinado de el ingrediente identificado por `IdIngrediente`
 
+##RELACIONES ENTRE TABLAS:
+Para finalizar querríamos añadir una imágen en la cual se pueden observar las diferentes relaciones entre tablas, el motivo por el que los nombres no son idénticos en este
+caso es porque esta imagen se trata de un esquema inicial que realizamos previo a la implementación de la base de datos:
 
-//SUBIR IMAGEN
+
+
+![image](https://github.com/Arzenin/Sistema-Mc-And-Cheese/assets/79646195/5b6c6e39-c669-44b8-b03a-b30b5f6400c6)
+
 
 
 ```sql
