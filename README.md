@@ -73,6 +73,10 @@ Queríamos poder aprender a realizar proyectos reales, los cuales se pudieran re
 se realizan ejemplos muy aislados, que no representan lo que se puede pedir a un programador en la vida real. Esa fue una de las motivaciones más fuertes a la hora de 
 elegir Mc And Cheese.
 
+
+[Volver al índice](#0-índice)
+
+
 # 2. Objetivos
 
 Nuestro objetivo principal a la hora de implementar este sistema era el de cumplir los requisitos funcionales establecidos a lo largo de las prácticas y seminarios 
@@ -92,6 +96,10 @@ como del backend.
 En conclusión nuestro objetivo es el de demostrar todo el conocimiento que hemos adquirido entre todos a lo largo del año, automatizar determinadas funciones para una mejor 
 distribución de la carga computacional y por último alcanzar una mayor profundidad dentro de la programación web.
 
+
+[Volver al índice](#0-índice)
+
+
 # 3. Github
 
 Al igual que en todos nuestros proyectos, se ha elegido Github como medio para crear nuestro repositorio del proyecto, el cual nos permitirá registrar tanto los resultados 
@@ -106,6 +114,10 @@ de seguir tutoriales que mejoren su comprensión del proyecto.
 
 En el archivo readme adjunto al repositorio, que estará disponible al final de esta sección, encontrarás un tutorial completo para la instalación de este proyecto. Te 
 instamos fervientemente a revisarlo para aprovechar al máximo todas las funcionalidades disponibles.
+
+
+[Volver al índice](#0-índice)
+
 
 ## 3.1 Estructura del Repositorio
 
@@ -138,6 +150,10 @@ El directorio __[web](src/web)__ es el más importante de todos, en él encontra
 Además de esto también podremos encontrar varios dockerfiles y docker compose los cuales nos ayudarán a la ejecución del código, sin embargo esto lo explicaremos más adelante 
 en el apartado __[6. Ejecución del Código](#6-ejecución-del-código)__ 
 
+
+[Volver al índice](#0-índice)
+
+
 ## 3.2 Descarga del Repositorio
 En este apartado explicaremos la instalación del repositorio en nuestra máquina de forma local, recomendamos __*encarecidamente*__ su instalación en caso de querer probar el 
 sistema, ya que esto nos ahorrará una gran cantidad de tiempo de cara a la instalación de ficheros dentro de nuestra máquina, además esto nos permitiría usar de forma más 
@@ -157,6 +173,10 @@ obligatorio.
 2. Abrimos la terminal en ese directorio
 3. Ejecutamos `git clone https://https://github.com/Arzenin/Sistema-Mc-And-Cheese.git`
 4. Ejecutamos `ls` y debería de haber aparecido un nuevo directorio llamado `/Analizador-Lexico`
+
+
+[Volver al índice](#0-índice)
+
 
 # 4. Explicación e Instalaciones de las Herramientas
 En esta sección explicaremos todas las herramientas que hemos usado a lo largo del desarrollo de este proyecto, queremos destacar que hay algunas que pueden llegar a ser 
@@ -208,6 +228,10 @@ https://www.docker.com/products/docker-desktop/
 
 4-Abrimos la Powershell y ejecutamos `docker --version` para comprobar la correcta instalación
 
+
+[Volver al índice](#0-índice)
+
+
 # 4.2 ZeroTier
 
 Como mencionamos previamente, nuestro propósito consistía no solo en ejecutar de manera eficiente el sitio web y la base de datos, sino también en tener la capacidad de 
@@ -246,6 +270,10 @@ __*Windows:*__
      2. __Windows:__ Click sobre el icono de zeroTier de la barra de tareas y join new network,
      copiamos el network id en el campo correspondiente.
 
+
+[Volver al índice](#0-índice)
+
+
 # 4.3 WAF
 
 Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript por medio de __*Node.js*__
@@ -268,6 +296,10 @@ aplicaciones web compatibles con dispositivos móviles.
 Para implementar la interfaz de la aplicación usando React Native, hemos usado __*Expo*__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones 
 móviles con React Native. Este simplifica el proceso de desarrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de 
 configurar y mantener manualmente ciertos aspectos del proyecto.
+
+
+[Volver al índice](#0-índice)
+
 
 ### 4.3.1 Instalación de WAF
 
@@ -293,6 +325,10 @@ y `node –version`, en caso de que estos fallen se deberá a que no se han aña
 5. `npm install` para asegurar que tenemos todas las dependencias, esto debería de instalar también __*MySQL2*__ el cual explicaremos en
 __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
+
+[Volver al índice](#0-índice)
+
+
 # 4.4 PHPMyAdmin y MySQL2
 
 En el aspecto de la administración de nuestro SGBD nos hemos decantado por _PHPMyAdmin_, ya que por una parte es herramienta de código abierto y gratuita, y por 
@@ -313,6 +349,9 @@ Respecto a la conexión con la base de datos hemos utilizado el driver __MySQL2_
 interacción con bases de datos MySQL mediante JavaScript. Este driver es una evolución del anterior MySQL y destaca por su rendimiento mejorado y algunas 
 funcionalidades adicionales. MySQL2 nos permite una fácil conexión y manipulación de datos, así como manejar los errores que se puedan presentar a la hora de 
 realizar la conexión o el manejo de los datos.
+
+
+[Volver al índice](#0-índice)
 
 
 ## 4.4.1 Instalación de PHPMyAdmin
@@ -340,6 +379,10 @@ __En nuestro caso para facilitar su instalación, hemos hecho que se ejecute en 
 En el directorio  encontraremos los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo queremos destacar el 
 fichero __[docker-compose.yml](src/DATABASE/docker-compose.yml)__ 
 
+
+[Volver al índice](#0-índice)
+
+
 # 5 Explicación del Código
 
 En esta sección explicaremos el código en profundidad, centrándonos individualmente en el código implementado tanto en MySQL como en java y para finalizar el 
@@ -355,7 +398,10 @@ __[triggers](#512-triggers)__, pese a que se mostrará el código en este archiv
 __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
 
 
- ### 5.1.1 Tablas
+[Volver al índice](#0-índice)
+
+ 
+### 5.1.1 Tablas
 
  En esta sección se explicará una a una las tablas que se han realizado y la funcionalidad de cada uno de sus atributos, dicho esto comenzamos:
 
@@ -703,6 +749,8 @@ caso es porque esta imagen se trata de un esquema inicial que se realizo previam
 
 ![image](https://github.com/Arzenin/Sistema-Mc-And-Cheese/assets/79646195/5b6c6e39-c669-44b8-b03a-b30b5f6400c6)
 
+
+[Volver al índice](#0-índice)
 
 
 ### 5.1.2 Triggers
@@ -1113,6 +1161,9 @@ END;
 
 Para finalizar, el último trigger será el encargado de que una reserva no pueda tener un número menor a uno en el número de clientes sea cual sea el contexto, ya
 que si no, no podría llegar a existir la reserva.
+
+
+[Volver al índice](#0-índice)
 
 
 ### 5.1.3 Archivo de BD completo
@@ -1575,6 +1626,10 @@ INSERT INTO CLIENTES (`IdCliente`, `Nombre`, `UserName`, `Contrasenia`, `Domicil
 INSERT INTO CLIENTES (`IdCliente`, `Nombre`, `UserName`, `Contrasenia`, `Domicilio`, `Puntos`, `FechaNacimiento`, `DatosDePago`) VALUES ('jose','José Manuel Aranda Gutierrez', 'josemanuelaranda_', '12346ma', 'Calle B', 0, '2012-12-12 00:00:00', '123B');
 ```
 
+
+[Volver al índice](#0-índice)
+
+
 ## 5.2 Explicación del Test
 
 Como mencionamos anteriormente, hemos realizado un programa en java el cual se encargará de comprobar los diversos triggers, para comprobar que se han realizado de forma 
@@ -1991,6 +2046,10 @@ public void TestReservasInferior(){
         }
     }
 ```
+
+
+[Volver al índice](#0-índice)
+
 
 ### 5.2.1 Archivo de Test Completo
 
@@ -2455,3 +2514,6 @@ public class TestTriggerJava {
     
 }
 ```
+
+
+[Volver al índice](#0-índice)
