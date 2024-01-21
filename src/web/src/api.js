@@ -66,7 +66,6 @@ app.post('/crearalergeno', async (req, res) => {
   }
 });
 
-
 app.post('/crearreceta', async (req, res) => {
   try {
     const connection = await abrirConexion();
@@ -126,6 +125,26 @@ app.put('/editarcliente', async (req, res) => {
   } catch (error) {
     console.error('Error al editar cliente:', error);
     res.status(500).json({ error: 'Error al editar cliente' });
+  }
+});
+
+app.put('/editaringrediente', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { idIngrediente, nombre, numStock } = req.body;
+    const querySelect = 'UPDATE INGREDIENTES SET Nombre=?,NumStock=? WHERE IdIngrediente=?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [nombre,numStock,idIngrediente]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Ingrediente editado correctamente' });
+  } catch (error) {
+    console.error('Error al editar Ingrediente:', error);
+    res.status(500).json({ error: 'Error al editar Ingrediente' });
   }
 });
 
@@ -297,6 +316,20 @@ app.get('/clientes/:id', async (req, res) => { // GET Estudiantes
   } catch (error) {
     console.error('Error al obtener cliente:', error);
     res.status(500).json({ error: 'Error al obtener cliente' });
+  }
+});
+
+app.get('/ingrediente/:id', async (req, res) => { // GET Estudiantes
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM INGREDIENTES WHERE IdIngrediente = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener Ingrediente:', error);
+    res.status(500).json({ error: 'Error al obtener Ingrediente' });
   }
 });
 

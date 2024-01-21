@@ -35,6 +35,10 @@ const Ingrediente = () => {
         navigate('/crearingrediente');
     };
 
+    const handleEdit = (ide) => {
+      navigate('/editaringrediente', { state: { id: ide }})
+    };
+
     const handleDelete = async (id) => { // Función borrar
         try{
           // Realizar la solicitud DELETE
@@ -116,7 +120,7 @@ const Ingrediente = () => {
                 <DataTable.Cell>{item.Nombre}</DataTable.Cell>
                 <DataTable.Cell>{item.NumStock}</DataTable.Cell>
                 {/* Botones de las filas */}
-                {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
+                <IconButton icon="pencil" onPress={() => handleEdit(item.IdIngrediente)} />
                 <IconButton icon="delete" onPress={() => handleDelete(item.IdIngrediente)} />
               </DataTable.Row>
             ))}
