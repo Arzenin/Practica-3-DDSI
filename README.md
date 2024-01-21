@@ -105,7 +105,9 @@ De nuevo, nuestra motivación para usar docker es el tener una cara diferenciaci
 
 A partir de este apartado será necesaria la descarga de todas las herramientas para el correcto funcionamiento de la aplicación en sus diferentes versiones.
 
-__Ubuntu__:(Cada apartado es una única línea, son comandos de gran longitud)
+__Ubuntu__:
+(Cada apartado es una única línea, son comandos de gran longitud)
+
 1-sudo apt update
  
 2-sudo apt install apt-transport-https ca-certificates curl	software-properties-common
@@ -125,6 +127,7 @@ docker --version
 Con esto ya estaría instalado docker dentro del sistema ubuntu
 
 __Windows__:
+
 1-Nos dirigiremos al siguiente enlace y descargamos la versión correspondiente a nuestro sistema:
 https://www.docker.com/products/docker-desktop/
 
