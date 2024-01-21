@@ -8,15 +8,15 @@
   - Correo electrónico ugr: gabrielvico02@correo.ugr.es
   - Grupo: A3
 - Pablo Gervilla Miranda
-  - Correo electrónico: jomagtr@gmail.com
-  - Correo electrónico ugr: jomagtr@correo.ugr.es
-  - Grupo: A3
-- Rubén Gázquez Gallardo
   - Correo electrónico: pablosky7000@gmail.com
   - Correo electrónico ugr: pablogervilla@correo.ugr.es
   - Grupo: A3
+- Rubén Gázquez Gallardo
+  - Correo electrónico: ruben.gazquez@gmail.com
+  - Correo electrónico ugr: rubeng@correo.ugr.es
+  - Grupo: A3
 - Gonzalo Sanz Guerrero
-  - Correo electrónico: sanzguerrerogonzalo.com 
+  - Correo electrónico: sanzguerrerogonzalo@gmail.com 
   - Correo electrónico ugr: gsanzguerrero@correo.ugr.es
   - Grupo: A3
 
