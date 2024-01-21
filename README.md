@@ -403,6 +403,19 @@ __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
 
       
     1. Archivo de Test Completo
+ 
+
+
+  ```javascript
+    CREATE TABLE IF NOT EXISTS RECETAS_INGREDIENTES (
+      IdReceta INT,
+      IdIngrediente INT,
+      numero INT CHECK (numero >= 1),
+      PRIMARY KEY(IdReceta,IdIngrediente),
+      FOREIGN KEY(IdReceta) REFERENCES RECETAS(IdReceta),
+      FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente)
+    );
+```
 
 
  
