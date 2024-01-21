@@ -57,7 +57,7 @@ const Receta = () => {
 };
 
 	const handleEdit = (ide) => {
-		navigate('/editarcliente', { state: { id: ide }})
+		navigate('/editarreceta', { state: { id: ide }})
 	};
 
   const handlePageChange = (page) => {  
@@ -119,7 +119,7 @@ const Receta = () => {
             <DataTable.Cell>{item.IdReceta}</DataTable.Cell>
             <DataTable.Cell>{item.Precio}</DataTable.Cell>
             {/* Botones de las filas */}
-            {/*<IconButton icon="pencil" onPress={() => handleEdit(item.IdCliente)} />*/}
+            <IconButton icon="pencil" onPress={() => handleEdit(item.IdReceta)} />
             <IconButton icon="delete" onPress={() => handleDelete(item.IdReceta)} />
           </DataTable.Row>
         ))}

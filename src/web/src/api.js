@@ -161,10 +161,30 @@ app.put('/editaralergeno', async (req, res) => {
     connection.destroy();
 
     // Devolver la respuesta exitosa
-    res.status(200).json({ mensaje: 'Ingrediente editado correctamente' });
+    res.status(200).json({ mensaje: 'Alergeno editado correctamente' });
   } catch (error) {
-    console.error('Error al editar Ingrediente:', error);
-    res.status(500).json({ error: 'Error al editar Ingrediente' });
+    console.error('Error al Alergeno Ingrediente:', error);
+    res.status(500).json({ error: 'Error al editar Alergeno' });
+  }
+});
+
+app.put('/editarreceta', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { idReceta,precio} = req.body;
+    const querySelect = 'UPDATE RECETAS SET Precio=? WHERE IdReceta=?';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [precio,idReceta]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Receta editado correctamente' });
+  } catch (error) {
+    console.error('Error al editar Receta:', error);
+    res.status(500).json({ error: 'Error al editar Receta' });
   }
 });
 
@@ -358,6 +378,20 @@ app.get('/alergeno/:id', async (req, res) => { // GET Estudiantes
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM ALERGENOS WHERE IdAlergeno = ?';
+    const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    connection.end(); // Libera recursos BD
+    res.json([resultado]); // Resultado servido en HTTP formato JSON
+  } catch (error) {
+    console.error('Error al obtener Ingrediente:', error);
+    res.status(500).json({ error: 'Error al obtener Ingrediente' });
+  }
+});
+
+app.get('/receta/:id', async (req, res) => { // GET Estudiantes
+  try {
+    const connection = await abrirConexion();
+    const id = req.params.id;
+    const queryEstudiantes = 'SELECT * FROM RECETAS WHERE IdReceta = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON

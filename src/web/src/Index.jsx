@@ -22,6 +22,7 @@ import CrearTrabajadores from './Trabajadores/CrearTrabajadores';
 import CrearAlergeno from './Menú/Alergeno/CrearAlergeno';
 import EditarIngrediente from './Menú/Ingrediente/EditarIngrediente';
 import EditarAlergeno from './Menú/Alergeno/EditarAlergeno';
+import EditarReceta from './Menú/Receta/EditarReceta';
 
 const Index = () => {
   return (
@@ -50,6 +51,7 @@ const Index = () => {
           <Route path="/crearalergeno" exact element={<CrearAlergeno />}/>
           <Route path="/editaringrediente" exact element={<EditarIngrediente />}/>
           <Route path="/editaralergeno" exact element={<EditarAlergeno />}/>
+          <Route path="/editarreceta" exact element={<EditarReceta />}/>
         </Routes>
       </View>
     </NativeRouter>
