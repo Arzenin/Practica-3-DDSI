@@ -345,13 +345,400 @@ En esta sección explicaremos el código en profundidad, centrándonos individua
 código en JavaScript de la aplicación web.
 
 
-# 5.1 Explicación del Código en SQL
+## 5.1 Explicación del Código en SQL
 
 Este apartado tiene la función de explicar la base de datos implementada en MySQL, ya que será necesario conocer la estructura de la misma y los triggers 
 implementados para poder comprender el razonamiento de la implementación de determinados requisitos. Ya que es un código de gran longitud hemos decidido dividir 
-su explicación en dos secciones. Una destinada a las __[tablas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
-__[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos también su visualización en el archivo  
+su explicación en dos secciones. Una destinada a las __[tabalas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
+__[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos tambien su visualización en el archivo  
 __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
+
+
+ ### 5.1.1 Tablas
+
+ En esta sección explicaremos una a una las tablas que hemos realizado y la funcionalidad de cada uno de sus atributos, dicho esto comenzamos:
+
+
+ #### Borrado de la base de datos
+ 
+ ```sql
+SET foreign_key_checks = 0;
+
+DROP TABLE IF EXISTS TRABAJADOR;
+DROP TABLE IF EXISTS PEDIDO;
+DROP TABLE IF EXISTS RESERVAS;
+DROP TABLE IF EXISTS CLIENTES;
+DROP TABLE IF EXISTS ALERGENOS;
+DROP TABLE IF EXISTS INGREDIENTES;
+DROP TABLE IF EXISTS RECETAS;
+DROP TABLE IF EXISTS RESERVAS_PEDIDO;
+DROP TABLE IF EXISTS TRABAJADOR_PEDIDO;
+DROP TABLE IF EXISTS CLIENTES_PEDIDO;
+DROP TABLE IF EXISTS PEDIDO_RECETAS;
+DROP TABLE IF EXISTS CLIENTES_ALERGENOS;
+DROP TABLE IF EXISTS RECETAS_INGREDIENTES;
+DROP TABLE IF EXISTS INGREDIENTES_ALERGENOS;
+DROP TRIGGER IF EXISTS RestarPuntos;
+DROP TRIGGER IF EXISTS RellenarStock;
+DROP TRIGGER IF EXISTS ContieneAlergeno;
+
+SET foreign_key_checks = 1;
+```
+En esta sección desactivaremos la comprobación de claves externas para facilitarnos el borrado de las tablas y triggers, tras esto en caso de que exista alguna de las tablas
+o triggers que deseemos eliminar se eliminaran, esta sección está realizada con el objetivo de adaptar cualquier base de datos que estemos utilizando a la nuestra.
+
+ #### TRABAJADOR:
+```sql
+CREATE TABLE IF NOT EXISTS TRABAJADOR (
+    IdTrabajador VARCHAR(20),
+    Nombre VARCHAR(40)
+    Libre tinyint(1) NOT NULL,
+    Turno INT,
+    Bono INT CHECK(Bono <= 500),
+    PRIMARY KEY(IdTrabajador)
+);
+```
+
+
+La tabla TRABAJADOR esta destinada al almacenamiento de todos los datos correspondientes al trabajador, sus atributos serían los siguientes:
+
+
+1. `ÌdTrabajador`: Es el atributo destinado a la identificación única y singular del trabajador.
+2. `Nombre`: Un atributo que esta destinado a almacenar el nombre del trabajador.
+3. `Libre`: Este atributo esta encargado de determinar si un trabajador se encuentra disponible para realizar un turno.
+4. `Turno`: En turno se determinan las horas de trabajo que va a relizar ese trabajor a lo largo del día.
+5. `Bono`: Atributo el cual determina el dinero extra que se le pagará a un trabajador en base a su participación y calidad en los pedidos.
+
+
+#### PEDIDO:
+```sql
+CREATE TABLE IF NOT EXISTS PEDIDO (
+    IdPedido INT,
+    Valoracion INT CHECK(Valoracion <= 10),
+    TPago VARCHAR(10) CHECK (TPago IN ('Tarjeta','Efectivo','Puntos')),
+    Estado VARCHAR(10) CHECK (Estado IN ('Activo','Inactivo')),
+    PRIMARY KEY(IdPedido)
+);
+```
+
+
+La tabla `PEDIDO` es la encargada de almacenar los datos básicos de cada pedido, más adelante por medio de relaciones con otras tablas se podrá acceder a datos más complejos 
+de cada pedido, y además de esto nos ayudará a ligar todas las tablas de la base de datos, __*es el centro del sistema*__ . Sus atributos serían los siguientes:
+
+
+1. `IdPedido`: Identificador que sirve para reconocer al pedido de forma singular dentro de su propia tabla y relacionarlo con otras tablas externas.
+2. `Valoracion`: Este atributo será modificado por el cliente y será el encargado de determinar el bono de los trabajadores que hayan participado en el pedido.
+3. `TPago`: Determina la forma en la que será pagado este pedido, en caso de ser puntos se deberán de restar de la catera de puntos del cliente asociado al pedido.
+4. `Estado`: Este atributo indica si el pedido ha finalizado.
+
+
+#### RESERVAS:
+```sql
+CREATE TABLE IF NOT EXISTS RESERVAS (
+    NumMesa INT UNIQUE,
+    IdReserva INT,
+    PRIMARY KEY(IdReserva)
+);
+```
+
+La tabla `RESERVAS` esta destinada al almacenamiento de las mesas del local y el determinar si están disponibles o no en base a la reserva.
+
+
+1. `NumMesa`: Este atributo se encarga de determinar el número en la mesa, es único ya que no pueden existir dos mesas iguales en el mismo local.
+2. `IdReserva`: Este atributo es el que relaciona a las mesas con los pedidos y es por el que podremos identificar la mesa que hay asociada a cada reserva.
+
+
+#### CLIENTES
+```sql
+CREATE TABLE IF NOT EXISTS CLIENTES (
+    IdCliente VARCHAR(40),
+    Nombre VARCHAR(40),
+    UserName VARCHAR(40),
+    Contrasenia VARCHAR(40),
+    Domicilio VARCHAR(40),
+    Puntos INT,
+    FechaNacimiento VARCHAR(40),
+    DatosDePago VARCHAR(30),
+    PRIMARY KEY(IdCliente)
+);
+```
+
+
+La tabla `CLIENTES` es la encargada de almacenar todos los datos del cliente necesarios para este sistema:
+
+
+1. `IdCliente`: Es el atributo destinado a la identificación del cliente, se decidió que fuese `VARCHAR` pensando en la posibilidad de que este fuese el correo.
+2. `Nombre`: Atributo destinado a almacenar el nombre del cliente.
+3. `UserName`: Es el atributo de almacenado del nombre de usuario.
+4. `Contrasenia`: En este atributo se almacenaría la contraseña de acceso a la cuenta del cliente.
+5. `Domicilio`: La funcionalidad de este atributo es almacenar la dirección del cliente.
+6. `Puntos`: Este atributo es el tipo de moneda dentro del local, por cada pedido que se realice se añadirán `Puntos` al usuario.
+7. `FechaNacimiento`: Es la fecha de nacimiento del usuario, hemos decidido inplementarla como `VARCHAR(40)` y la implementación del formato realizarla en código.
+8. `DatosDePago`: Aquí se almacenarán los datos de la tarjeta del cliente.
+
+
+#### ALERGENOS
+```sql
+CREATE TABLE IF NOT EXISTS ALERGENOS (
+    IdAlergeno INT,
+    Nombre VARCHAR(40),
+    Descripcion VARCHAR(40),
+    PRIMARY KEY(IdAlergeno)
+);
+```
+
+La tabla `ALERGENOS` tiene la función de almacenar todos los tipos de alergenos que incluyan los ingredientes con los que se preparan las recetas,sus atrubutos serían los 
+siguientes:
+
+
+1. `IdAlergeno`: Es el identificador del alérgeno, se tomo la decisón de que fuese `INT` ya que en caso de que haya dos alergenos con nombres similares no exista confusión.
+2. `Nombre`: Atributo que almacena una nombre del alérgeno.
+3. `Descripcion`: En esta variable se almacenará una breve descripción del alergeno, como por ejemplo los tipos de alimentos donde se encuetran.
+
+
+
+#### INGREDIENTES
+```sql
+CREATE TABLE IF NOT EXISTS INGREDIENTES (
+    IdIngrediente INT,
+    Nombre VARCHAR(40),
+    NumStock INT CHECK (NumStock >= 0),
+    PRIMARY KEY(IdIngrediente)
+);
+```
+
+
+La tabla `INGREDIENTES` tiene como función almacenar todos los ingredientes que tenemos disponibles en el local, estén o no incluidos en alguna receta, sus atributos serían 
+los siguientes:
+
+
+1. `IdIngrediente`: Este ID tiene la función de identificar rápidamente un ingrediente, ya que al igual que en `ALERGENOS` puede tener un nombre similiar a otro
+2. `Nombre`: Atributo encargado de almacenar el nombre del ingrediente
+3. `NumStock`: Es un atributo de gran importancia ya que almacenará las unidades del ingrediente que disponemos, __deberá de actualizarse automáticamente con cada pedido__
+
+
+#### RECETAS
+```sql
+CREATE TABLE IF NOT EXISTS RECETAS (
+    IdReceta INT,
+    Nombre VARCHAR(40),
+    Precio INT CHECK (Precio >= 1),
+    PRIMARY KEY(IdReceta)
+);
+```
+
+
+La tabla `RECETAS` almacenará todas las recetas disponibles del local, además de esto __es la capa más alta del subsitema menú__ ya que por medio de el y sus relaciones
+podremos llegar a las capas más inferiores de este mismo subsistema, sus atributos son los siguientes:
+
+
+1. `IdReceta`: Es el identificador único de receta y por medio de el tendremos acceso a todas las relaciones en las que se encuentre esa receta concreta.
+2. `Nombre`: Atributo encargado de almacenar el nombre de la receta y por el cual el usuario sabra que `IdReceta` corresponde a que receta.
+3. `Precio`: Es el precio de la receta y será de gran importancia, ya que gracias a este podremos calcular cuanto se le debará de restar a la cartera de puntos del cliente si
+esta receta se encuentra en un pedido cuyo método de pago sean puntos 
+
+### Tablas de relaciones:
+A continuación se explicarán las tablas encargadas de llevar a cabo las relaciones entre las diversas tablas individuales explicadas anteriormente:
+
+#### RESERVAS_PEDIDO
+```sql
+CREATE TABLE IF NOT EXISTS RESERVAS_PEDIDO (
+    IdReserva INT,
+    IdPedido INT UNIQUE,
+    NumPersonas INT,
+    HoraIni VARCHAR(40),
+    PRIMARY KEY(IdReserva,Horaini),
+    FOREIGN KEY(IdReserva) REFERENCES RESERVAS(IdReserva),
+    FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido)
+);
+```
+
+
+La tabla `RESERVAS_PEDIDO` será la encargada de __relacionar el pedido con una reserva concreta__, no es necesario que pedido pertenezca a la relación ya que pueden existir
+pedidos que no tengan reserva, sin embargo como el __`IdPedido` es único para cada pedido, deberá de ser único dentro de la tabla__. Además de esto gracias a ella __podremos 
+saber que cliente tiene cada reserva__
+
+
+1. `IdReserva`: Es la reserva que esta ligada a un pedido en una hora concreta
+2. `IdPedido`: Es el pedido que esta ligado a una reserva a una hora concreta
+3. `NumPersonas`: Es el número de personas que atenderán a la reserva, en caso de modificarlo __no podrá ser mayor al número previamente establecido__
+4. `HoraIni`:Es la hora a la que se realizará la reserva, junto a `IdReserva` __serán la clave principal__ ya que se ha tenido en cuenta que pueden haber `IdReserva`
+repedidos, ya que, si pensamos a largo plazo, llegará un momento en el que se deban de almacenar __números de gran tamaño__ lo cual haría dificil identificar la reserva,
+además de esto sabremos que mesa es en la que ha estado el cliente ya que __cada `IdReserva` tiene una mesa única ligada__  
+
+
+#### TRABAJADOR_PEDIDO
+```sql
+CREATE TABLE IF NOT EXISTS TRABAJADOR_PEDIDO (
+    IdTrabajador VARCHAR(20),
+    IdPedido INT,
+    PRIMARY KEY(IdTrabajador,IdPedido),
+    FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido),
+    FOREIGN KEY(IdTrabajador) REFERENCES TRABAJADOR(IdTrabajador)
+);
+```
+
+La tabla `TRABAJADOR_PEDIDO` esta destinada a __ligar un trabajador a un pedido determinado__ para así cuando el pedido haya finalizado __poder calcular el bono__ y además de
+esto poder estudiar las causas de la buena o mala reacción de un cliente determinado (El cual estará ligado al pedido).Sus atributos son:
+
+
+1. `IdTrabajador`: Es el identificador del trabajador que ha formado parte en el pedido
+2. `IdPedido`: Es el identificador del pedido del cual ha tomado parte el trabajador
+
+
+#### CLIENTES_PEDIDO
+```sql
+CREATE TABLE IF NOT EXISTS CLIENTES_PEDIDO (
+    IdCliente VARCHAR(40),
+    IdPedido INT,
+    PRIMARY KEY(IdPedido,IdCliente),
+    FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido),
+    FOREIGN KEY(IdCliente) REFERENCES CLIENTES(IdCliente)
+);
+```
+
+
+La tabla `CLIENTES_PEDIDO` es una de las más importantes dentro del sistema, ya que por medio de ella le daremos acceso al cliente a los diferentes subsistemas de una forma 
+controlada y gracias a ella __podermos ligar un cliente a una reserva__ , __un cliente a un pedido__ , __detectar si un alergeno del cliente forma parte del pedido__ , 
+__restar los puntos o sumarlos segun el metodo de pago__ etc... Sus atributos son los siguientes:
+
+1. `IdCliente`: El identificador del cliente el cual ha realizado el pedido
+2. `IdPedido`: El identidicador del pedido que ha realizado un cliente determinado
+   
+#### PEDIDO_RECETAS
+```sql
+CREATE TABLE IF NOT EXISTS PEDIDO_RECETAS (
+    IdReceta INT,
+    IdPedido INT,
+    numero INT CHECK (numero >= 1),
+    PRIMARY KEY(IdPedido,IdReceta),
+    FOREIGN KEY(IdPedido) REFERENCES PEDIDO(IdPedido),
+    FOREIGN KEY(IdReceta) REFERENCES RECETAS(IdReceta)
+);
+```
+
+La tabla `PEDIDO_RECETAS` será la encargada de unir __el subsistema menú con el subsistema de pedido__. Gracias ella podremos saber datos complejos como, por ejemplo, 
+cual ha sido la receta más pedida en el local, hasta algunos más sencillos como puede ser el listado de las recetas de un pedido concreto. Además de esto esta tabla tendrá 
+gran importancia de cara a saber si un pedido concreto contiene alérgenos que tenga el cliente o no. Sus atributos son los siguiemtes.
+
+
+1. `IdReceta`:Contiene el identificador de la receta que esta ligada al pedido
+2. `IdPedido`:Contiene el identificador del pedido por el cual podremos saber a que pedido esta ligada la receta
+3. `numero`:Es la cantidad de la misma receta que se haya en el pedido, por ejemplo si tiene el valor 2 significará que se han pedido dos unidades de la receta indentificada
+por `ÌdReceta`
+
+
+Para finalizar queremos destacar que pese a que se haya implementado teniendo en cuenta que se vaya a pedir más platos de un tipo, junto al correspondiente __aumento que 
+supondría en la resta de puntos al cliente__ en caso de pagar por puntos. Se ha decidido con motivo de una mejor comprensión y explicación del sistema los platos __se pedirán 
+de uno en uno__
+
+#### CLIENTES_ALERGENOS
+```sql
+CREATE TABLE IF NOT EXISTS CLIENTES_ALERGENOS (
+    IdCliente VARCHAR(40),
+    IdAlergeno INT,
+    PRIMARY KEY(IdCliente,IdAlergeno),
+    FOREIGN KEY(IdCliente) REFERENCES CLIENTES(IdCliente),
+    FOREIGN KEY(IdAlergeno) REFERENCES ALERGENOS(IdAlergeno)
+);
+```
+La tabla `CLIENTES_ALERGENOS` es la encargada de dictaminar el listado de los alergenos de un cliente determinado, por medio de ella podermos saber si hay un alergeno que
+coincida en con el cliente en el pedido, ya que de __aquí será de donde obtengamos la información de que alergenos no deben de estar en pedido__, sus atributos son los
+siguientes:
+
+
+1. `IdCliente`: Es el identificador del cliente del cual obtendremos el listado de los alergenos
+2. `IdAlergeno`: Es el identificador de uno de los posibles alergenos a los cuales puede reaccionar el cliete con id `IdCliente`
+
+
+   
+#### RECETAS_INGREDIENTES
+```sql
+CREATE TABLE IF NOT EXISTS RECETAS_INGREDIENTES (
+    IdReceta INT,
+    IdIngrediente INT,
+    numero INT CHECK (numero >= 1),
+    PRIMARY KEY(IdReceta,IdIngrediente),
+    FOREIGN KEY(IdReceta) REFERENCES RECETAS(IdReceta),
+    FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente)
+);
+```
+
+
+La tabla `RECETAS_INGREDIENTES` es la tabla situada entre medias de `RECETAS` e `INGREDIENTES` y será por la cual podremos obtener que ingredientes foman parte de que plato, 
+el número de ingredientes de cada plato, y además de esto nos ayudará a disminuir el `NumStock` de ingredientes cada vez que se seleccione una receta en un pedido. Sus 
+atribitos son los siguientes:
+
+1. `IdReceta`: Es el identificador de la receta la cual pertenecen los ingredientes
+2. `IdIngrediente`: Es el identidicador de un ingrediente concreto perteneciente a la receta con `IdReceta`
+3. `numero`: Es el número de ingredientes con `IdIngrediente` que se necesitan para preparar cada plato, por medio de este atributo, como he mencionado anteriormente,
+podremos calcular la resta correcta que se le debe de hacer a `numStock` cada vez que una receta se añada a `PEDIDO_RECETAS` 
+
+
+
+#### INGREDIENTES_ALERGENOS
+```sql
+CREATE TABLE IF NOT EXISTS INGREDIENTES_ALERGENOS (
+    IdIngrediente INT,
+    IdAlergeno INT,
+    PRIMARY KEY(IdAlergeno,IdIngrediente),
+    FOREIGN KEY(IdAlergeno) REFERENCES ALERGENOS(IdAlergeno),
+    FOREIGN KEY(IdIngrediente) REFERENCES INGREDIENTES(IdIngrediente)
+);
+```
+
+La última tabla que nos quedaría por explicar sería `INGREDIENTES_ALERGENOS` esta tabla es la encargada de definir que alergenos contiene cada ingrediente, es decir que
+también determinaría que alergenos contiene cada receta. Sus atributos son los siguientes:
+
+
+1. `IdIngrediente`: Es el identidicador del ingrediente del cual quieren saberse los alergenos
+2. `IdAlergeno`: Es el identificador de un alergeno determinado de el ingrediente identificado por `IdIngrediente`
+
+
+//SUBIR IMAGEN
+
+
+```sql
+
+```
+
+```sql
+
+```
+
+```sql
+
+```
+
+```sql
+
+```
+
+
+```sql
+
+```
+
+
+```sql
+
+```
+
+
+```sql
+
+```
+
+
+```sql
+
+```
+
+
+```sql
+
+```
+
 
 
  
