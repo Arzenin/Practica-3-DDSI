@@ -23,7 +23,7 @@
 Para ello se ha realizado un repositorio en Github con el siguiente enlace:[https://github.com/Arzenin/Sistema-Mc-And-Cheese](https://github.com/Arzenin/Sistema-Mc-And-Cheese)
 
 
-__Se recomienda__ la visualización de la documentación desde el README.md en el github, ya que por medio de los enlaces se puede llegar más rápido a las partes en las que se esté interesado, sin embargo si se desea se puede tener la casi la misma experiencia visualizandolo tanto desde el README.md como desde el [PDF](Doc/) que o bien se ha obtenido por medio de su envio o bien por su obtención en la carpeta `Doc/` dentro del repositorio de github.
+__Se recomienda__ la visualización de la documentación desde el README.md en el github, ya que por medio de los enlaces se puede llegar más rápido a las partes en las que se esté interesado, sin embargo si se desea se puede tener la casi la misma experiencia visualizandolo tanto desde el README.md como desde el [PDF](Doc/) que o bien se ha obtenido por medio de su envío o bien por su obtención en la carpeta `Doc/` dentro del repositorio de github.
 
 # 0. Índice
 
@@ -61,26 +61,26 @@ __Se recomienda__ la visualización de la documentación desde el README.md en e
 
 # 1. Introducción y Motivación
 
-En esta practica se nos presenta la continuación e implementación de nustro sistema Mc And Cheese. Tras dejar la base de la P2, donde ya teniamos todos los subsistemas 
-implementados, se ha seguido evolucionando el codigo y la base de datos. Basandonos tambien en los seminarios, especialmente en el segundo, hemos decidido implementar nustro 
-sistema en una pagina web. Estuvimos dando muchas vueltas a la hora de elergir la implementacion , ya que java tambien era una muy buena opcion, pero nos decantamos por la 
-programacion web.
+En esta práctica se nos presenta la continuación e implementación de nuestro sistema Mc And Cheese. Tras dejar la base de la P2, donde ya teniamos todos los subsistemas 
+implementados, se ha seguido evolucionando el código y la base de datos. Basándonos tambien en los seminarios, especialmente en el segundo, hemos decidido implementar nuestro 
+sistema en una página web. Estuvimos dando muchas vueltas a la hora de elegir la implementación , ya que java tambien era una muy buena opción, pero nos decantamos por la 
+programación web.
 
 
-Nuestra motivación al elegir nuestro sistema fue la amplia gama de funcionalidades que puede tomar, asi como que es un tema muy común y representativo de la realidad. 
+Nuestra motivación al elegir nuestro sistema fue la amplia gama de funcionalidades que puede tomar, así como que es un tema muy común y representativo de la realidad. 
 Queríamos poder aprender a realizar proyectos reales, los cuales se pudieran reflejar en algún caso real de nuestro futuro profesional, ya que en asignaturas pasadas siempre 
-se realizan ejemplos muy aislados, que no representan lo que se puede pedir a un programador en la vida real. Esa fue una de las motivaciones mas fuertes a la hora de 
+se realizan ejemplos muy aislados, que no representan lo que se puede pedir a un programador en la vida real. Esa fue una de las motivaciones más fuertes a la hora de 
 elegir Mc And Cheese.
 
 # 2. Objetivos
 
-Nuestro objetivo principal a la hora de implementar este sistema era el de cumplir los requisitos funcionales establecidos a lo largo de las practicas y seminarios 
-anteriores.Sin embargo, decidimos que demás de esto,  tomamos la decisión de intentar aplicar todo el conocimiento obtenido a lo largo del año, tanto dentro de las clases 
+Nuestro objetivo principal a la hora de implementar este sistema era el de cumplir los requisitos funcionales establecidos a lo largo de las prácticas y seminarios 
+anteriores.Sin embargo, decidimos que además de esto,  tomamos la decisión de intentar aplicar todo el conocimiento obtenido a lo largo del año, tanto dentro de las clases 
 como fuera de estas.
 
 
 Nada más comenzar la implementación del sistema, tomamos la decisión de automatizar el máximo número posible de los requisitos funcionales por medio del uso de triggers, para 
-así poder distribuir la carga de cómputo entre las diferentes terminales en las que se ejecutasen cada uno de los servicios necesarios para el correcto funcionamiento del 
+así poder distribuir la carga de cómputo entre las diferentes terminales en las que se ejecutásen cada uno de los servicios necesarios para el correcto funcionamiento del 
 sistema Mc and Cheese.
 
 
@@ -89,7 +89,7 @@ como del backend.
 
 
 En conclusión nuestro objetivo es el de demostrar todo el conocimiento que hemos adquirido entre todos a lo largo del año, automatizar determinadas funciones para una mejor 
-distribución de la carga computacional y por último alcanzar una mayor profundidad dentro de la progración web.
+distribución de la carga computacional y por último alcanzar una mayor profundidad dentro de la programación web.
 
 # 3. Github
 
@@ -130,16 +130,16 @@ Hemos decidido no explicar en profundidad, el proceso de instalación y de ejecu
 se desease probar este test, se deberá de generar un proyecto el cual tenga como base el archivo __TestTriggerJava.java__ y enlazada como una librería el conector de __JDBC__.
 
 
-Sin embargo lo que si se realizará es una breve explicación de lo que hará el test para comprobar que los triggers funcionan correctamente. 
+Sin embargo lo que sí se realizará es una breve explicación de lo que hará el test para comprobar que los triggers funcionan correctamente. 
 
 ### 3.1.4 web
-El directorio __[web](src/web)__ es el más importante de todos, en el encontraremos desde los ficheros fuente del sistema como la api destinada a la ejecución del backend.
+El directorio __[web](src/web)__ es el más importante de todos, en él encontraremos desde los ficheros fuente del sistema como la api destinada a la ejecución del backend.
 Además de esto también podremos encontrar varios dockerfiles y docker compose los cuales nos ayudarán a la ejecución del código, sin embargo esto lo explicaremos más adelante 
 en el apartado __[6. Ejecución del Código](#6-ejecución-del-código)__ 
 
 ## 3.2 Descarga del Repositorio
 En este apartado explicaremos la instalación del repositorio en nuestra máquina de forma local, recomendamos __*encarecidamente*__ su instalación en caso de querer probar el 
-sistema, ya que esto nos ahorrará una gran cantidad de tiempo de cara a la instalación de ficheros dentro de nuestra máquina, además esto nos permitiría usea de forma más 
+sistema, ya que esto nos ahorrará una gran cantidad de tiempo de cara a la instalación de ficheros dentro de nuestra máquina, además esto nos permitiría usar de forma más 
 sencilla este proyecto desde máquinas las cuales no tengan una propia interfaz gráfica, pudiendo así utilizarlo en máquinas con un menor número de recursos.
 
 ### 3.2.1 Instalación de Git
@@ -158,7 +158,7 @@ obligatorio.
 4. Ejecutamos `ls` y debería de haber aparecido un nuevo directorio llamado `/Analizador-Lexico`
 
 # 4. Explicación e Instalaciones de las Herramientas
-En exta sección explicaremos todas las herramientas que hemos usado a lo largo del desarrollo de este proyecto, queremos destacar que hay algunas que pueden llegar a ser 
+En esta sección explicaremos todas las herramientas que hemos usado a lo largo del desarrollo de este proyecto, queremos destacar que hay algunas que pueden llegar a ser 
 opcionales, como puede ser el caso de __[ZeroTier]()__ sin embargo recomendamos su lectura e instalación para una mejor comprensión del proyecto.
 
 ## 4.1. Docker
@@ -167,7 +167,7 @@ Docker es un software especializado en en la creación y uso de contenedores, lo
 compartimentada dentro del sistema o aplicación.
 
 
-Gracias a esto se nos permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicacion fuera de nuestro propio sistema. 
+Gracias a esto se nos permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicación fuera de nuestro propio sistema. 
 Es decir que con docker no es necesario realizar modificaciones en el nuevo sistema.
 
 
@@ -179,8 +179,8 @@ Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados
 nuestro propio docker.
 
 
-En conclusión nuestro razoniento del uso de docker es el tener una clara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el 
-mantenimientro y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra 
+En conclusión, nuestro razonamiento del uso de docker es el tener una clara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el 
+mantenimiento y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra 
 página copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
 
 ### 4.1.1 Instalación de Docker
@@ -252,11 +252,11 @@ Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript por
 
 __*Node.js*__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que nos da la posibilidad de 
 crear aplicaciones backend escalables y eficientes. Node.js utiliza un modelo de E/S sin bloqueo, por lo tanto lo hace adecuado para aplicaciones que requieren un alto 
-rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backnend de nuestra aplicación usamos este mismo entorno, este backend será el encargado de
+rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backend de nuestra aplicación usamos este mismo entorno, este backend será el encargado de
 conectarse a la base de datos y manipularla.
 
 
-De cara a la interfaz de usuario hemos eliegido __*React Native*__,ya  que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar 
+De cara a la interfaz de usuario hemos elegido __*React Native*__,ya  que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar 
 __*React*__(biblioteca de JavaScript destinada a construir interfaces de usuario) para crear aplicaciones nativas en iOS y Android. Esto se consigue al proporcionar una capa 
 de abstracción sobre los componentes nativos, permitiendo así a los desarrolladores compartir código base entre plataformas.
 
@@ -265,7 +265,7 @@ aplicaciones web compatibles con dispositivos móviles.
 
 
 Para implementar la interfaz de la aplicación usando React Native, hemos usado __*Expo*__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones 
-móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de 
+móviles con React Native. Este simplifica el proceso de desarrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de 
 configurar y mantener manualmente ciertos aspectos del proyecto.
 
 ### 4.3.1 Instalación de WAF
@@ -300,7 +300,7 @@ diversas tareas de administración de bases de datos de manera eficiente. Se sue
 de bases de datos interactuar con sus bases de datos de una manera más visual. Algunas de las funciones de PHPMyAdmin son las siguientes:
 
 1. Gestionar las bases de datos de forma visual.
-2. Ralizar la gestión de tablas.
+2. Realizar la gestión de tablas.
 3. Manipulación de datos de manera sencilla.
 4. Gestión de usuarios y privilegios.
 5. Ejecución de Consultas SQL.
@@ -311,7 +311,7 @@ de bases de datos interactuar con sus bases de datos de una manera más visual. 
 Respecto a la conexión con la base de datos hemos utilizado el driver __MySQL2__, que es una biblioteca de Node.js diseñada para facilitar la conexión e 
 interacción con bases de datos MySQL mediante JavaScript. Este driver es una evolución del anterior MySQL y destaca por su rendimiento mejorado y algunas 
 funcionalidades adicionales. MySQL2 nos permite una fácil conexión y manipulación de datos, así como manejar los errores que se puedan presentar a la hora de 
-realizar la conexióno el manejo de los datos.
+realizar la conexión o el manejo de los datos.
 
 
 ## 4.4.1 Instalación de PHPMyAdmin
@@ -341,7 +341,7 @@ fichero __[docker-compose.yml](src/DATABASE/docker-compose.yml)__
 
 # 5 Explicación del Código
 
-En esta sección explicaremos el código en profundidad, centrandonos individualemente en el código implementado tanto en MySQL como en java y para finalizar el 
+En esta sección explicaremos el código en profundidad, centrándonos individualmente en el código implementado tanto en MySQL como en java y para finalizar el 
 código en JavaScript de la aplicación web.
 
 
@@ -349,8 +349,8 @@ código en JavaScript de la aplicación web.
 
 Este apartado tiene la función de explicar la base de datos implementada en MySQL, ya que será necesario conocer la estructura de la misma y los triggers 
 implementados para poder comprender el razonamiento de la implementación de determinados requisitos. Ya que es un código de gran longitud hemos decidido dividir 
-su explicación en dos secciones. Una destinada a las __[tabalas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
-__[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos tambien su visualización en el archivo  
+su explicación en dos secciones. Una destinada a las __[tablas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
+__[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos también su visualización en el archivo  
 __[ddsi3.sql](src/DATABASE/ddsip3.sql)__
 
 
