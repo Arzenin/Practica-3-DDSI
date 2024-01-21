@@ -694,7 +694,7 @@ también determinaría que alergenos contiene cada receta. Sus atributos son los
 1. `IdIngrediente`: Es el identidicador del ingrediente del cual quieren saberse los alergenos
 2. `IdAlergeno`: Es el identificador de un alergeno determinado de el ingrediente identificado por `IdIngrediente`
 
-##RELACIONES ENTRE TABLAS:
+## RELACIONES ENTRE TABLAS:
 Para finalizar querríamos añadir una imágen en la cual se pueden observar las diferentes relaciones entre tablas, el motivo por el que los nombres no son idénticos en este
 caso es porque esta imagen se trata de un esquema inicial que realizamos previo a la implementación de la base de datos:
 
