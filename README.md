@@ -351,7 +351,7 @@ Este apartado tiene la función de explicar la base de datos implementada en MyS
 implementados para poder comprender el razonamiento de la implementación de determinados requisitos. Ya que es un código de gran longitud hemos decidido dividir 
 su explicación en dos secciones. Una destinada a las __[tabalas y su estructura general](#511-tablas)__ y otra destinada al uso e implementación de los diferentes 
 __[triggers](#512-triggers)__, pese a que se mostrará el código en este archivo, recomendamos tambien su visualización en el archivo  
-__[ddsi3.sql(src/DATABASE/ddsip3.sql)__
+__[ddsi3.sql](src/DATABASE/ddsip3.sql)__
 
 
  
