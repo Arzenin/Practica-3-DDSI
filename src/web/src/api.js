@@ -27,6 +27,7 @@ async function abrirConexion(){
 
 
 app.post('/crearcliente', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { email, nombre, date, username, contraseña, domicilio, datosPago } = req.body;
@@ -34,7 +35,7 @@ app.post('/crearcliente', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [email, nombre, username, contraseña, domicilio, date, datosPago]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -43,10 +44,21 @@ app.post('/crearcliente', async (req, res) => {
   } catch (error) {
     console.error('Error al crear cliente:', error);
     res.status(500).json({ error: 'Error al crear cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.put('/editarcliente', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { email, nombre, date, username, contraseña, domicilio, datosPago } = req.body;
@@ -54,7 +66,7 @@ app.put('/editarcliente', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [nombre, username, contraseña, domicilio, date, datosPago, email]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -63,37 +75,72 @@ app.put('/editarcliente', async (req, res) => {
   } catch (error) {
     console.error('Error al editar cliente:', error);
     res.status(500).json({ error: 'Error al editar cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/clientes', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM CLIENTES';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/clientes/:id', async (req, res) => { // GET Estudiantes
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM CLIENTES WHERE idCliente = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
     console.error('Error al obtener cliente:', error);
     res.status(500).json({ error: 'Error al obtener cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borrarcliente/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = req.params.id;
@@ -125,29 +172,53 @@ app.delete('/borrarcliente/:id', async (req, res) => {
     }
 
     });
+    await connection.promise().commit();
     connection.end();
   } catch (error){
     console.error('Error al borrar cliente:', error);
     res.status(500).json({ error: 'Error al borrar cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
   console.log('Cliente eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Cliente eliminado con éxito' });
 });
 
 app.get('/alergenos', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM ALERGENOS';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener alergenoss:', error);
     res.status(500).json({ error: 'Error al obtener alergenoss' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
   
 app.post('/crearalergeno', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, nombre, descripcion } = req.body;
@@ -155,7 +226,7 @@ app.post('/crearalergeno', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, nombre, descripcion]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -164,10 +235,21 @@ app.post('/crearalergeno', async (req, res) => {
   } catch (error) {
     console.error('Error al crear alergeno:', error);
     res.status(500).json({ error: 'Error al crear alergeno' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borraralergeno/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = parseInt(req.params.id, 10);
@@ -198,21 +280,28 @@ app.delete('/borraralergeno/:id', async (req, res) => {
     }
 
     });
+    await connection.promise().commit();
     connection.end();
   } catch (error){
     console.error('Error al borrar alergeno:', error);
     res.status(500).json({ error: 'Error al borrar alergeno' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
   }
   console.log('Alergeno eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Alergeno eliminado con éxito' });
 });
 
 app.get('/alergenos/clienteId/:IdCliente', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const IdCliente = req.params.IdCliente;
-    const queryTareas = 'SELECT * FROM CLIENTE_ALERGENOS JOIN ALERGENOS ON CLIENTE_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno WHERE CLIENTE_ALERGENOS.IdCliente = ?';
+    const queryTareas = 'SELECT * FROM CLIENTES_ALERGENOS JOIN ALERGENOS ON CLIENTES_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno WHERE CLIENTES_ALERGENOS.IdCliente = ?';
     const [resultado] = await connection.promise().query(queryTareas, [IdCliente]);
+    await connection.promise().commit();
     connection.end();
 
     // Devuelve un array vacío si no hay resultados
@@ -220,6 +309,16 @@ app.get('/alergenos/clienteId/:IdCliente', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener alergenos del cliente:', error);
     res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
@@ -227,6 +326,7 @@ app.get('/alergenos/clienteId/:IdCliente', async (req, res) => {
 
 
 app.post('/clientes/quitaralergenos', async (req, res) => {
+  let connection;
   try {
     const {IdCliente, alergenos } = req.body;
     const connection = await abrirConexion();
@@ -235,7 +335,7 @@ app.post('/clientes/quitaralergenos', async (req, res) => {
       // Iterar sobre los estudiantes seleccionados
       for (const alergenoId of alergenos) {
         // Eliminar la fila correspondiente a la asignación
-        const queryDelete = 'DELETE FROM CLIENTE_ALERGENOS WHERE IdCliente = ? AND IdAlergeno = ?';
+        const queryDelete = 'DELETE FROM CLIENTES_ALERGENOS WHERE IdCliente = ? AND IdAlergeno = ?';
         await connection.promise().query(queryDelete, [IdCliente, alergenoId], (err, result) => {
           if (err) {
             console.error('Error al establecer conexión con la base de datos:' + err);
@@ -247,7 +347,12 @@ app.post('/clientes/quitaralergenos', async (req, res) => {
     } catch (error) {
       console.error('Error al quitar tareas a estudiante:', error);
       res.status(500).json({ error: 'Error al quitar tareas a estudiante.' });
+      // Rollback en caso de excepción
+      if (connection) {
+        await connection.promise().rollback();
+      }
     } finally {
+        await connection.promise().commit();
       connection.end();
     }
 
@@ -260,6 +365,7 @@ app.post('/clientes/quitaralergenos', async (req, res) => {
 });
 
 app.post('/clientes/aniadealergenos', async (req, res) => {
+  let connection;
   try {
     const { IdCliente, alergenos } = req.body;
     const connection = await abrirConexion();
@@ -267,7 +373,7 @@ app.post('/clientes/aniadealergenos', async (req, res) => {
 
     try {
       if (Array.isArray(alergenos)) {
-        for (const alergenoId of alergenos) {
+        /*for (const alergenoId of alergenos) {
         // Eliminar la fila correspondiente a la asignación
         const queryDelete = 'DELETE FROM CLIENTE_ALERGENOS WHERE IdCliente = ? AND IdAlergeno = ?';
         await connection.promise().query(queryDelete, [IdCliente, alergenoId], (err, result) => {
@@ -276,13 +382,13 @@ app.post('/clientes/aniadealergenos', async (req, res) => {
             res.status(500).json({ error: 'Error al establecer conexión con la base de datos.' });
           }
         });
-      }
+      }*/
         
         // Use Promise.all to wait for all queries to complete
         await Promise.all(
           alergenos.map(async (alergenoId) => {
             const queryInsert =
-              'INSERT INTO CLIENTE_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
+              'INSERT INTO CLIENTES_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
             await connection.promise().query(queryInsert, [IdCliente, alergenoId]);
           })
         );
@@ -295,7 +401,7 @@ app.post('/clientes/aniadealergenos', async (req, res) => {
       } else {
         // Si tareas no es un array, realizar una única inserción
         const queryInsert =
-          'INSERT INTO CLIENTE_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
+          'INSERT INTO CLIENTES_ALERGENOS (IdCliente, IdAlergeno) VALUES (?, ?)';
         await connection.promise().query(queryInsert, [IdCliente, alergenos]);
 
         // Query is successful, send a response
@@ -305,30 +411,54 @@ app.post('/clientes/aniadealergenos', async (req, res) => {
     } catch (error) {
       console.error('Error al añadir tareas al alumno:', error);
       res.status(500).json({ error: 'Error al añadir tareas al alumno.' });
+      // Rollback en caso de excepción
+      if (connection) {
+        await connection.promise().rollback();
+      }
     } finally {
       // Always close the connection in a finally block
+      await connection.promise().commit();
       connection.end();
     }
   } catch (error) {
     console.error('Error al añadir las tareas:', error);
     res.status(500).json({ error: 'Error al añadir las tareas.' });
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/ingredientes', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM INGREDIENTES';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener alergenoss:', error);
     res.status(500).json({ error: 'Error al obtener alergenoss' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borraringrediente/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = parseInt(req.params.id, 10);
@@ -359,16 +489,28 @@ app.delete('/borraringrediente/:id', async (req, res) => {
     }
 
     });
+    await connection.promise().commit();
     connection.end();
   } catch (error){
     console.error('Error al borrar alergeno:', error);
     res.status(500).json({ error: 'Error al borrar alergeno' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
   console.log('Alergeno eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Alergeno eliminado con éxito' });
 });
 
 app.post('/crearingrediente', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, nombre, alergenos } = req.body;
@@ -400,20 +542,33 @@ app.post('/crearingrediente', async (req, res) => {
     }
 
     // Mover el cierre de la conexión aquí, después de todas las operaciones
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
   } catch (error) {
     console.error('Error al crear Ingrediente:', error);
     res.status(500).json({ error: 'Error al crear Ingrediente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/alergenos/ingrediente/:id', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryTareas = 'SELECT * FROM INGREDIENTES_ALERGENOS JOIN ALERGENOS ON INGREDIENTES_ALERGENOS.IdAlergeno = ALERGENOS.IdAlergeno WHERE INGREDIENTES_ALERGENOS.IdIngrediente = ?';
     const [resultado] = await connection.promise().query(queryTareas, [id]);
+    await connection.promise().commit();
     connection.end();
 
     // Devuelve un array vacío si no hay resultados
@@ -421,23 +576,46 @@ app.get('/alergenos/ingrediente/:id', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener alergenos del ingrediente:', error);
     res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/trabajadores', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM TRABAJADOR';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener trabajadores:', error);
     res.status(500).json({ error: 'Error al obtener trabajadores' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.post('/trabajadores/creartrabajador', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const {id, nombre, turno, libre} = req.body;
@@ -445,7 +623,7 @@ app.post('/trabajadores/creartrabajador', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, turno, nombre, libre]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -454,10 +632,21 @@ app.post('/trabajadores/creartrabajador', async (req, res) => {
   } catch (error) {
     console.error('Error al crear Trabajador:', error);
     res.status(500).json({ error: 'Error al crear Trabajador' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/trabajadores/trabajador/:id', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
@@ -468,10 +657,21 @@ app.get('/trabajadores/trabajador/:id', async (req, res) => { // GET Clientes
   } catch (error) {
     console.error('Error al obtener trabajador:', error);
     res.status(500).json({ error: 'Error al obtener trabajador' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.put('/trabajadores/editartrabajador', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, nombre, turno, libre} = req.body;
@@ -479,7 +679,7 @@ app.put('/trabajadores/editartrabajador', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [nombre, turno, libre, id]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -488,10 +688,21 @@ app.put('/trabajadores/editartrabajador', async (req, res) => {
   } catch (error) {
     console.error('Error al editar Trabajador:', error);
     res.status(500).json({ error: 'Error al editar Trabajador' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borrartrabajador/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = parseInt(req.params.id, 10);
@@ -514,43 +725,79 @@ app.delete('/borrartrabajador/:id', async (req, res) => {
     }
 
     });
+    await connection.promise().commit();
     connection.end();
   } catch (error){
     console.error('Error al borrar trabajador:', error);
     res.status(500).json({ error: 'Error al borrar trabajador' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
   console.log('Trabajador eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Trabajador eliminado con éxito' });
 });
 
 app.get('/reservas/:id', async (req, res) => { // GET Estudiantes
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
     console.error('Error al obtener cliente:', error);
     res.status(500).json({ error: 'Error al obtener cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/recetas', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM RECETAS';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.post('/crearreceta', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, nombre, precio, ingredientes } = req.body;
@@ -576,15 +823,27 @@ app.post('/crearreceta', async (req, res) => {
     }
 
     // Mover el cierre de la conexión aquí, después de todas las operaciones
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
   } catch (error) {
     console.error('Error al crear recetas:', error);
     res.status(500).json({ error: 'Error al crear Ingrediente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borrarreceta/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = parseInt(req.params.id, 10);
@@ -615,21 +874,28 @@ app.delete('/borrarreceta/:id', async (req, res) => {
     }
 
     });
+    await connection.promise().commit();
     connection.end();
   } catch (error){
     console.error('Error al borrar alergeno:', error);
     res.status(500).json({ error: 'Error al borrar alergeno' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
   }
   console.log('Alergeno eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Alergeno eliminado con éxito' });
 });
 
 app.get('/ingredientes/:idReceta', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.idReceta;
     const queryTareas = 'SELECT * FROM RECETAS_INGREDIENTES JOIN INGREDIENTES ON RECETAS_INGREDIENTES.IdIngrediente = INGREDIENTES.IdIngrediente WHERE RECETAS_INGREDIENTES.IdReceta = ?';
     const [resultado] = await connection.promise().query(queryTareas, [id]);
+    await connection.promise().commit();
     connection.end();
 
     // Devuelve un array vacío si no hay resultados
@@ -637,49 +903,96 @@ app.get('/ingredientes/:idReceta', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener alergenos del ingrediente:', error);
     res.status(500).json({ error: 'Error al obtener alergenos del cliente' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/verpedidos', async (req, res) => { // GET Ingredientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM PEDIDO';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener listado de ingredientes:', error);
     res.status(500).json({ error: 'Error al obtener ingredientes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/verpedidosactivos', async (req, res) => { // GET Ingredientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM PEDIDO WHERE Estado = \'Activo\';';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener listado de ingredientes:', error);
     res.status(500).json({ error: 'Error al obtener ingredientes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/verpedidosinactivos', async (req, res) => { // GET Ingredientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM PEDIDO WHERE Estado= \'Inactivo\';';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener listado de ingredientes:', error);
     res.status(500).json({ error: 'Error al obtener ingredientes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.post('/crearpedido', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const {id, tipoPago, clientes, recetas } = req.body;
@@ -719,17 +1032,28 @@ app.post('/crearpedido', async (req, res) => {
       
     }
 
-
+    await connection.promise().commit();
     // Mover el cierre de la conexión aquí, después de todas las operaciones
     connection.end(); // Liberar recursos BD
     connection.destroy();
   } catch (error) {
     console.error('Error al crear pedido:', error);
     res.status(500).json({ error: 'Error al crear Pedido' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.post('/finalizarpedido', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const {id, valoracion, trabajadores } = req.body;
@@ -760,18 +1084,29 @@ app.post('/finalizarpedido', async (req, res) => {
       console.log('Pedido finalizado con éxito');
       res.status(200).json({ mensaje: 'Pedido creado correctamente' });
 
-
+      await connection.promise().commit();
     // Mover el cierre de la conexión aquí, después de todas las operaciones
     connection.end(); // Liberar recursos BD
     connection.destroy();
   } catch (error) {
     console.error('Error al crear pedido:', error);
     res.status(500).json({ error: 'Error al crear Pedido' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 
 app.post('/crearreserva', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, idP, npersonas, hora} = req.body;
@@ -779,7 +1114,7 @@ app.post('/crearreserva', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, idP, npersonas, hora]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -788,10 +1123,21 @@ app.post('/crearreserva', async (req, res) => {
   } catch (error) {
     console.error('Error al crear cliente:', error);
     res.status(500).json({ error: 'Error al crear una reserva' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.post('/crearmesa', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { id, num} = req.body;
@@ -799,7 +1145,7 @@ app.post('/crearmesa', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [id, num]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -808,11 +1154,22 @@ app.post('/crearmesa', async (req, res) => {
   } catch (error) {
     console.error('Error al crear cliente:', error);
     res.status(500).json({ error: 'Error al crear una mesa' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 
 app.put('/editarreserva', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const { idReserva, numPersonas, horaIni} = req.body;
@@ -820,7 +1177,7 @@ app.put('/editarreserva', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [numPersonas, idReserva, horaIni]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -829,10 +1186,21 @@ app.put('/editarreserva', async (req, res) => {
   } catch (error) {
     console.error('Error al editar la reserva:', error);
     res.status(500).json({ error: 'Error al editar reserva' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.put('/editarmesa', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const {idReserva, numMesa} = req.body;
@@ -840,7 +1208,7 @@ app.put('/editarmesa', async (req, res) => {
 
     // Cambiar el nombre de la variable result
     const result = await connection.promise().query(querySelect, [numMesa, idReserva]);
-    
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -849,95 +1217,177 @@ app.put('/editarmesa', async (req, res) => {
   } catch (error) {
     console.error('Error al editar la mesa:', error);
     res.status(500).json({ error: 'Error al editar mesa' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 
 app.get('/reservas', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM RESERVAS_PEDIDO';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/reservas/:id', async (req, res) => { // GET Estudiantes
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM RESERVAS_PEDIDO WHERE IdReserva = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
     console.error('Error al obtener reserva:', error);
     res.status(500).json({ error: 'Error al obtener reserva' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/mesas', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM RESERVAS';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/mesas/:id', async (req, res) => { // GET Estudiantes
+  let connection;
   try {
     const connection = await abrirConexion();
     const id = req.params.id;
     const queryEstudiantes = 'SELECT * FROM RESERVAS WHERE IdReserva = ?';
     const [resultado] = await connection.promise().query(queryEstudiantes, [id]);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON
   } catch (error) {
     console.error('Error al obtener mesa:', error);
     res.status(500).json({ error: 'Error al obtener mesa' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.get('/mesasdisponibles', async (req, res) => { // GET Clientes
+  let connection;
   try {
     const connection = await abrirConexion();
     const query = 'SELECT * FROM RESERVAS WHERE NOT EXISTS (SELECT 1 FROM RESERVAS_PEDIDO WHERE RESERVAS_PEDIDO.IdReserva = RESERVAS.IdReserva)';
     const [resultado] = await connection.promise().query(query);
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json([resultado]); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener estudiantes:', error);
     res.status(500).json({ error: 'Error al obtener estudiantes' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 
 app.get('/infopedido/:id', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
     const idPedido = req.params.id; // Obtener el valor del parámetro desde la URL
     const query = 'SELECT * FROM RESERVAS_PEDIDO JOIN PEDIDO ON RESERVAS_PEDIDO.IdPedido = PEDIDO.IdPedido WHERE RESERVAS_PEDIDO.IdPedido = ?';
 
     const [resultado] = await connection.promise().query(query, [idPedido]); // Pasar el valor del parámetro como un array
-
+    await connection.promise().commit();
     connection.end(); // Libera recursos BD
     res.json(resultado); // Resultado servido en HTTP formato JSON  
   } catch (error) {
     console.error('Error al obtener información del pedido:', error);
     res.status(500).json({ error: 'Error al obtener información del pedido' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
 
 app.delete('/borrarmesa/:id', async (req, res) => {
+  let connection;
   try{
     const connection = await abrirConexion();
     const id = req.params.id;
@@ -959,18 +1409,29 @@ app.delete('/borrarmesa/:id', async (req, res) => {
       await connection.promise().query(deleteQuery2, id);
     }
 
-    connection.commit();
+    await connection.promise().commit();
     connection.end();
 
   } catch (error){
     console.error('Error al borrar mesa:', error);
     res.status(500).json({ error: 'Error al borrar mesa' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
   console.log('Mesa eliminado con éxito en la base de datos!');
   res.status(201).json({ message: 'Mesa eliminado con éxito' });
 });
 
 app.post('/reiniciar', async (req, res) => {
+  let connection;
   try {
     const connection = await abrirConexion();
 
@@ -1042,7 +1503,7 @@ app.post('/reiniciar', async (req, res) => {
     for (const sqlStatement of sqlStatements) {
       await connection.promise().query(sqlStatement);
     }
-
+    await connection.promise().commit();
     connection.end(); // Liberar recursos BD
     connection.destroy();
 
@@ -1051,6 +1512,16 @@ app.post('/reiniciar', async (req, res) => {
   } catch (error) {
     console.error('Error al generar la base de datos', error);
     res.status(500).json({ error: 'Error al generar la base de datos' });
+    // Rollback en caso de excepción
+    if (connection) {
+      await connection.promise().rollback();
+    }
+  }finally {  
+    // Asegurarse de liberar recursos incluso si hay una excepción
+    if (connection) {
+      connection.end();
+      connection.destroy();
+    }
   }
 });
   
