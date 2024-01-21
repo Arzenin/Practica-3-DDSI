@@ -295,7 +295,8 @@ __*Windows:*__
 y `node –version`, en caso de que estos fallen se deberá a que no se han añadido correctamente a la variable paths
 3. Instalamos __*Expo*__ por medio de `npm install -g expo-cli en la terminal`
 4. Nos dirigimos al directorio de `/src/app` en caso de no tenerlo clonado lo descargamos.
-5. `npm install` para asegurar que tenemos todas las dependencias, esto debería de instalar también __*MySQL2*__ el cual explicaremos en __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
+5. `npm install` para asegurar que tenemos todas las dependencias, esto debería de instalar también __*MySQL2*__ el cual explicaremos en
+__[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
 
  
