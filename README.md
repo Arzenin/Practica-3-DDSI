@@ -152,7 +152,7 @@ Elegimos React Native porque además de ser una herramienta que nos permite real
 Para implementar la interfaz de la aplicación usando React Native, hemos usado __Expo__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de configurar y mantener manualmente ciertos aspectos del proyecto.
 
 
-__Instalación de Node.js, React Native y Expo__
+__Instalación de Node.js, React Native y Expo
 
 __Ubuntu__:
 
