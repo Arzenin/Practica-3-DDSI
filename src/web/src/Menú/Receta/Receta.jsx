@@ -32,7 +32,7 @@ const Receta = () => {
 
   
   const handleAdd = () => { // Función añadir
-    navigate('/crearcliente');
+    navigate('/crearreceta');
   };
 
   const handleDelete = async (id) => { // Función borrar

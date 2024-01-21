@@ -46,6 +46,47 @@ app.post('/crearcliente', async (req, res) => {
   }
 });
 
+app.post('/crearalergeno', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, nombre, descripcion } = req.body;
+    const querySelect = 'INSERT INTO ALERGENOS (IdAlergeno, Nombre, Descripcion) VALUES (?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, nombre, descripcion]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Alergeno creado correctamente' });
+  } catch (error) {
+    console.error('Error al crear el alergeno:', error);
+    res.status(500).json({ error: 'Error al crear alergeno' });
+  }
+});
+
+
+app.post('/crearreceta', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const {id, precio} = req.body;
+    const querySelect = 'INSERT INTO RECETAS (IdReceta, Precio) VALUES (?,?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, precio]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Receta creada correctamente' });
+  } catch (error) {
+    console.error('Error al crear Receta:', error);
+    res.status(500).json({ error: 'Error al crear Receta' });
+  }
+});
+
 app.post('/crearingrediente', async (req, res) => {
 
   try {
@@ -85,6 +126,46 @@ app.put('/editarcliente', async (req, res) => {
   } catch (error) {
     console.error('Error al editar cliente:', error);
     res.status(500).json({ error: 'Error al editar cliente' });
+  }
+});
+
+app.post('/crearreserva', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, idP, npersonas, hora} = req.body;
+    const querySelect = 'INSERT INTO RESERVAS_PEDIDO (IdReserva, IdPedido, NumPersonas, HoraIni) VALUES (?, ?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, idP, npersonas, hora]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Reserva creada correctamente' });
+  } catch (error) {
+    console.error('Error al crear cliente:', error);
+    res.status(500).json({ error: 'Error al crear una reserva' });
+  }
+});
+
+app.post('/creartrabajadores', async (req, res) => {
+  try {
+    const connection = await abrirConexion();
+    const { id, turno, bono } = req.body;
+    const querySelect = 'INSERT INTO TRABAJADOR (IdTrabajador, Turno, Bono) VALUES (?, ?, ?)';
+
+    // Cambiar el nombre de la variable result
+    const result = await connection.promise().query(querySelect, [id, turno, bono]);
+    
+    connection.end(); // Liberar recursos BD
+    connection.destroy();
+
+    // Devolver la respuesta exitosa
+    res.status(200).json({ mensaje: 'Trabajador creado correctamente' });
+  } catch (error) {
+    console.error('Error al crear trabajador:', error);
+    res.status(500).json({ error: 'Error al crear trabajador' });
   }
 });
 

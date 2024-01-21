@@ -32,7 +32,7 @@ const Trabajadores = () => {
     const [itemsPorPagina] = useState(10); // Ajustar preferencia
     
     const handleAdd = () => { // Función añadir
-        navigate('/crearcliente');
+      navigate('/creartrabajadores');
     };
 
     const handleDelete = async (id) => { // Función borrar
