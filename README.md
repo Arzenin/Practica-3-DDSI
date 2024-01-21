@@ -126,28 +126,28 @@ explicación en profundidad se explica uno por uno los directorios superiores, s
 para la ejecución del proyecto.
 
 ### 3.1.1 src
-En el directorio __[src](src/)__ encontraremos los directorios destinados al almacenamiento del código necesario para la ejecución del programa además de aquellos ficheros 
-que nos ayudarán a comprender el correcto funcionamiento de los triggers y los requisitos implementados.
+En el directorio __[src](src/)__ se encontrarán los directorios destinados al almacenamiento del código necesario para la ejecución del programa además de aquellos ficheros 
+que ayudarán a comprender el correcto funcionamiento de los triggers y los requisitos implementados.
 
 ### 3.1.2 DATABASE
-En el directorio __[DATABASE](src/DATABASE)__ encontraremos los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo queremos destacar el 
-fichero __[ddsi3.sql](src/DATABASE/ddsip3.sql)__ el cual contiene toda la estructura de nuestra base de datos, nos centraremos más en la explicación de este fichero en el 
+En el directorio __[DATABASE](src/DATABASE)__ se encontrarán los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo se destaca el 
+fichero __[ddsi3.sql](src/DATABASE/ddsip3.sql)__ el cuál contiene toda la estructura de nuestra base de datos, se centrará más en la explicación de este fichero en el 
 apartado __[5.1 Explicación del Código en SQL](#51-explicación-del-codigo-en-sql)__
 
 ### 3.1.3 TestTriggerJava
-En el directorio __[TestTriggerJava](src/TestTriggerJava)__ encontraremos un programa sencillo de cara a la comprensión de los triggers implementados en nuestro código, sobre 
-los cuales profundizaremos en el apartado __[5.1.2 Triggers](#512-triggers)__ , sobre este código cabe destacar que hemos usado el conector __MySQL JDBC__.
+En el directorio __[TestTriggerJava](src/TestTriggerJava)__ se encontrará un programa sencillo de cara a la comprensión de los triggers implementados en nuestro código, sobre 
+los cuales se profundizará en el apartado __[5.1.2 Triggers](#512-triggers)__ , sobre este código cabe destacar que se ha usado el conector __MySQL JDBC__.
 
 
-Hemos decidido no explicar en profundidad, el proceso de instalación y de ejecución tanto del conector como del test ya que consideramos esto como un añadido, sin embargo si 
+Se ha decidido no explicar en profundidad el proceso de instalación y de ejecución tanto del conector como del test ya que se considera esto como un añadido, sin embargo, si 
 se desease probar este test, se deberá de generar un proyecto el cual tenga como base el archivo __TestTriggerJava.java__ y enlazada como una librería el conector de __JDBC__.
 
 
 Sin embargo lo que sí se realizará es una breve explicación de lo que hará el test para comprobar que los triggers funcionan correctamente. 
 
 ### 3.1.4 web
-El directorio __[web](src/web)__ es el más importante de todos, en él encontraremos desde los ficheros fuente del sistema como la api destinada a la ejecución del backend.
-Además de esto también podremos encontrar varios dockerfiles y docker compose los cuales nos ayudarán a la ejecución del código, sin embargo esto lo explicaremos más adelante 
+El directorio __[web](src/web)__ es el más importante de todos, en él se encuentran desde los ficheros fuente del sistema como la api destinada a la ejecución del backend.
+Además de esto también se pueede encontrar varios dockerfiles y docker compose los cuales ayudarán a la ejecución del código, sin embargo esto se explicará más adelante 
 en el apartado __[6. Ejecución del Código](#6-ejecución-del-código)__ 
 
 
@@ -155,32 +155,32 @@ en el apartado __[6. Ejecución del Código](#6-ejecución-del-código)__
 
 
 ## 3.2 Descarga del Repositorio
-En este apartado explicaremos la instalación del repositorio en nuestra máquina de forma local, recomendamos __*encarecidamente*__ su instalación en caso de querer probar el 
-sistema, ya que esto nos ahorrará una gran cantidad de tiempo de cara a la instalación de ficheros dentro de nuestra máquina, además esto nos permitiría usar de forma más 
+En este apartado se explica la instalación del repositorio en nuestra máquina de forma local, se recomienda __*encarecidamente*__ su instalación en caso de querer probar el 
+sistema, ya que esto ahorrará una gran cantidad de tiempo de cara a la instalación de ficheros dentro de nuestra máquina, además esto permitirá usar de forma más 
 sencilla este proyecto desde máquinas las cuales no tengan una propia interfaz gráfica, pudiendo así utilizarlo en máquinas con un menor número de recursos.
 
 ### 3.2.1 Instalación de Git
-1. Deberemos abrir el terminal 
-2. Nos aseguraremos de tener todas las dependencias y paquetes actualizados por medio de `sudo apt update` y `sudo apt upgrade`
-3. Tras esto ejecutaremos `apt-get install git` por el cual instalaremos git junto a sus dependencias
-4. Por último como en el resto de instalaciones ejecutaremos `git --version` para asegurarnos que se ha instalado todo correctamente
+1. Se deberá abrir la terminal 
+2. Se asegurará de tener todas las dependencias y paquetes actualizados por medio de `sudo apt update` y `sudo apt upgrade`
+3. Tras esto se ejecutará `apt-get install git` por el cuál se instalará git junto a sus dependencias
+4. Por último como en el resto de instalaciones se ejecutará `git --version` para asegurar que se ha instalado todo correctamente
    
 ### 3.2.2 Clonar un Repositorio
-Una vez instalado Git deberemos de crear un directorio personalmente recomiendo que creemos uno con el siguiente esquema `/Documents/github` sin embargo esto esto no es 
+Una vez instalado Git se debe de crear un directorio, se recomienda que se cree uno con el siguiente esquema `/Documents/github` sin embargo esto esto no es 
 obligatorio.
 
-1. Nos dirigiremos al directorio en el que queramos clonar el repositorio
-2. Abrimos la terminal en ese directorio
-3. Ejecutamos `git clone https://https://github.com/Arzenin/Sistema-Mc-And-Cheese.git`
-4. Ejecutamos `ls` y debería de haber aparecido un nuevo directorio llamado `/Analizador-Lexico`
+1. Hay que dirigirse al directorio en el que se quiera clonar el repositorio
+2. Se abre la terminal en ese directorio
+3. Se deberá ejecutar `git clone https://https://github.com/Arzenin/Sistema-Mc-And-Cheese.git`
+4. Se deberá ejecutar `ls` y debería de haber aparecido un nuevo directorio llamado `/Analizador-Lexico`
 
 
 [Volver al índice](#0-índice)
 
 
 # 4. Explicación e Instalaciones de las Herramientas
-En esta sección explicaremos todas las herramientas que hemos usado a lo largo del desarrollo de este proyecto, queremos destacar que hay algunas que pueden llegar a ser 
-opcionales, como puede ser el caso de __[ZeroTier]()__ sin embargo recomendamos su lectura e instalación para una mejor comprensión del proyecto.
+En esta sección se explicará todas las herramientas que se han usado a lo largo del desarrollo de este proyecto, donde se quiere destacar que hay algunas que pueden llegar a ser 
+opcionales, como puede ser el caso de __[ZeroTier]()__ sin embargo se recomienda su lectura e instalación para una mejor comprensión del proyecto.
 
 ## 4.1. Docker
 
@@ -188,7 +188,7 @@ Docker es un software especializado en en la creación y uso de contenedores, lo
 compartimentada dentro del sistema o aplicación.
 
 
-Gracias a esto se nos permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicación fuera de nuestro propio sistema. 
+Gracias a esto, se permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicación fuera de nuestro propio sistema. 
 Es decir que con docker no es necesario realizar modificaciones en el nuevo sistema.
 
 
@@ -196,13 +196,13 @@ Mientras que una máquina virtual usa virtualización de hardware de nuestro sis
 eficiente que una máquina virtual al no consumir tantos recursos.
 
 
-Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados por parte de empresas como por ejemplo MySQL, y por supuesto también se nos permite generar 
+Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados por parte de empresas como por ejemplo MySQL, y por supuesto también permite generar 
 nuestro propio docker.
 
 
-En conclusión, nuestro razonamiento del uso de docker es el tener una clara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el 
-mantenimiento y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra 
-página copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
+En conclusión, nuestro razonamiento del uso de docker es el tener una clara diferenciación dentro del sistema entre base de datos y página web, además de facilitar el 
+mantenimiento y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudará a arreglar el problema de que se produjese un exceso de peticiones en nuestra 
+página, copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
 
 ### 4.1.1 Instalación de Docker
 
@@ -219,14 +219,14 @@ __*Ubuntu:*__
 
 __*Windows:*__
 
-1-Nos dirigiremos al siguiente enlace y descargamos la versión correspondiente a nuestro sistema:
+1-Se dirigirá al siguiente enlace y descargará la versión correspondiente a nuestro sistema:
 https://www.docker.com/products/docker-desktop/
 
-2-Ejecutamos el instalador con los valores por defecto, ya que en esta ocasión se añadirá esta variable automáticamente a PATH
+2-Se ejecutará el instalador con los valores por defecto, ya que en esta ocasión se añadirá esta variable automáticamente a PATH
 
-3-Reiniciamos el ordenador
+3-Se reiniciará el ordenador
 
-4-Abrimos la Powershell y ejecutamos `docker --version` para comprobar la correcta instalación
+4-Se abrirá la Powershell y se ejecutará `docker --version` para comprobar la correcta instalación
 
 
 [Volver al índice](#0-índice)
@@ -234,9 +234,9 @@ https://www.docker.com/products/docker-desktop/
 
 # 4.2 ZeroTier
 
-Como mencionamos previamente, nuestro propósito consistía no solo en ejecutar de manera eficiente el sitio web y la base de datos, sino también en tener la capacidad de 
-acceder a estos recursos desde cualquier ubicación geográfica. Para lograrlo, optamos por utilizar ZeroTier por las razones que se presentaron en el semanario 2 (dificultad 
-de la vpn). Esta plataforma se especializa en la creación de redes definidas por software, lo que nos permite establecer conexiones virtuales desde cualquier parte del mundo, 
+Como mencionamos previamente, el propósito consistía no solo en ejecutar de manera eficiente el sitio web y la base de datos, sino también en tener la capacidad de 
+acceder a estos recursos desde cualquier ubicación geográfica. Para lograrlo, se opta por utilizar ZeroTier por las razones que se presentaron en el semanario 2 (dificultad 
+de la vpn). Esta plataforma se especializa en la creación de redes definidas por software, lo que permite establecer conexiones virtuales desde cualquier parte del mundo, 
 comportándose estas como redes locales convencionales. La ventaja de esta elección radica en la simplicidad de generar una red virtual, asignar direcciones IP a los 
 dispositivos conectados y, gracias a ello, acceder a nuestros recursos desde cualquier ubicación global.
 
@@ -254,21 +254,21 @@ __*Ubuntu:*__
    3. `curl -s https://install.zerotier.com | sudo bash`
 
 __*Windows:*__
-   1. Nos dirigimos a https://www.zerotier.com/download/ y descargamos el correspondiente
+   1. Se dirigirá a https://www.zerotier.com/download/ y descargará el correspondiente
    ejecutable.
-   2. Ejecutamos el ejecutable y dejamos los valores por defecto.
-   3. Ejecutamos la aplicación
+   2. Se ejecutará el ejecutable y se dejará los valores por defecto.
+   3. Se ejecutará la aplicación
    4. En el apartado de iconos de la bandeja del sistema(la flecha en la barra de tareas que
       podemos desplegar). Se encuentra ZeroTier
       
   __*Generar una red en ZeroTier*__
-  1. Nos dirigimos a https://www.zerotier.com/
-  2. Iniciaremos sesión y tras esto pulsaremos en Create a Network
-  3. Deberemos añadir a los dispositivos a la red, para ello copiamos el network ID
-  4. Añadimos la red:
+  1. Se dirigirá a https://www.zerotier.com/
+  2. Se iniciará sesión y tras esto se pulsará en Create a Network
+  3. Se debe añadir a los dispositivos a la red, para ello se copia el network ID
+  4. Se añade la red:
      1. __Ubuntu:__ `sudo zerotier-cli join <ID_de_Red>`
      2. __Windows:__ Click sobre el icono de zeroTier de la barra de tareas y join new network,
-     copiamos el network id en el campo correspondiente.
+     se copiará el network id en el campo correspondiente.
 
 
 [Volver al índice](#0-índice)
@@ -276,20 +276,20 @@ __*Windows:*__
 
 # 4.3 WAF
 
-Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript por medio de __*Node.js*__
+Para realizar nuestra aplicación se ha elegido utilizar de nuevo JavaScript por medio de __*Node.js*__
 
 
-__*Node.js*__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que nos da la posibilidad de 
+__*Node.js*__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que da la posibilidad de 
 crear aplicaciones backend escalables y eficientes. Node.js utiliza un modelo de E/S sin bloqueo, por lo tanto lo hace adecuado para aplicaciones que requieren un alto 
-rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backend de nuestra aplicación usamos este mismo entorno, este backend será el encargado de
+rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backend de nuestra aplicación se usará este mismo entorno, este backend será el encargado de
 conectarse a la base de datos y manipularla.
 
 
-De cara a la interfaz de usuario hemos elegido __*React Native*__,ya  que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar 
+De cara a la interfaz de usuario se han elegido __*React Native*__,ya  que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar 
 __*React*__(biblioteca de JavaScript destinada a construir interfaces de usuario) para crear aplicaciones nativas en iOS y Android. Esto se consigue al proporcionar una capa 
 de abstracción sobre los componentes nativos, permitiendo así a los desarrolladores compartir código base entre plataformas.
 
-En concreto hemos elegido __*React Native*__ porque además de ser una herramienta que nos permite realizar interfaces de forma sencilla e intuitiva, nos permitía crear 
+En concreto se ha elegido __*React Native*__ porque además de ser una herramienta que permite realizar interfaces de forma sencilla e intuitiva, permitía crear 
 aplicaciones web compatibles con dispositivos móviles.
 
 
@@ -331,7 +331,7 @@ __[la siguiente sección](#44-phpmyadmin-y-el-conector-mysql2)__
 
 # 4.4 PHPMyAdmin y MySQL2
 
-En el aspecto de la administración de nuestro SGBD nos hemos decantado por _PHPMyAdmin_, ya que por una parte es herramienta de código abierto y gratuita, y por 
+En el aspecto de la administración de nuestro SGBD, se ha decantado por _PHPMyAdmin_, ya que por una parte es herramienta de código abierto y gratuita, y por 
 otra es ampliamente utilizada en el campo de desarrollo web y la administración de bases de datos MySQL debido a su facilidad de uso y su capacidad para realizar
 diversas tareas de administración de bases de datos de manera eficiente. Se suele instalar en servidores web para permitir a los desarrolladores y administradores
 de bases de datos interactuar con sus bases de datos de una manera más visual. Algunas de las funciones de PHPMyAdmin son las siguientes:
@@ -375,8 +375,8 @@ La ruta tiene que ser la misma donde se colocó PHPMyAdmin.
 5. Poner el usuario y contraseña para iniciar sesión en PHPMyAdmin.
 
 
-__En nuestro caso para facilitar su instalación, hemos hecho que se ejecute en un docker compose el cual se podrá encontrar en el directorio __[DATABASE](src/DATABASE)__, concretamente en el fichero 
-En el directorio  encontraremos los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo queremos destacar el 
+__En nuestro caso para facilitar su instalación, se ha hecho que se ejecute en un docker compose el cual se podrá encontrar en el directorio __[DATABASE](src/DATABASE)__, concretamente en el fichero 
+En el directorio se encuentran los ficheros destinados a la gestión y estructura de la base de datos, dentro del mismo se quiere destacar el 
 fichero __[docker-compose.yml](src/DATABASE/docker-compose.yml)__ 
 
 
@@ -385,7 +385,7 @@ fichero __[docker-compose.yml](src/DATABASE/docker-compose.yml)__
 
 # 5 Explicación del Código
 
-En esta sección explicaremos el código en profundidad, centrándonos individualmente en el código implementado tanto en MySQL como en java y para finalizar el 
+En esta sección se explicará el código en profundidad, centrandose individualmente en el código implementado tanto en MySQL como en java y para finalizar el 
 código en JavaScript de la aplicación web.
 
 
