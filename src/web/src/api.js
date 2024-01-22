@@ -146,7 +146,7 @@ app.delete('/borrarcliente/:id', async (req, res) => {
     const id = req.params.id;
     console.log("Cliente:", id);
 
-    const query1 = 'DELETE FROM CLIENTE_ALERGENOS WHERE idCliente = ?';
+    const query1 = 'DELETE FROM CLIENTES_ALERGENOS WHERE idCliente = ?';
     await connection.promise().query(query1, id, (err, result) => {
     if (err) {
       console.error('Error al borrar cliente-alérgeno: ' + err);
@@ -156,7 +156,7 @@ app.delete('/borrarcliente/:id', async (req, res) => {
     res.status(201).json({ message: 'Cliente borrado con éxito' });
     });
 
-    const query2 = 'DELETE FROM CLIENTE_PEDIDO WHERE idCliente = ?';
+    const query2 = 'DELETE FROM CLIENTES_PEDIDO WHERE idCliente = ?';
     await connection.promise().query(query2, id, (err, result) => {
     if (err) {
       console.error('Error al borrar cliente-pedido: ' + err);
@@ -254,7 +254,7 @@ app.delete('/borraralergeno/:id', async (req, res) => {
     const connection = await abrirConexion();
     const id = parseInt(req.params.id, 10);
 
-    const query1 = 'DELETE FROM CLIENTE_ALERGENOS WHERE idAlergeno = ?';
+    const query1 = 'DELETE FROM CLIENTES_ALERGENOS WHERE idAlergeno = ?';
     await connection.promise().query(query1, id, (err, result) => {
     if (err) {
       console.error('Error al borrar cliente-alérgeno: ' + err);
