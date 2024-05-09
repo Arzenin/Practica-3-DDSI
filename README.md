@@ -1317,6 +1317,109 @@ CREATE TABLE IF NOT EXISTS INGREDIENTES_ALERGENOS (
 -- Crear triggers
 
 
+# 3. Docker
+
+De nuevo, hemos vuelto a usar Docker al igual que en el seminario 2.
+Docker es un software que se especializa en en la creación y uso de contenedores, los cuales funcionan de tal forma que se pueden ejecutar aplicaciones de forma compartimentada dentro del sistema o aplicación.
+
+Gracias a esto se nos permite exportar nuestro docker a otro sistema y poder ejecutarlo e instalar todo lo necesario para nuestra aplicacion fuera de nuestro propio sistema. Destacar que con docker no es necesario realizar modificaciones en el nuevo sistema.
+
+Mientras que una máquina virtual usa virtualización de hardware de nuestro sistema, docker virtualiza el sistema operativo que queramos, además de que este es más ligero y eficiente que una máquina virtual al no consumir tantos recursos.
+
+Docker da la posibilidad de acceder a una gran variedad de dockers prefabricados por parte de empresas como por ejemplo MySQL, y por supuesto también se nos permite generar nuestro propio docker.
+
+De nuevo, nuestra motivación para usar docker es el tener una cara diferenciación dentro del sistema entre base de datos y página web, además de facilitarnos el mantenimientro y uso de recursos por parte de las mismas dentro del sistema, lo que nos ayudaría a arreglar el problema de que se produjese un exceso de peticiones en nuestra página copiando el docker y redireccionando estas peticiones a los dockers paralelos al mismo.
+
+__Instalación de Docker__
+
+A partir de este apartado será necesaria la descarga de todas las herramientas para el correcto funcionamiento de la aplicación en sus diferentes versiones.
+
+__Ubuntu__:
+(Cada apartado es una única línea, son comandos de gran longitud)
+
+1-sudo apt update
+ 
+2-sudo apt install apt-transport-https ca-certificates curl	software-properties-common
+  
+3-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o         /usr/share/keyrings/docker-archive-keyring.gpg
+  
+4-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]   https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee   /etc/apt/sources.list.d/docker.list > /dev/null
+  
+5-Una vez instaladas estas dependencias de nuevo ejecutaremos:
+sudo apt update
+
+6-sudo apt install docker-ce docker-ce-cli containerd.io
+
+7-Comprobamos la correcta instalación con:
+docker --version
+
+Con esto ya estaría instalado docker dentro del sistema ubuntu
+
+__Windows__:
+
+1-Nos dirigiremos al siguiente enlace y descargamos la versión correspondiente a nuestro sistema:
+https://www.docker.com/products/docker-desktop/
+
+2-Ejecutamos el instalador con los valores por defecto, ya que en esta ocasión se añadirá esta variable automáticamente a PATH
+
+3-Reiniciamos el ordenador
+
+4-Abrimos la Powershell y ejecutamos docker --version para comprobar la correcta instalación
+
+
+# 4. Node.js, React Native y Expo
+
+Para realizar nuestra aplicación hemos elegido utilizar de nuevo JavaScript. Hemos investigado diferentes posibilidades y nos decantamos por Node.js
+
+__Node.js__ es un entorno de ejecución para JavaScript del lado del servidor. Este permite ejecutar código JavaScript fuera del navegador, lo que nos da la posibilidad de crear aplicaciones backend escalables y eficientes. Node.js utiliza un modelo de E/S sin bloqueo, por lo tanto lo hace adecuado para aplicaciones que requieren un alto rendimiento y una gestión eficiente de las operaciones de entrada/salida. Para el backnend de nuestra aplicación, usamos node.js, que se encarga de conectarse a la base de datos y manipularla.
+
+
+Para la interfaz de usuario hemos eliegido __React Native__, que es un marco de desarrollo de aplicaciones móviles que permite a los desarrolladores utilizar React(una biblioteca de JavaScript para construir interfaces de usuario) para crear aplicaciones nativas en iOS y Android. Esto se consigue al proporcionar una capa de abstracción sobre los componentes nativos, permitiendo así a los desarrolladores compartir código base entre plataformas.
+Elegimos React Native porque además de ser una herramienta que nos permite realizar interfaces de forma sencilla e intuitiva, nos permitía crear aplicaciones web compatibles con dispositivos móviles.
+
+
+Para implementar la interfaz de la aplicación usando React Native, hemos usado __Expo__. Expo es una plataforma y conjunto de herramientas para desarrollar aplicaciones móviles con React Native. Este simplifica el proceso de desrrollo al proporcionar un conjunto de características y servicios listos para usar, eliminando así la necesidad de configurar y mantener manualmente ciertos aspectos del proyecto.
+
+
+__Instalación de Node.js, React Native y Expo
+
+__Ubuntu__:
+
+1-sudo apt update
+
+2-sudo apt install nodejs npm
+
+3-node -v
+
+4-npm -v
+
+5-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+6-source ~/.bashrc
+
+7-source ~/.zshrc
+
+8-npm install stable
+
+9- Verificaremos la instalación por medio de ejecutar node -v y npm -v
+
+
+__Windows__:
+
+1- Nos dirigimos a la web de https://nodejs.org/en y descargamos el instalador
+
+2-Verificamos la instalación con los comandos node –version 
+y node –version, en caso de que estos fallen se deberá a que no se han añadido correctamente a la variable paths para esto usaremos el tutorial de la bibliografía
+
+3-Instalamos expo por medio de npm install -g expo-cli en la terminal
+
+4-Nos dirigimos al directorio de /src/app en caso de no tenerlo clonado lo descargamos.
+
+5- npm install para asegurar que tenemos todas las dependencias, esto debería de instalar también Mysql2
+
+
+ 
+
 
 
 DELIMITER //
